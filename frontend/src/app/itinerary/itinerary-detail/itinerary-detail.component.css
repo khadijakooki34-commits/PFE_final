@@ -1,0 +1,125 @@
+/* Hero Section - Matched to Destinations */
+/* Hero Section - Matched to Destinations */
+.hero-small {
+    background: url('https://best-itinerary.com/wp-content/uploads/2019/06/maroc-itineraire-voyage1-carte.jpg') center center/cover no-repeat;
+    min-height: 500px;
+    position: relative;
+    margin-top: calc(-1 * var(--navbar-height, 80px));
+    padding-top: var(--navbar-height, 80px);
+    padding-bottom: 4rem;
+}
+
+.hero-overlay-dark {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(rgba(15, 23, 42, 0.2), rgba(15, 23, 42, 0.6));
+    backdrop-filter: blur(2px);
+}
+
+.font-display {
+    font-family: var(--font-display, 'Playfair Display', serif);
+}
+
+.letter-spacing-2 {
+    letter-spacing: 2px;
+}
+
+.bg-white-glass {
+    background: rgba(255, 255, 255, 0.2) !important;
+    backdrop-filter: blur(8px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.3) !important;
+    color: white !important;
+}
+
+.bg-white-glass:hover {
+    background: rgba(255, 255, 255, 0.3) !important;
+}
+
+.hero-stats {
+    display: flex;
+    justify-content: center;
+    gap: 3rem;
+}
+
+.stat-item {
+    text-align: center;
+}
+
+.stat-value {
+    display: block;
+    font-size: 1.75rem;
+    font-weight: 800;
+    color: white;
+    margin-bottom: 0.2rem;
+}
+
+.stat-label {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.7);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.rounded-4 {
+    border-radius: 1rem !important;
+}
+
+.rounded-xxl {
+    border-radius: 2rem !important;
+}
+
+.bg-primary-subtle {
+    background-color: rgba(211, 84, 0, 0.1) !important;
+    color: var(--primary-color, #d35400) !important;
+}
+
+.min-width-0 {
+    min-width: 0;
+}
+
+.destination-item {
+    border-left: 4px solid transparent !important;
+}
+
+.destination-item:hover {
+    background-color: #f8f9fa !important;
+    border-left-color: var(--primary-color, #d35400) !important;
+    transform: translateX(4px);
+}
+
+.destination-item:hover .icon-btn {
+    background-color: var(--primary-color, #d35400) !important;
+    color: white !important;
+}
+
+.dropdown-toggle-no-caret::after {
+    display: none;
+}
+
+@media (max-width: 991.98px) {
+    .hero-small {
+        min-height: 450px;
+    }
+    .hero-stats {
+        gap: 1.5rem;
+    }
+    .stat-value {
+        font-size: 1.5rem;
+    }
+}
+
+@media (max-width: 767.98px) {
+    .hero-small {
+        min-height: 550px;
+        padding-top: 100px;
+    }
+    .hero-stats {
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+    .menu-actions {
+        top: 20px;
+    }
+}
