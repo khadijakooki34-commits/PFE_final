@@ -253,7 +253,8 @@
 
                         <div class="row g-4">
                             <div class="col-12 col-md-6 col-xl-4" *ngFor="let it of createdItineraries">
-                                <div class="card reservation-card border-0 rounded-4 h-100">
+                                <div class="card reservation-card border-0 rounded-4 h-100 cursor-pointer"
+                                     (click)="viewItinerary(it.id)">
                                     <div class="d-flex justify-content-between align-items-start mb-3">
                                         <div>
                                             <h6 class="fw-800 mb-0 text-dark">{{ it.nom }}</h6>
@@ -268,7 +269,7 @@
                                             it.destinations.length : 0 }} Destinations</small>
                                     </div>
                                     <div class="mt-auto d-flex gap-2 justify-content-end">
-                                        <button (click)="viewItinerary(it.id)"
+                                        <button (click)="viewItinerary(it.id); $event.stopPropagation()"
                                             class="btn btn-sm btn-primary fw-700 rounded-pill px-3">View</button>
                                     </div>
                                 </div>
