@@ -2,6 +2,7 @@ package ma.safar.morocco.itinerary.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import ma.safar.morocco.util.Translator;
 import ma.safar.morocco.destination.entity.Destination;
 import ma.safar.morocco.destination.repository.DestinationRepository;
 import ma.safar.morocco.itinerary.dto.*;
@@ -287,8 +288,16 @@ public class ItineraireServiceImpl implements ItineraireService {
     private ItineraireResponseDTO mapToResponse(Itineraire itineraire, String message) {
         return ItineraireResponseDTO.builder()
                 .id(itineraire.getId())
-                .nom(itineraire.getNom())
-                .dureeEstimee(itineraire.getDureeEstimee())
+                .nom(Translator.translate(itineraire, "nom"))
+                .nomEn(itineraire.getNomEn())
+                .nomFr(itineraire.getNomFr())
+                .nomAr(itineraire.getNomAr())
+                .nomEs(itineraire.getNomEs())
+                .dureeEstimee(Translator.translate(itineraire, "dureeEstimee"))
+                .dureeEstimeeEn(itineraire.getDureeEstimeeEn())
+                .dureeEstimeeFr(itineraire.getDureeEstimeeFr())
+                .dureeEstimeeAr(itineraire.getDureeEstimeeAr())
+                .dureeEstimeeEs(itineraire.getDureeEstimeeEs())
                 .dateCreation(itineraire.getDateCreation())
                 .dateModification(itineraire.getDateModification())
                 .distanceTotale(itineraire.getDistanceTotale())
@@ -296,7 +305,7 @@ public class ItineraireServiceImpl implements ItineraireService {
                 .estOptimise(itineraire.getEstOptimise())
                 .destinations(
                         itineraire.getDestinations().stream()
-                                .map(Destination::getNom)
+                                .map(d -> Translator.translate(d, "name"))
                                 .collect(Collectors.toList()))
                 .message(message)
                 .build();
@@ -305,8 +314,16 @@ public class ItineraireServiceImpl implements ItineraireService {
     private ItineraireDetailDTO mapToDetailDTO(Itineraire itineraire) {
         return ItineraireDetailDTO.builder()
                 .id(itineraire.getId())
-                .nom(itineraire.getNom())
-                .dureeEstimee(itineraire.getDureeEstimee())
+                .nom(Translator.translate(itineraire, "nom"))
+                .nomEn(itineraire.getNomEn())
+                .nomFr(itineraire.getNomFr())
+                .nomAr(itineraire.getNomAr())
+                .nomEs(itineraire.getNomEs())
+                .dureeEstimee(Translator.translate(itineraire, "dureeEstimee"))
+                .dureeEstimeeEn(itineraire.getDureeEstimeeEn())
+                .dureeEstimeeFr(itineraire.getDureeEstimeeFr())
+                .dureeEstimeeAr(itineraire.getDureeEstimeeAr())
+                .dureeEstimeeEs(itineraire.getDureeEstimeeEs())
                 .dateCreation(itineraire.getDateCreation())
                 .dateModification(itineraire.getDateModification())
                 .distanceTotale(itineraire.getDistanceTotale())
@@ -321,7 +338,11 @@ public class ItineraireServiceImpl implements ItineraireService {
                         itineraire.getDestinations().stream()
                                 .map(dest -> ItineraireDetailDTO.DestinationDTO.builder()
                                         .id(dest.getId())
-                                        .nom(dest.getNom())
+                                        .nom(Translator.translate(dest, "name"))
+                                        .nameEn(dest.getNameEn())
+                                        .nameFr(dest.getNameFr())
+                                        .nameAr(dest.getNameAr())
+                                        .nameEs(dest.getNameEs())
                                         .type(dest.getType())
                                         .categorie(dest.getCategorie())
                                         .latitude(dest.getLatitude())

@@ -17,7 +17,15 @@ public class ItineraireDetailDTO {
 
     private Long id;
     private String nom;
+    private String nomEn;
+    private String nomFr;
+    private String nomAr;
+    private String nomEs;
     private String dureeEstimee;
+    private String dureeEstimeeEn;
+    private String dureeEstimeeFr;
+    private String dureeEstimeeAr;
+    private String dureeEstimeeEs;
     private LocalDateTime dateCreation;
     private LocalDateTime dateModification;
     private Double distanceTotale;
@@ -45,6 +53,10 @@ public class ItineraireDetailDTO {
     public static class DestinationDTO {
         private Long id;
         private String nom;
+        private String nameEn;
+        private String nameFr;
+        private String nameAr;
+        private String nameEs;
         private String type;
         private String categorie;
         private Double latitude;

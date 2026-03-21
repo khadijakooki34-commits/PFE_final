@@ -42,12 +42,36 @@ public class Itineraire {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank(message = "Le nom de l'itinéraire est obligatoire")
+    @NotBlank(message = "{validation.itinerary.name.required}")
     @Column(nullable = false, length = 200)
     private String nom;
 
+    @Column(name = "nom_en", length = 200)
+    private String nomEn;
+
+    @Column(name = "nom_fr", length = 200)
+    private String nomFr;
+
+    @Column(name = "nom_ar", length = 200)
+    private String nomAr;
+
+    @Column(name = "nom_es", length = 200)
+    private String nomEs;
+
     @Column(name = "duree_estimee", length = 100)
     private String dureeEstimee;
+
+    @Column(name = "duree_estimee_en", length = 100)
+    private String dureeEstimeeEn;
+
+    @Column(name = "duree_estimee_fr", length = 100)
+    private String dureeEstimeeFr;
+
+    @Column(name = "duree_estimee_ar", length = 100)
+    private String dureeEstimeeAr;
+
+    @Column(name = "duree_estimee_es", length = 100)
+    private String dureeEstimeeEs;
 
     @CreatedDate
     @Column(name = "date_creation", nullable = false, updatable = false)
@@ -220,25 +244,41 @@ public class Itineraire {
     /**
      * Calcule la durée totale estimée de l'itinéraire
      */
-    public String calculerDureeTotale() {
+    public String calculerDureeTotale(String lang) {
         if (destinations == null || destinations.isEmpty()) {
-            return "0 heure";
+            return switch (lang) {
+                case "ar" -> "0 ساعة";
+                case "es" -> "0 horas";
+                case "fr" -> "0 heure";
+                default -> "0 hours";
+            };
         }
 
-        // Estimation: 2h par destination + temps de trajet (1h pour 50km)
         int heures = destinations.size() * 2;
-
         double distance = calculerDistanceTotale();
         heures += (int) (distance / 50);
 
         if (heures < 24) {
-            return heures + " heure" + (heures > 1 ? "s" : "");
+            return switch (lang) {
+                case "ar" -> heures + " ساعة";
+                case "es" -> heures + " hora" + (heures > 1 ? "s" : "");
+                case "fr" -> heures + " heure" + (heures > 1 ? "s" : "");
+                default -> heures + " hour" + (heures > 1 ? "s" : "");
+            };
         } else {
             int jours = heures / 24;
             int restHeures = heures % 24;
-            return jours + " jour" + (jours > 1 ? "s" : "") +
-                    (restHeures > 0 ? " " + restHeures + "h" : "");
+            return switch (lang) {
+                case "ar" -> jours + " يوم" + (jours > 1 ? "s" : "") + (restHeures > 0 ? " " + restHeures + "س" : "");
+                case "es" -> jours + " día" + (jours > 1 ? "s" : "") + (restHeures > 0 ? " " + restHeures + "h" : "");
+                case "fr" -> jours + " jour" + (jours > 1 ? "s" : "") + (restHeures > 0 ? " " + restHeures + "h" : "");
+                default -> jours + " day" + (jours > 1 ? "s" : "") + (restHeures > 0 ? " " + restHeures + "h" : "");
+            };
         }
+    }
+
+    public String calculerDureeTotale() {
+        return calculerDureeTotale("en");
     }
 
     /**
@@ -265,6 +305,10 @@ public class Itineraire {
     private void updateCalculatedFields() {
         this.nombreDestinations = (destinations != null) ? destinations.size() : 0;
         this.distanceTotale = calculerDistanceTotale();
-        this.dureeEstimee = calculerDureeTotale();
+        this.dureeEstimeeEn = calculerDureeTotale("en");
+        this.dureeEstimeeFr = calculerDureeTotale("fr");
+        this.dureeEstimeeAr = calculerDureeTotale("ar");
+        this.dureeEstimeeEs = calculerDureeTotale("es");
+        this.dureeEstimee = this.dureeEstimeeEn;
     }
 }

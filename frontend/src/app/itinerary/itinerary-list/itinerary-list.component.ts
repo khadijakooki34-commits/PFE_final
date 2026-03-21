@@ -17,12 +17,12 @@ export class ItineraryListComponent implements OnInit {
     currentUser: any;
 
     constructor(
-        private router: Router,
-        private itineraryService: ItineraryService,
-        private authService: AuthService,
-        private snackBar: MatSnackBar,
-        private cdr: ChangeDetectorRef,
-        public translateService: TranslateService
+        private readonly router: Router,
+        private readonly itineraryService: ItineraryService,
+        private readonly authService: AuthService,
+        private readonly snackBar: MatSnackBar,
+        private readonly cdr: ChangeDetectorRef,
+        public readonly translateService: TranslateService
     ) { }
 
     ngOnInit(): void {
@@ -57,7 +57,7 @@ export class ItineraryListComponent implements OnInit {
             },
             error: (err) => {
                 console.error('🔍 Error loading itineraries:', err);
-                this.snackBar.open('Erreur lors du chargement des itinéraires', 'Fermer', {
+                this.snackBar.open(this.translateService.instant('ITINERARY.LOAD_ERROR'), this.translateService.instant('COMMON.CLOSE'), {
                     duration: 3000
                 });
                 this.loading = false;
@@ -80,7 +80,7 @@ export class ItineraryListComponent implements OnInit {
 
     getDurationValue(duration: string): string {
         if (!duration) return '';
-        const match = duration.match(/[\d.]+/);
+        const match = /[\d.]+/.exec(duration);
         return match ? match[0] : '';
     }
 

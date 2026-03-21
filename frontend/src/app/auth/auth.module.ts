@@ -4,6 +4,7 @@ import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 import { AuthCallbackComponent } from './auth-callback/auth-callback.component';
 import { SharedModule } from '../shared/shared.module';
+import { TranslateModule } from '@ngx-translate/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AuthRequired } from './auth-required/auth-required';
 import { Verified } from './verified/verified';
@@ -35,6 +36,7 @@ const routes: Routes = [
     imports: [
         CommonModule,
         SharedModule,
+        TranslateModule,
         RouterModule.forChild(routes)
     ]
 })

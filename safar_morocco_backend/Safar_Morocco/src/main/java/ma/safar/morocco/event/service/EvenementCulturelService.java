@@ -1,8 +1,10 @@
 package ma.safar.morocco.event.service;
 
 import lombok.RequiredArgsConstructor;
+import ma.safar.morocco.event.dto.EvenementResponseDTO;
 import ma.safar.morocco.event.entity.EvenementCulturel;
 import ma.safar.morocco.event.repository.EvenementCulturelRepository;
+import ma.safar.morocco.util.Translator;
 import ma.safar.morocco.destination.entity.Destination;
 import ma.safar.morocco.destination.repository.DestinationRepository;
 import org.springframework.stereotype.Service;
@@ -22,22 +24,26 @@ public class EvenementCulturelService {
     /**
      * Récupère tous les événements
      */
-    public List<EvenementCulturel> findAll() {
-        return evenementRepository.findAll();
+    public List<EvenementResponseDTO> findAll() {
+        return evenementRepository.findAll().stream()
+                .map(this::convertToDTO)
+                .toList();
     }
 
     /**
      * Récupère un événement par ID
      */
-    public Optional<EvenementCulturel> findById(Long id) {
-        return evenementRepository.findById(id);
+    public Optional<EvenementResponseDTO> findById(Long id) {
+        return evenementRepository.findById(id).map(this::convertToDTO);
     }
 
     /**
      * Récupère les événements d'une destination
      */
-    public List<EvenementCulturel> findByDestinationId(Long destinationId) {
-        return evenementRepository.findByDestinationId(destinationId);
+    public List<EvenementResponseDTO> findByDestinationId(Long destinationId) {
+        return evenementRepository.findByDestinationId(destinationId).stream()
+                .map(this::convertToDTO)
+                .toList();
     }
 
     /**
@@ -85,51 +91,72 @@ public class EvenementCulturelService {
     /**
      * Récupère les événements à venir
      */
-    public List<EvenementCulturel> findUpcoming() {
+    public List<EvenementResponseDTO> findUpcoming() {
         LocalDateTime now = LocalDateTime.now();
         return evenementRepository.findAll().stream()
-                .filter(e -> e.getDateDebut().isAfter(now))
+                .filter(e -> e.getDateDebut() != null && e.getDateDebut().isAfter(now))
                 .sorted((e1, e2) -> e1.getDateDebut().compareTo(e2.getDateDebut()))
+                .map(this::convertToDTO)
                 .toList();
     }
 
-    /**
-     * Récupère les événements en cours
-     */
-    public List<EvenementCulturel> findOngoing() {
+    public List<EvenementResponseDTO> findOngoing() {
         LocalDateTime now = LocalDateTime.now();
         return evenementRepository.findAll().stream()
-                .filter(e -> e.getDateDebut().isBefore(now) && e.getDateFin().isAfter(now))
+                .filter(e -> e.getDateDebut() != null && e.getDateFin() != null &&
+                        e.getDateDebut().isBefore(now) && e.getDateFin().isAfter(now))
+                .map(this::convertToDTO)
                 .toList();
     }
 
-    /**
-     * Récupère les événements passés
-     */
-    public List<EvenementCulturel> findPast() {
+    public List<EvenementResponseDTO> findPast() {
         LocalDateTime now = LocalDateTime.now();
         return evenementRepository.findAll().stream()
-                .filter(e -> e.getDateFin().isBefore(now))
+                .filter(e -> e.getDateFin() != null && e.getDateFin().isBefore(now))
                 .sorted((e1, e2) -> e2.getDateFin().compareTo(e1.getDateFin()))
+                .map(this::convertToDTO)
                 .toList();
     }
 
-    /**
-     * Récupère les événements par type
-     */
-    public List<EvenementCulturel> findByType(String type) {
+    public List<EvenementResponseDTO> findByType(String type) {
         return evenementRepository.findAll().stream()
-                .filter(e -> e.getEventType().equalsIgnoreCase(type))
+                .filter(e -> e.getEventType() != null && e.getEventType().equalsIgnoreCase(type))
+                .map(this::convertToDTO)
                 .toList();
     }
 
-    /**
-     * Récupère les événements par lieu
-     */
-    public List<EvenementCulturel> findByLieu(String lieu) {
+    public List<EvenementResponseDTO> findByLieu(String lieu) {
         return evenementRepository.findAll().stream()
                 .filter(e -> e.getLieu() != null && e.getLieu().contains(lieu))
+                .map(this::convertToDTO)
                 .toList();
+    }
+
+    public EvenementResponseDTO convertToDTO(EvenementCulturel e) {
+        if (e == null) return null;
+        return EvenementResponseDTO.builder()
+                .id(e.getId())
+                .nom(Translator.translate(e, "name"))
+                .nameEn(e.getNameEn())
+                .nameFr(e.getNameFr())
+                .nameAr(e.getNameAr())
+                .nameEs(e.getNameEs())
+                .description(Translator.translate(e, "description"))
+                .descriptionEn(e.getDescriptionEn())
+                .descriptionFr(e.getDescriptionFr())
+                .descriptionAr(e.getDescriptionAr())
+                .descriptionEs(e.getDescriptionEs())
+                .dateDebut(e.getDateDebut())
+                .dateFin(e.getDateFin())
+                .lieu(e.getLieu())
+                .eventType(e.getEventType())
+                .historique(Translator.translate(e, "historique"))
+                .historiqueEn(e.getHistoriqueEn())
+                .historiqueFr(e.getHistoriqueFr())
+                .historiqueAr(e.getHistoriqueAr())
+                .historiqueEs(e.getHistoriqueEs())
+                .imageUrl(e.getImageUrl())
+                .build();
     }
 
     /**

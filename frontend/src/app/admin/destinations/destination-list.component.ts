@@ -5,6 +5,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MatDialog } from '@angular/material/dialog';
 import { ApiService } from '../../core/services/api.service';
 import { DestinationDialogComponent } from '../../destination/dialog/destination-dialog.component';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
     standalone: false,
@@ -19,7 +20,11 @@ export class AdminDestinationListComponent implements OnInit {
     @ViewChild(MatPaginator) paginator!: MatPaginator;
     @ViewChild(MatSort) sort!: MatSort;
 
-    constructor(private apiService: ApiService, private dialog: MatDialog) {
+    constructor(
+        private readonly apiService: ApiService,
+        private readonly dialog: MatDialog,
+        private readonly translate: TranslateService
+    ) {
         this.dataSource = new MatTableDataSource();
     }
 
@@ -54,10 +59,14 @@ export class AdminDestinationListComponent implements OnInit {
     }
 
     deleteDestination(id: number) {
-        if (confirm('Are you sure?')) {
+        if (confirm(this.translate.instant('ADMIN.DELETE_CONFIRM'))) {
             this.apiService.deleteDestination(id).subscribe(() => {
                 this.loadDestinations();
             });
         }
+    }
+
+    onImageError(event: any) {
+        event.target.src = 'assets/placeholder.jpg';
     }
 }

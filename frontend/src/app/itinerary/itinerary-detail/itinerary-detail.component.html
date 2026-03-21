@@ -110,6 +110,8 @@
                         <div *ngFor="let destination of itinerary.destinations; let i = index" 
                             class="list-group-item list-group-item-action d-flex align-items-center p-3 border-bottom destination-item"
                             (click)="viewDestinationDetails(destination)"
+                            (keydown.enter)="viewDestinationDetails(destination)"
+                            tabindex="0" role="button"
                             style="cursor: pointer; transition: all 0.2s; border-left: 4px solid transparent;">
                             
                             <div class="destination-number shadow-sm bg-primary text-white d-flex align-items-center justify-content-center rounded-circle me-3 flex-shrink-0" style="width: 45px; height: 45px; font-weight: 700; font-size: 1.1rem;">
@@ -117,7 +119,7 @@
                             </div>
                             
                             <div class="flex-grow-1 min-width-0 pe-2">
-                                <h6 class="mb-1 fw-bold text-dark text-truncate">{{ destination.nom | translateValue }}</h6>
+                                <h6 class="mb-1 fw-bold text-dark text-truncate">{{ destination | localizedField:'name' }}</h6>
                                 <p class="mb-0 text-muted small text-truncate d-flex align-items-center">
                                     <i class="bi me-1 text-primary" [class]="getDestinationTypeIcon(destination.type)"></i>
                                     {{ destination.categorie || destination.type }}

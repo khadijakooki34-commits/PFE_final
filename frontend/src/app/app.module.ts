@@ -17,21 +17,9 @@ import { TermsAndConditionsComponent } from './pages/terms-and-conditions/terms-
 
 import { HttpClientModule, HttpClient, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { TranslateModule, TranslateLoader, MissingTranslationHandler, MissingTranslationHandlerParams } from '@ngx-translate/core';
+import { TranslateHttpLoader, provideTranslateHttpLoader } from '@ngx-translate/http-loader';
 import { Observable } from 'rxjs';
-import { HttpLoggingInterceptor } from './core/interceptors/http-logging.interceptor';
 
-export class CustomHttpLoader implements TranslateLoader {
-    constructor(private http: HttpClient) { }
-    public getTranslation(lang: string): Observable<any> {
-        // Add timestamp to bust cache
-        const timestamp = new Date().getTime();
-        return this.http.get(`/assets/i18n/${lang}.json?v=${timestamp}`);
-    }
-}
-
-export function HttpLoaderFactory(http: HttpClient) {
-    return new CustomHttpLoader(http);
-}
 
 export class CustomMissingTranslationHandler implements MissingTranslationHandler {
     handle(params: MissingTranslationHandlerParams) {
@@ -60,15 +48,14 @@ import { provideCharts, withDefaultRegisterables } from 'ng2-charts';
     ],
     imports: [
         BrowserModule,
-        HttpClientModule,
         AppRoutingModule,
         BrowserAnimationsModule,
+        CoreModule,
         TranslateModule.forRoot({
-            defaultLanguage: 'fr',
+            defaultLanguage: 'en',
             loader: {
                 provide: TranslateLoader,
-                useFactory: HttpLoaderFactory,
-                deps: [HttpClient]
+                useClass: TranslateHttpLoader
             },
             missingTranslationHandler: {
                 provide: MissingTranslationHandler,
@@ -76,17 +63,15 @@ import { provideCharts, withDefaultRegisterables } from 'ng2-charts';
             },
             useDefaultLang: true
         }),
-        CoreModule,
         SharedModule,
         ItineraryModule
     ],
     providers: [
-        provideCharts(withDefaultRegisterables()),
-        {
-            provide: HTTP_INTERCEPTORS,
-            useClass: HttpLoggingInterceptor,
-            multi: true
-        }
+        provideTranslateHttpLoader({
+            prefix: 'assets/i18n/',
+            suffix: '.json'
+        }),
+        provideCharts(withDefaultRegisterables())
     ],
     bootstrap: [AppComponent]
 })

@@ -25,9 +25,9 @@ safar_morocco_backend/Safar_Morocco/output*.txt
 safar_morocco_backend/Safar_Morocco/file_list.txt
 
 # Chatbot (Python)
-chatbot/__pycache__/
-chatbot/.env
-chatbot/*.pyc
+# chatbot/__pycache__/
+# chatbot/.env
+# chatbot/*.pyc
 
 # Uploads
 uploads/

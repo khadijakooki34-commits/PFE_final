@@ -6,6 +6,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ApiService } from '../../core/services/api.service';
 import { EventDialogComponent } from './event-dialog.component';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
     standalone: false,
@@ -21,9 +22,10 @@ export class AdminEventListComponent implements OnInit {
     @ViewChild(MatSort) sort!: MatSort;
 
     constructor(
-        private apiService: ApiService,
-        private dialog: MatDialog,
-        private snackBar: MatSnackBar
+        private readonly apiService: ApiService,
+        private readonly dialog: MatDialog,
+        private readonly snackBar: MatSnackBar,
+        private readonly translate: TranslateService
     ) {
         this.dataSource = new MatTableDataSource();
     }
@@ -63,11 +65,15 @@ export class AdminEventListComponent implements OnInit {
     }
 
     deleteEvent(id: number) {
-        if (confirm('Are you sure you want to delete this event?')) {
+        if (confirm(this.translate.instant('ADMIN.DELETE_CONFIRM'))) {
             this.apiService.deleteEvent(id).subscribe(() => {
                 this.snackBar.open('Event deleted', 'Close', { duration: 3000 });
                 this.loadEvents();
             });
         }
+    }
+
+    onImageError(event: any) {
+        (event.target as HTMLImageElement).src = 'assets/placeholder.jpg';
     }
 }

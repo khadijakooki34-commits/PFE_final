@@ -1,6 +1,6 @@
 <a [routerLink]="['/destinations', destination.id]" [state]="{ data: destination }" class="destination-card">
     <div class="card-img-wrapper">
-        <img [src]="(destination.thumbnailUrl || destination.medias?.[0]?.url) | imageUrl" alt="{{destination.nom | translateValue}}"
+        <img [src]="(destination.thumbnailUrl || destination.medias?.[0]?.url) | imageUrl" alt="{{destination | localizedField:'name'}}"
             loading="lazy" (error)="handleImageError($event)">
 
         <!-- Badges - Modernized -->
@@ -19,9 +19,9 @@
             <span>{{destination.type | translateValue}}</span>
         </div>
 
-        <h3 class="destination-title">{{destination.nom | translateValue}}</h3>
+        <h3 class="destination-title">{{destination | localizedField:'name'}}</h3>
 
-        <p class="destination-description">{{ (destination.description || '') | slice:0:100 }}...</p>
+        <p class="destination-description">{{ ((destination | localizedField:'description':'description') || '') | slice:0:100 }}...</p>
 
         <div class="card-footer-action">
             <span class="view-details-link">

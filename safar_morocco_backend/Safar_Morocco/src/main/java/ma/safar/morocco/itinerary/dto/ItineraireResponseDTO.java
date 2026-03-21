@@ -16,7 +16,15 @@ public class ItineraireResponseDTO {
 
     private Long id;
     private String nom;
+    private String nomEn;
+    private String nomFr;
+    private String nomAr;
+    private String nomEs;
     private String dureeEstimee;
+    private String dureeEstimeeEn;
+    private String dureeEstimeeFr;
+    private String dureeEstimeeAr;
+    private String dureeEstimeeEs;
     private LocalDateTime dateCreation;
     private LocalDateTime dateModification;
     private Double distanceTotale;

@@ -11,8 +11,22 @@ import java.util.List;
 public class DestinationResponseDTO {
     private Long id;
     private String nom;
+    private String nameEn;
+    private String nameFr;
+    private String nameAr;
+    private String nameEs;
+    
     private String description;
+    private String descriptionEn;
+    private String descriptionFr;
+    private String descriptionAr;
+    private String descriptionEs;
+    
+    // Localized fields
     private String histoire;
+    private String bestTime;
+    private String languages;
+    
     private String historicalDescription;
     private String type;
     private Double latitude;
@@ -24,8 +38,16 @@ public class DestinationResponseDTO {
     private String thumbnailUrl;
     private List<ma.safar.morocco.media.dto.MediaDTO> medias;
     private List<String> imageUrls;
-    private String bestTime;
-    private String languages;
+    private String bestTimeEn;
+    private String bestTimeFr;
+    private String bestTimeAr;
+    private String bestTimeEs;
+    
+    private String languagesEn;
+    private String languagesFr;
+    private String languagesAr;
+    private String languagesEs;
+    
     private Double averageCost;
     private String videoUrl;
 }

@@ -1,60 +1,97 @@
-/* Hero Section - Matched to Destinations */
-.hero-small {
+/* Hero Section - Redesigned to match image */
+.itinerary-hero {
     background: url('https://lesglobeblogueurs.com/wp-content/uploads/2019/12/car-2417295erikawittlieb-pixabay-3-1920x1179.jpg') center center/cover no-repeat;
-    min-height: 500px;
+    min-height: 550px;
     position: relative;
     margin-top: calc(-1 * var(--navbar-height, 80px));
     padding-top: var(--navbar-height, 80px);
-    padding-bottom: 4rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    color: white;
 }
 
-.hero-overlay-dark {
+.hero-overlay {
     position: absolute;
     inset: 0;
-    background: linear-gradient(rgba(15, 23, 42, 0.4), rgba(15, 23, 42, 0.75));
-    backdrop-filter: blur(2px);
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.5));
+    backdrop-filter: blur(1px);
 }
 
-.font-display {
-    font-family: var(--font-display, 'Playfair Display', serif);
+.hero-content {
+    position: relative;
+    z-index: 2;
+    padding: 3rem 1rem;
 }
 
-.letter-spacing-2 {
-    letter-spacing: 2px;
-}
-
-.bg-white-glass {
+.hero-badge {
     background: rgba(255, 255, 255, 0.15);
     backdrop-filter: blur(8px);
+    padding: 0.5rem 1.25rem;
+    border-radius: 50px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
     border: 1px solid rgba(255, 255, 255, 0.2);
+    color: white;
 }
 
-/* Quick Statistics */
-.hero-stats {
-    display: flex;
-    justify-content: center;
-    gap: 3rem;
+.hero-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    margin-bottom: 1rem;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+.hero-subtitle {
+    font-size: 1.25rem;
+    opacity: 0.9;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.hero-stats-row {
+    margin-top: 3rem;
 }
 
 .stat-item {
     text-align: center;
+    min-width: 150px;
 }
 
 .stat-value {
     display: block;
-    font-size: 1.75rem;
+    font-size: 2.5rem;
     font-weight: 800;
-    color: white;
-    margin-bottom: 0.2rem;
+    margin-bottom: 0.25rem;
 }
 
 .stat-label {
     display: block;
-    font-size: 0.85rem;
-    font-weight: 600;
-    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.75rem;
+    font-weight: 700;
+    opacity: 0.8;
+    letter-spacing: 0.05em;
     text-transform: uppercase;
-    letter-spacing: 1px;
+}
+
+.btn-primary-orange {
+    background-color: #d35400;
+    border: none;
+    color: white;
+    padding: 1rem 2.5rem;
+    font-size: 1.1rem;
+    transition: all 0.3s ease;
+}
+
+.btn-primary-orange:hover {
+    background-color: #e67e22;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(211, 84, 0, 0.3);
+    color: white;
 }
 
 /* Grid Adjustments */

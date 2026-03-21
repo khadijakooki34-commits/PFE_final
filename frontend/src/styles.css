@@ -358,6 +358,18 @@ h3 {
   display: inline-block;
 }
 
+/* Chatbot RTL Fixes */
+[dir="rtl"] .chatbot-trigger,
+[dir="rtl"] .chatbot-container {
+  right: auto !important;
+  left: 30px !important;
+}
+
+[dir="rtl"] .chatbot-header span::before {
+  margin-left: 8px;
+  margin-right: 0;
+}
+
 /* Margin/Padding Flip Helper Utilities */
 [dir="rtl"] .ms-1 {
   margin-right: 0.25rem !important;

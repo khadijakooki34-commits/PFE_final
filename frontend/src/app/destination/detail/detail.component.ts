@@ -1,4 +1,5 @@
 import { Component, OnInit, AfterViewInit, NgZone, ChangeDetectorRef }  from '@angular/core';
+import { TranslateService } from '@ngx-translate/core';
 import { DomSanitizer, SafeResourceUrl }  from '@angular/platform-browser';
 import { MatTabChangeEvent }  from '@angular/material/tabs';
 import { ActivatedRoute, Router }  from '@angular/router';
@@ -21,7 +22,7 @@ import * as L from 'leaflet';
     templateUrl: './detail.component.html',
     styleUrls: ['./detail.component.css']
 })
-export class DestinationDetailComponent implements OnInit, AfterViewInit {
+export class DestinationDetailComponent implements OnInit {
     destination: any;
     reviews: any[] = [];
     loading = true;
@@ -46,19 +47,20 @@ export class DestinationDetailComponent implements OnInit, AfterViewInit {
     }
 
     constructor(
-        private route: ActivatedRoute,
-        private router: Router,
-        private apiService: ApiService,
-        private destinationService: DestinationService,
-        private weatherService: WeatherService, // Inject WeatherService
-        private offerService: OfferService,
-        private reservationService: ReservationService,
-        public authService: AuthService,
-        private snackBar: MatSnackBar,
-        private dialog: MatDialog,
-        private sanitizer: DomSanitizer,
-        private ngZone: NgZone,
-        private cdr: ChangeDetectorRef
+        private readonly route: ActivatedRoute,
+        private readonly router: Router,
+        private readonly apiService: ApiService,
+        private readonly destinationService: DestinationService,
+        private readonly weatherService: WeatherService,
+        private readonly offerService: OfferService,
+        private readonly reservationService: ReservationService,
+        public readonly authService: AuthService,
+        private readonly snackBar: MatSnackBar,
+        private readonly dialog: MatDialog,
+        private readonly sanitizer: DomSanitizer,
+        private readonly translate: TranslateService,
+        private readonly ngZone: NgZone,
+        private readonly cdr: ChangeDetectorRef
     ) {
         // INSTANT LOAD LOGIC: Check if data was passed via state
         this.ngZone.run(() => {
@@ -94,9 +96,6 @@ export class DestinationDetailComponent implements OnInit, AfterViewInit {
         });
     }
 
-    ngAfterViewInit(): void {
-        // Map init handled after data load
-    }
 
     loadDestination(id: number, showLoading: boolean) {
         if (showLoading) this.loading = true;
@@ -116,7 +115,7 @@ export class DestinationDetailComponent implements OnInit, AfterViewInit {
                     console.error('Error loading destination:', err);
                     this.loading = false;
                     if (!this.destination) {
-                        this.snackBar.open('Failed to load destination details.', 'Close', { duration: 5000 });
+                        this.snackBar.open(this.translate.instant('DESTINATIONS.LIST.EMPTY_TITLE'), this.translate.instant('COMMON.CLOSE'), { duration: 5000 });
                     }
                     this.cdr.detectChanges();
                 });
@@ -125,7 +124,7 @@ export class DestinationDetailComponent implements OnInit, AfterViewInit {
     }
 
     loadWeather() {
-        if (this.destination && this.destination.id) {
+        if (this.destination?.id) {
             this.weatherLoading = true;
             this.weatherService.getCurrentWeather(this.destination.id).subscribe({
                 next: (data) => {
@@ -193,7 +192,7 @@ export class DestinationDetailComponent implements OnInit, AfterViewInit {
     }
 
     initMap() {
-        if (!this.destination || !this.destination.latitude || !this.destination.longitude) return;
+        if (!this.destination?.latitude || !this.destination?.longitude) return;
 
         // Ensure map container exists
         const mapContainer = document.getElementById('map');
@@ -245,12 +244,12 @@ export class DestinationDetailComponent implements OnInit, AfterViewInit {
                 this.reviews.push(review);
                 this.newReview = { note: 5, commentaire: '' };
                 this.showReviewForm = false;
-                this.snackBar.open('Review added!', 'Close', { duration: 3000 });
+                this.snackBar.open(this.translate.instant('DESTINATIONS.DETAIL.REVIEW_SUCCESS'), this.translate.instant('COMMON.CLOSE'), { duration: 3000 });
                 this.loadReviews(this.destination.id);
             },
             error: (err: any) => {
                 console.error('Error adding review:', err);
-                this.snackBar.open('Failed to add review', 'Close', { duration: 3000 });
+                this.snackBar.open(this.translate.instant('DESTINATIONS.DETAIL.REVIEW_ERROR'), this.translate.instant('COMMON.CLOSE'), { duration: 3000 });
             }
         });
     }
@@ -265,7 +264,7 @@ export class DestinationDetailComponent implements OnInit, AfterViewInit {
         dialogRef.afterClosed().subscribe(result => {
             if (result) {
                 this.destination = result;
-                this.snackBar.open('Destination updated successfully', 'Close', { duration: 3000 });
+                this.snackBar.open(this.translate.instant('DESTINATIONS.DETAIL.UPDATE_SUCCESS'), this.translate.instant('COMMON.CLOSE'), { duration: 3000 });
                 this.initMap();
                 this.loadWeather(); // Reload weather in case coords changed
             }
@@ -274,13 +273,13 @@ export class DestinationDetailComponent implements OnInit, AfterViewInit {
 
     deleteDestination() {
         if (!this.authService.isAdmin) return;
-        if (confirm('Are you sure you want to delete this destination? This cannot be undone.')) {
-            this.destinationService.deleteDestination(this.destination.id).subscribe({
+        if (confirm(this.translate.instant('DESTINATIONS.DETAIL.DELETE_CONFIRM'))) {
+            this.destinationService.deleteDestination(this.destination?.id).subscribe({
                 next: () => {
-                    this.snackBar.open('Destination deleted', 'Close', { duration: 3000 });
+                    this.snackBar.open(this.translate.instant('DESTINATIONS.DETAIL.DELETE_SUCCESS'), this.translate.instant('COMMON.CLOSE'), { duration: 3000 });
                     this.router.navigate(['/destinations']);
                 },
-                error: () => this.snackBar.open('Failed to delete', 'Close', { duration: 3000 })
+                error: () => this.snackBar.open(this.translate.instant('DESTINATIONS.DETAIL.DELETE_ERROR'), this.translate.instant('COMMON.CLOSE'), { duration: 3000 })
             });
         }
     }
@@ -302,7 +301,7 @@ export class DestinationDetailComponent implements OnInit, AfterViewInit {
     // Lightbox Logic
     openLightbox(index: number) {
         this.currentImageIndex = index;
-        if (this.destination.medias && this.destination.medias[index]) {
+        if (this.destination?.medias?.[index]) {
             this.lightboxImage = this.destination.medias[index].url;
         }
     }
@@ -337,16 +336,16 @@ export class DestinationDetailComponent implements OnInit, AfterViewInit {
     }
 
     private uploadImage(file: File) {
-        this.snackBar.open('Uploading image...', 'Close', { duration: 2000 });
+        this.snackBar.open(this.translate.instant('DESTINATIONS.DETAIL.UPLOAD_START'), this.translate.instant('COMMON.CLOSE'), { duration: 2000 });
         this.apiService.uploadFile(this.destination.id, file).subscribe({
             next: (response) => {
-                this.snackBar.open('Photo added to gallery!', 'Close', { duration: 3000 });
+                this.snackBar.open(this.translate.instant('DESTINATIONS.DETAIL.UPLOAD_SUCCESS'), this.translate.instant('COMMON.CLOSE'), { duration: 3000 });
                 // Reload destination to see new image
                 this.loadDestination(this.destination.id, false);
             },
             error: (err) => {
                 console.error('Upload failed:', err);
-                this.snackBar.open('Failed to upload image. Please try again.', 'Close', { duration: 5000 });
+                this.snackBar.open(this.translate.instant('DESTINATIONS.DETAIL.UPLOAD_ERROR'), this.translate.instant('COMMON.CLOSE'), { duration: 5000 });
             }
         });
     }
@@ -379,15 +378,15 @@ export class DestinationDetailComponent implements OnInit, AfterViewInit {
         // Vérifier que l'utilisateur est connecté
         if (!this.authService.isLoggedIn) {
             console.log('🔍 User not logged in, redirecting to login');
-            this.snackBar.open('⚠️ Veuillez vous connecter pour planifier un voyage', 'Fermer', { duration: 5000 });
+            this.snackBar.open(this.translate.instant('DESTINATIONS.DETAIL.PLAN_TRIP_LOGIN_REQ'), this.translate.instant('COMMON.CLOSE'), { duration: 5000 });
             this.router.navigate(['/auth/login']);
             return;
         }
 
         // Vérifier que la destination existe
-        if (!this.destination || !this.destination.id) {
+        if (!this.destination?.id) {
             console.log('🔍 No destination found');
-            this.snackBar.open('Erreur: Destination non trouvée', 'Fermer', { duration: 3000 });
+            this.snackBar.open(this.translate.instant('DESTINATIONS.DETAIL.PLAN_TRIP_ERROR'), this.translate.instant('COMMON.CLOSE'), { duration: 3000 });
             return;
         }
 
@@ -408,7 +407,7 @@ export class DestinationDetailComponent implements OnInit, AfterViewInit {
 
     openReservationMenu(offer: Offer) {
         if (!this.authService.isLoggedIn) {
-            this.snackBar.open('Please log in to make a reservation.', 'Close', { duration: 5000 });
+            this.snackBar.open(this.translate.instant('DESTINATIONS.DETAIL.RESERVE_LOGIN_REQ'), this.translate.instant('COMMON.CLOSE'), { duration: 5000 });
             this.router.navigate(['/auth/login']);
             return;
         }
@@ -421,7 +420,7 @@ export class DestinationDetailComponent implements OnInit, AfterViewInit {
 
         dialogRef.afterClosed().subscribe(result => {
             if (result && result.success && result.itineraryId) {
-                this.snackBar.open('Reservation submitted! Waiting for admin approval.', 'Close', { duration: 5000 });
+                this.snackBar.open(this.translate.instant('DESTINATIONS.DETAIL.RESERVE_SUCCESS'), this.translate.instant('COMMON.CLOSE'), { duration: 5000 });
                 // Redirect user to the itinerary page where they can see their reservations and generate invoices
                 this.router.navigate(['/itineraires/detail', result.itineraryId]);
             }

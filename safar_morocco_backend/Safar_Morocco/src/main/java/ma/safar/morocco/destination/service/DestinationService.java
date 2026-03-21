@@ -1,6 +1,7 @@
 package ma.safar.morocco.destination.service;
 
 import lombok.RequiredArgsConstructor;
+import ma.safar.morocco.util.Translator;
 import ma.safar.morocco.destination.dto.DestinationResponseDTO;
 import ma.safar.morocco.destination.entity.Destination;
 import ma.safar.morocco.destination.repository.DestinationRepository;
@@ -100,9 +101,17 @@ public class DestinationService {
 
         return DestinationResponseDTO.builder()
                 .id(d.getId())
-                .nom(d.getNom())
-                .description(d.getDescription())
-                .histoire(d.getHistoire())
+                .nom(Translator.translate(d, "name"))
+                .nameEn(d.getNameEn())
+                .nameFr(d.getNameFr())
+                .nameAr(d.getNameAr())
+                .nameEs(d.getNameEs())
+                .description(Translator.translate(d, "description"))
+                .descriptionEn(d.getDescriptionEn())
+                .descriptionFr(d.getDescriptionFr())
+                .descriptionAr(d.getDescriptionAr())
+                .descriptionEs(d.getDescriptionEs())
+                .histoire(Translator.translate(d, "histoire"))
                 .historicalDescription(d.getHistoricalDescription())
                 .type(d.getType())
                 .latitude(d.getLatitude())
@@ -123,8 +132,8 @@ public class DestinationService {
                         d.getMedias() != null ? d.getMedias().stream().map(m -> m.getUrl())
                                 .collect(Collectors.toList())
                                 : java.util.Collections.emptyList())
-                .bestTime(d.getBestTime())
-                .languages(d.getLanguages())
+                .bestTime(Translator.translate(d, "bestTime"))
+                .languages(Translator.translate(d, "languages"))
                 .averageCost(d.getAverageCost())
                 .videoUrl(d.getVideoUrl())
                 .build();

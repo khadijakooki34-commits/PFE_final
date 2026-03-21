@@ -13,7 +13,7 @@
                                 <i class="bi bi-geo-alt me-1"></i>{{ 'DESTINATIONS.DETAIL.BREADCRUMB' | translate }}
                             </a>
                         </li>
-                        <li class="breadcrumb-item active text-white" aria-current="page">{{ destination.nom | translateValue }}</li>
+                        <li class="breadcrumb-item active text-white" aria-current="page">{{ destination | localizedField:'name' }}</li>
                     </ol>
                 </nav>
 
@@ -21,7 +21,7 @@
                     <i class="bi bi-tags-fill me-2"></i> {{ destination.categorie | categoryName }}
                 </span>
 
-                <h1 class="display-2 fw-800 text-white mb-4 font-display">{{ destination.nom | translateValue }}</h1>
+                <h1 class="display-2 fw-800 text-white mb-4 font-display">{{ destination | localizedField:'name' }}</h1>
 
                 <div class="hero-meta-badges mb-4">
                     <span class="hero-glass-badge">
@@ -102,7 +102,7 @@
                                     <i class="bi bi-info-circle-fill text-primary"></i> 
                                     {{ 'DESTINATIONS.DETAIL.ABOUT' | translate }}
                                 </h2>
-                                <p class="description-large mb-5">{{destination.description}}</p>
+                                <p class="description-large mb-5">{{destination | localizedField:'description':'description'}}</p>
 
                                 <div class="row g-4 mb-5">
                                     <!-- Highlights (Points Forts) -->
@@ -214,9 +214,9 @@
                                 </div>
                                 <div class="masonry-gallery" *ngIf="destination.medias?.length; else noImages">
                                     <div class="gallery-card" *ngFor="let media of destination.medias; let i = index"
-                                        (click)="openLightbox(i)">
+                                        (click)="openLightbox(i)" (keydown.enter)="openLightbox(i)" tabindex="0">
                                         <img [src]="media | imageUrl" class="img-fluid rounded-4 shadow-sm"
-                                            alt="Gallery image" loading="lazy">
+                                            alt="Gallery thumbnail" loading="lazy">
                                         <div class="gallery-hover-overlay">
                                             <i class="bi bi-zoom-in text-white fs-1"></i>
                                         </div>
@@ -240,7 +240,7 @@
                                 </h2>
                                 <div class="video-container shadow-lg rounded-4 overflow-hidden border">
                                     <iframe [src]="getSafeVideoUrl(destination.videoUrl)" width="100%" height="500"
-                                        frameborder="0"
+                                        title="Destination Video"
                                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                                         allowfullscreen></iframe>
                                 </div>
@@ -366,18 +366,20 @@
                 <div class="review-form-card p-4 rounded-4 shadow-sm bg-white border mb-5" *ngIf="showReviewForm">
                     <h4 class="fw-800 mb-3">{{ 'DESTINATIONS.DETAIL.WRITE_REVIEW' | translate }}</h4>
                     <div class="mb-3">
-                        <label class="form-label text-muted small fw-bold">{{ 'DESTINATIONS.DETAIL.REVIEW_RATING_LABEL' | translate }}</label>
-                        <div class="d-flex gap-2">
+                        <label for="reviewRating" class="form-label text-muted small fw-bold">{{ 'DESTINATIONS.DETAIL.REVIEW_RATING_LABEL' | translate }}</label>
+                        <div id="reviewRating" class="d-flex gap-2">
                             <i class="bi fs-4 cursor-pointer" 
                                [class.bi-star-fill]="newReview.note >= i" 
                                [class.bi-star]="newReview.note < i"
                                [class.text-warning]="newReview.note >= i"
+                               tabindex="0"
+                               (keydown.enter)="newReview.note = i"
                                *ngFor="let i of [1,2,3,4,5]" (click)="newReview.note = i"></i>
                         </div>
                     </div>
                     <div class="mb-4">
-                        <label class="form-label text-muted small fw-bold">{{ 'DESTINATIONS.DETAIL.REVIEW_COMMENT_LABEL' | translate }}</label>
-                        <textarea class="form-control form-control-lg border-light bg-light" rows="4" 
+                        <label for="reviewComment" class="form-label text-muted small fw-bold">{{ 'DESTINATIONS.DETAIL.REVIEW_COMMENT_LABEL' | translate }}</label>
+                        <textarea id="reviewComment" class="form-control form-control-lg border-light bg-light" rows="4" 
                             [(ngModel)]="newReview.commentaire" [placeholder]="'DESTINATIONS.DETAIL.SHARE_EXP' | translate"></textarea>
                     </div>
                     <div class="d-flex gap-2">
@@ -395,7 +397,7 @@
                                         *ngFor="let review of reviews">
                                         <div class="d-flex align-items-center gap-3 mb-3">
                                             <img [src]="review.travelerPhotoUrl | imageUrl:'assets/default-avatar.png'"
-                                                class="reviewer-img">
+                                                class="reviewer-img" [alt]="review.travelerName">
                                             <div>
                                                 <h6 class="fw-800 text-secondary mb-0">{{review.travelerName}}</h6>
                                                 <div class="star-rating text-warning small">
@@ -438,15 +440,15 @@
 </ng-template>
 
 <!-- Lightbox Overlay -->
-<div class="lightbox" *ngIf="lightboxImage" (click)="closeLightbox()">
-    <span class="close-btn" (click)="closeLightbox()">&times;</span>
+<div class="lightbox" *ngIf="lightboxImage" (click)="closeLightbox()" (keydown.escape)="closeLightbox()" tabindex="0">
+    <span class="close-btn" (click)="closeLightbox()" (keydown.enter)="closeLightbox()" tabindex="0">&times;</span>
 
     <button class="nav-btn prev-btn" *ngIf="destination?.medias && currentImageIndex > 0" (click)="prevImage($event)">
         <i class="bi bi-chevron-left"></i>
     </button>
 
     <div class="lightbox-img-wrapper">
-        <img [src]="lightboxImage | imageUrl" class="lightbox-content img-fluid" (click)="$event.stopPropagation()">
+        <img [src]="lightboxImage | imageUrl" class="lightbox-content img-fluid" (click)="$event.stopPropagation()" alt="Enlarged gallery photo">
     </div>
 
     <button class="nav-btn next-btn" *ngIf="destination?.medias && currentImageIndex < destination.medias.length - 1"

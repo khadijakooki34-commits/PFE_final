@@ -1,32 +1,42 @@
 <!-- Hero Section -->
-<section class="hero-small d-flex align-items-center justify-content-center text-center text-white">
-    <div class="hero-overlay-dark"></div>
-    <div class="container position-relative z-2">
-        <div class="fade-in-up">
-            <span class="badge bg-white-glass text-white px-4 py-2 rounded-pill mb-4 fw-800 letter-spacing-2">
-                {{ 'ITINERARY.HERO_SUBTITLE' | translate }}
+<section class="itinerary-hero">
+    <div class="hero-overlay"></div>
+    <div class="container hero-content text-center">
+        <!-- Badge -->
+        <div class="d-flex justify-content-center mb-4">
+            <span class="hero-badge animate__animated animate__fadeInDown">
+                {{ 'ITINERARY.REDESIGN.BADGE' | translate }}
             </span>
-            <h1 class="display-3 fw-800 mb-3 font-display" style="color: white !important;">{{ 'ITINERARY.HERO_TITLE' | translate }}</h1>
-            <p class="lead opacity-90 mx-auto mb-5" style="max-width: 700px; color: white !important;">{{ 'ITINERARY.HERO_DESC' | translate }}</p>
-            
-            <!-- Quick Statistics -->
-            <div class="hero-stats mb-5">
-                <div class="stat-item">
-                    <span class="stat-value">{{ itineraries.length }}</span>
-                    <span class="stat-label">{{ 'ITINERARY.STATS_ITINERARIES' | translate }}</span>
-                </div>
-                <div class="stat-item">
-                    <span class="stat-value">{{ getOptimizedCount() }}</span>
-                    <span class="stat-label">{{ 'ITINERARY.STATS_OPTIMIZED' | translate }}</span>
-                </div>
-                <div class="stat-item">
-                    <span class="stat-value">{{ getTotalDistance() }} {{ 'ITINERARY.KM_UNIT' | translate }}</span>
-                    <span class="stat-label">{{ 'ITINERARY.STATS_DISTANCE' | translate }}</span>
-                </div>
-            </div>
+        </div>
 
-            <button class="btn btn-primary px-5 py-3 rounded-pill shadow-lg fw-bold" style="font-size: 1.1rem;" (click)="createNewItinerary()">
-                <i class="bi bi-plus-lg me-2"></i> {{ 'ITINERARY.NEW_ITINERARY' | translate }}
+        <!-- Title & Subtitle -->
+        <h1 class="hero-title fw-800 mb-2 animate__animated animate__fadeInDown">
+            {{ 'ITINERARY.REDESIGN.TITLE' | translate }}
+        </h1>
+        <p class="hero-subtitle mb-5 animate__animated animate__fadeInUp">
+            {{ 'ITINERARY.REDESIGN.SUBTITLE' | translate }}
+        </p>
+        
+        <!-- Stats Row -->
+        <div class="hero-stats-row d-flex flex-wrap justify-content-center gap-5 mb-5 animate__animated animate__zoomIn">
+            <div class="stat-item">
+                <span class="stat-value">{{ itineraries.length }}</span>
+                <span class="stat-label">{{ 'ITINERARY.REDESIGN.STATS_TOTAL' | translate }}</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-value">{{ getOptimizedCount() }}</span>
+                <span class="stat-label">{{ 'ITINERARY.REDESIGN.STATS_OPTIMIZED' | translate }}</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-value">{{ getTotalDistance() }} {{ 'ITINERARY.KM_UNIT' | translate }}</span>
+                <span class="stat-label">{{ 'ITINERARY.REDESIGN.STATS_DISTANCE' | translate }}</span>
+            </div>
+        </div>
+
+        <!-- Action Button -->
+        <div class="animate__animated animate__fadeInUp animate__delay-1s">
+            <button class="btn btn-primary-orange px-5 py-3 rounded-pill shadow-lg fw-bold" (click)="createNewItinerary()">
+                <i class="bi bi-plus-lg me-2"></i> {{ 'ITINERARY.REDESIGN.NEW_BUTTON' | translate }}
             </button>
         </div>
     </div>
@@ -64,7 +74,12 @@
     <div *ngIf="!loading && itineraries.length > 0">
         <div class="row g-4">
             <div *ngFor="let itinerary of itineraries" class="col-md-6 col-lg-4">
-                <div class="card itinerary-card border-0 shadow-sm h-100 rounded-4 overflow-hidden" (click)="viewItineraryDetail(itinerary.id)">
+                <div class="card itinerary-card border-0 shadow-sm h-100 rounded-4 overflow-hidden hover-shadow"
+                     [class.is-optimized]="itinerary?.estOptimise"
+                     (click)="viewItineraryDetail(itinerary.id)"
+                     (keydown.enter)="viewItineraryDetail(itinerary.id)"
+                     role="button"
+                     tabindex="0">
                     <div class="card-body p-4 d-flex flex-column">
                         <div class="d-flex justify-content-between align-items-start mb-4">
                             <h4 class="card-title fw-bold mb-0 text-truncate pe-3">{{ itinerary?.nom || ('ITINERARY.UNNAMED_ITINERARY' | translate) }}</h4>

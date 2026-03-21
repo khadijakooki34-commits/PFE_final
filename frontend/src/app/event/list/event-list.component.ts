@@ -1,5 +1,6 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { ApiService } from '../../core/services/api.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
     standalone: false,
@@ -12,17 +13,34 @@ export class EventListComponent implements OnInit {
     loading = true;
     searchTerm: string = '';
     locationTerm: string = '';
-    selectedCategory: string = 'All Events';
-    categories = ['All Events', 'Festivals', 'Cultural', 'Music', 'Traditional'];
+    selectedCategory: string = ''; // Initialized to empty string, will be set by loadCategories
+    categories: string[] = []; // Changed to empty array
 
     filteredEvents: any[] = []; // Explicit array instead of getter
 
     constructor(
         private apiService: ApiService,
+        private translate: TranslateService,
         private cdr: ChangeDetectorRef
     ) { }
 
     ngOnInit(): void {
+        this.loadCategories(); // Load categories first
+        this.loadEvents(); // Then load events
+    }
+
+    private loadCategories(): void {
+        this.categories = [
+            this.translate.instant('EVENTS.ALL_EVENTS'),
+            this.translate.instant('EVENTS.FESTIVALS'),
+            this.translate.instant('EVENTS.CULTURAL'),
+            this.translate.instant('EVENTS.MUSIC'),
+            this.translate.instant('EVENTS.TRADITIONAL')
+        ];
+        this.selectedCategory = this.categories[0]; // Set default selected category after loading
+    }
+
+    private loadEvents(): void {
         this.loading = true;
         this.apiService.getEvents().subscribe({
             next: (data) => {
@@ -34,12 +52,12 @@ export class EventListComponent implements OnInit {
                 }));
                 this.applyFilters(); // Initial filter application
                 this.loading = false;
-                this.cdr.detectChanges(); // Force update
+                // Removed cdr.detectChanges()
             },
             error: (e) => {
                 console.error(e);
                 this.loading = false;
-                this.cdr.detectChanges();
+                // Removed cdr.detectChanges()
             }
         });
     }
@@ -60,16 +78,13 @@ export class EventListComponent implements OnInit {
     applyFilters() {
         const search = (this.searchTerm || '').trim().toLowerCase();
         const location = (this.locationTerm || '').trim().toLowerCase();
-        const selectedCat = this.selectedCategory || 'All Events';
+        const selectedCat = this.selectedCategory;
 
-        // Map display label → backend eventType value
-        const categoryMap: { [key: string]: string } = {
-            'Festivals':    'festival',
-            'Cultural':     'cultural',
-            'Music':        'music',
-            'Traditional':  'traditional',
-        };
-        const targetType = categoryMap[selectedCat]; // undefined when 'All Events'
+        // Find the matching internal type by checking which category index was selected
+        // categories = [All, Festivals, Cultural, Music, Traditional]
+        const categoryIndex = this.categories.indexOf(selectedCat);
+        const internalTypes = [null, 'festival', 'cultural', 'music', 'traditional'];
+        const targetType = internalTypes[categoryIndex] || null;
 
         this.filteredEvents = this.events.filter(event => {
             const matchesSearch = !search || 
@@ -104,7 +119,7 @@ export class EventListComponent implements OnInit {
     resetFilters() {
         this.searchTerm = '';
         this.locationTerm = '';
-        this.selectedCategory = 'All Events';
+        this.selectedCategory = this.categories[0];
         this.applyFilters();
     }
 }

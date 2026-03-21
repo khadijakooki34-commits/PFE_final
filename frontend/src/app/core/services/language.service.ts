@@ -16,7 +16,7 @@ export interface Language {
 })
 export class LanguageService {
     private readonly LANG_KEY = 'selected_language';
-    private currentLangSubject = new BehaviorSubject<string>('en');
+    private readonly currentLangSubject = new BehaviorSubject<string>('en');
     public currentLang$ = this.currentLangSubject.asObservable();
 
     public languages: Language[] = [
@@ -27,9 +27,9 @@ export class LanguageService {
     ];
 
     constructor(
-        private translate: TranslateService,
-        private apiService: ApiService,
-        private authService: AuthService
+        private readonly translate: TranslateService,
+        private readonly apiService: ApiService,
+        private readonly authService: AuthService
     ) {
         this.initLanguage();
     }
@@ -75,11 +75,11 @@ export class LanguageService {
         if (isRtl) {
             html.setAttribute('dir', 'rtl');
             html.setAttribute('lang', langCode);
-            body.classList.add('rtl-layout');
+            body.classList.add('rtl-mode');
         } else {
             html.setAttribute('dir', 'ltr');
             html.setAttribute('lang', langCode);
-            body.classList.remove('rtl-layout');
+            body.classList.remove('rtl-mode');
         }
     }
 

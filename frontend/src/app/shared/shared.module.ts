@@ -35,6 +35,7 @@ import { DestinationDialogComponent } from '../destination/dialog/destination-di
 import { ImageUrlPipe } from './pipes/image-url.pipe';
 import { CategoryNamePipe } from './pipes/category-name.pipe';
 import { TranslateValuePipe } from './pipes/translate-value.pipe';
+import { LocalizedFieldPipe } from './pipes/localized-field.pipe';
 import { RecommendationComponent } from './components/recommendation/recommendation.component';
 
 @NgModule({
@@ -49,6 +50,7 @@ import { RecommendationComponent } from './components/recommendation/recommendat
         ImageUrlPipe,
         CategoryNamePipe,
         TranslateValuePipe,
+        LocalizedFieldPipe,
         RecommendationComponent
     ],
     imports: [
@@ -110,6 +112,7 @@ import { RecommendationComponent } from './components/recommendation/recommendat
         ImageUrlPipe,
         CategoryNamePipe,
         TranslateValuePipe,
+        LocalizedFieldPipe,
         RecommendationComponent
     ]
 })

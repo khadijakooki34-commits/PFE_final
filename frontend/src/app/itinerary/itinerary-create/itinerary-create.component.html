@@ -73,17 +73,19 @@
                                  [class.border-success]="isDestinationSelected(destination)"
                                  [class.selected-card]="isDestinationSelected(destination)"
                                  (click)="addDestination(destination)"
+                                 (keydown.enter)="addDestination(destination)"
+                                 tabindex="0" role="button"
                                  style="cursor: pointer; transition: all 0.2s;">
                                 <div class="card-body p-3 d-flex flex-column justify-content-center position-relative">
-                                    <h6 class="fw-bold mb-1 text-dark pe-4">{{ destination.nom | translateValue }}</h6>
+                                    <h6 class="fw-bold mb-1 text-dark pe-4">{{ destination | localizedField:'name' }}</h6>
                                     <small class="text-muted d-flex align-items-center">
                                         <i class="bi bi-tag-fill me-1 opacity-50 text-secondary"></i>
-                                        {{ destination.categorie || destination.type || 'Destination' }}
+                                        {{ destination.categorie || destination.type || ('NAV.DESTINATIONS' | translate) }}
                                     </small>
                                     
                                     <div class="position-absolute top-50 end-0 translate-middle-y me-3">
                                         <div *ngIf="isDestinationSelected(destination)" class="badge bg-success rounded-pill d-flex align-items-center gap-1 shadow-sm px-2 py-1">
-                                            <i class="bi bi-check2"></i> <span style="font-size: 0.8rem;">Sélectionnée</span>
+                                            <i class="bi bi-check2"></i> <span style="font-size: 0.8rem;">{{ 'ITINERARY.SELECTED_LABEL' | translate }}</span>
                                         </div>
                                         <div *ngIf="!isDestinationSelected(destination)" class="text-primary opacity-50 hover-opacity-100 transition-all">
                                             <i class="bi bi-plus-circle fs-4"></i>

@@ -102,7 +102,7 @@ export class ItineraryCreateComponent implements OnInit {
             },
             error: (err) => {
                 console.error('❌ Error loading itinerary for edit:', err);
-                this.snackBar.open('Erreur lors du chargement de l\'itinéraire', 'Fermer', {
+                this.snackBar.open(this.translate.instant('ITINERARY.LOAD_ERROR'), this.translate.instant('COMMON.CLOSE'), {
                     duration: 3000
                 });
             }
@@ -183,7 +183,7 @@ export class ItineraryCreateComponent implements OnInit {
             },
             error: (err: any) => {
                 console.error('Error loading destinations:', err);
-                this.snackBar.open('Erreur lors du chargement des destinations', 'Fermer', {
+                this.snackBar.open(this.translate.instant('ITINERARY.LOAD_DEST_ERROR'), this.translate.instant('COMMON.CLOSE'), {
                     duration: 3000
                 });
             }
@@ -218,12 +218,12 @@ export class ItineraryCreateComponent implements OnInit {
 
         if (this.itineraryForm.invalid || this.selectedDestinations.length === 0) {
             if (this.selectedDestinations.length === 0) {
-                this.snackBar.open(this.translate.instant('ITINERARY.SELECT_AT_LEAST_ONE'), 'Fermer', {
+                this.snackBar.open(this.translate.instant('ITINERARY.SELECT_AT_LEAST_ONE'), this.translate.instant('COMMON.CLOSE'), {
                     duration: 3000
                 });
             }
             if (this.itineraryForm.invalid) {
-                this.snackBar.open(this.translate.instant('ITINERARY.NAME_ERROR'), 'Fermer', {
+                this.snackBar.open(this.translate.instant('ITINERARY.NAME_ERROR'), this.translate.instant('COMMON.CLOSE'), {
                     duration: 3000
                 });
             }
@@ -234,7 +234,7 @@ export class ItineraryCreateComponent implements OnInit {
 
         const currentUser = this.authService.currentUserValue;
         if (!currentUser) {
-            this.snackBar.open('Utilisateur non connecté', 'Fermer', { duration: 3000 });
+            this.snackBar.open(this.translate.instant('ITINERARY.USER_NOT_LOGGED'), this.translate.instant('COMMON.CLOSE'), { duration: 3000 });
             this.loading = false;
             return;
         }
@@ -252,14 +252,14 @@ export class ItineraryCreateComponent implements OnInit {
             this.itineraryService.updateItineraire(this.editId, itineraryRequest, currentUser.id).subscribe({
                 next: (response) => {
                     console.log(' Itinerary updated successfully:', response);
-                    this.snackBar.open('Itinéraire mis à jour avec succès!', 'Fermer', {
+                    this.snackBar.open(this.translate.instant('ITINERARY.UPDATE_SUCCESS'), this.translate.instant('COMMON.CLOSE'), {
                         duration: 3000
                     });
                     this.router.navigate(['/itineraries/detail', response.id]);
                 },
                 error: (err) => {
                     console.error(' Error updating itinerary:', err);
-                    this.snackBar.open('Erreur lors de la mise à jour de l\'itinéraire', 'Fermer', {
+                    this.snackBar.open(this.translate.instant('ITINERARY.UPDATE_ERROR'), this.translate.instant('COMMON.CLOSE'), {
                         duration: 3000
                     });
                     this.loading = false;
@@ -271,14 +271,14 @@ export class ItineraryCreateComponent implements OnInit {
             this.itineraryService.creerItineraire(itineraryRequest, currentUser.id).subscribe({
                 next: (response) => {
                     console.log(' Itinerary created successfully:', response);
-                    this.snackBar.open('Itinéraire créé avec succès!', 'Fermer', {
+                    this.snackBar.open(this.translate.instant('ITINERARY.CREATE_SUCCESS'), this.translate.instant('COMMON.CLOSE'), {
                         duration: 3000
                     });
                     this.router.navigate(['/itineraries/detail', response.id]);
                 },
                 error: (err) => {
                     console.error(' Error creating itinerary:', err);
-                    this.snackBar.open('Erreur lors de la création de l\'itinéraire', 'Fermer', {
+                    this.snackBar.open(this.translate.instant('ITINERARY.CREATE_ERROR'), this.translate.instant('COMMON.CLOSE'), {
                         duration: 3000
                     });
                     this.loading = false;

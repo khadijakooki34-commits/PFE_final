@@ -15,19 +15,19 @@ import { Router } from '@angular/router';
       <div class="chatbot-header">
         <span (click)="toggle()">{{ 'CHATBOT.HEADER' | translate }}</span>
         <div class="header-actions d-flex gap-3 align-items-center">
-          <i class="bi bi-clock-history" *ngIf="currentUser" (click)="toggleSidebar()" title="Chat History" style="cursor:pointer;"></i>
+          <i class="bi bi-clock-history" *ngIf="currentUser" (click)="toggleSidebar()" [title]="'CHATBOT.HISTORY' | translate" style="cursor:pointer;"></i>
           <i class="bi bi-x-lg" (click)="toggle()" style="cursor:pointer;"></i>
         </div>
       </div>
       <div class="chatbot-body" *ngIf="isOpen">
         <div class="chatbot-sidebar" *ngIf="showSidebar">
           <button class="new-chat-btn" (click)="startNewChat()">
-            <i class="bi bi-plus-lg me-2"></i> New Chat
+            <i class="bi bi-plus-lg me-2"></i> {{ 'CHATBOT.NEW_CHAT' | translate }}
           </button>
           
           <div class="history-list mt-3">
              <div *ngIf="conversations.length === 0" class="text-muted small text-center mt-4">
-                 No previous conversations
+                 {{ 'CHATBOT.NO_HISTORY' | translate }}
              </div>
              <div class="history-item" *ngFor="let conv of conversations" 
                   [class.active]="conv.id === sessionId"
@@ -274,7 +274,7 @@ import { Router } from '@angular/router';
   `]
 })
 export class ChatbotComponent implements AfterViewChecked {
-  @ViewChild('scrollContainer') private scrollContainer!: ElementRef;
+  @ViewChild('scrollContainer') private readonly scrollContainer!: ElementRef;
   isOpen = false;
   userInput = '';
   isLoading = false;
@@ -286,11 +286,11 @@ export class ChatbotComponent implements AfterViewChecked {
   currentUser: any = null;
 
   constructor(
-    private chatService: ChatService,
-    private cd: ChangeDetectorRef,
-    private translate: TranslateService,
+    private readonly chatService: ChatService,
+    private readonly cd: ChangeDetectorRef,
+    private readonly translate: TranslateService,
     public authService: AuthService,
-    private router: Router
+    private readonly router: Router
   ) {
     this.authService.user$.subscribe((user: any) => {
       // If user changed or logged out, reset chat
@@ -307,24 +307,12 @@ export class ChatbotComponent implements AfterViewChecked {
 
     this.sessionId = localStorage.getItem('chat_session_id');
 
-    if (!this.sessionId) {
-      this.addInitialMessage();
-    } else {
-      // If we have a sessionId, we still show the welcome message until history loads (or load it immediately if open)
-      this.addInitialMessage();
-    }
+    // Always show initial message, history will append or replace if needed
+    this.addInitialMessage();
   }
 
   addInitialMessage() {
-    const lang = this.translate.currentLang || 'en';
-    let welcomeText = "Hello 👋 I am Safar Assistant. How can I help you explore Morocco today?";
-
-    if (lang === 'fr') {
-      welcomeText = "Bonjour 👋 Je suis l'assistant Safar. Comment puis-je vous aider ?";
-    } else if (lang === 'en') {
-      welcomeText = "Hello 👋 I am Safar Assistant. How can I help you?";
-    }
-
+    const welcomeText = this.translate.instant('CHATBOT.WELCOME');
     this.messages = [{ text: welcomeText, sender: 'bot' }];
   }
 

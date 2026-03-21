@@ -24,14 +24,14 @@ export class ItineraryDetailComponent implements OnInit, AfterViewInit, OnDestro
     isDropdownOpen = false;
 
     constructor(
-        private route: ActivatedRoute,
-        private router: Router,
-        private itineraryService: ItineraryService,
-        private reservationService: ReservationService,
-        private invoiceService: InvoiceService,
-        private snackBar: MatSnackBar,
-        private cdr: ChangeDetectorRef,
-        private translate: TranslateService
+        private readonly route: ActivatedRoute,
+        private readonly router: Router,
+        private readonly itineraryService: ItineraryService,
+        private readonly reservationService: ReservationService,
+        private readonly invoiceService: InvoiceService,
+        private readonly snackBar: MatSnackBar,
+        private readonly cdr: ChangeDetectorRef,
+        private readonly translate: TranslateService
     ) {}
 
     ngOnInit(): void {
@@ -92,7 +92,7 @@ export class ItineraryDetailComponent implements OnInit, AfterViewInit, OnDestro
                 error: (err) => {
                     console.error('Error loading itinerary:', err);
                     this.loading = false;
-                    this.snackBar.open('Erreur lors du chargement de l\'itinéraire', 'Fermer', {
+                    this.snackBar.open(this.translate.instant('ITINERARY.LOAD_ERROR'), this.translate.instant('COMMON.CLOSE'), {
                         duration: 3000
                     });
                 }
@@ -132,7 +132,7 @@ export class ItineraryDetailComponent implements OnInit, AfterViewInit, OnDestro
         if (!this.map || !this.itinerary) return;
 
         // Clear existing markers and routes
-        this.markers.forEach(marker => this.map!.removeLayer(marker));
+        this.markers.forEach(marker => this.map?.removeLayer(marker));
         this.markers = [];
         if (this.routeControl) {
             this.map.removeLayer(this.routeControl);
@@ -196,14 +196,14 @@ export class ItineraryDetailComponent implements OnInit, AfterViewInit, OnDestro
         }
 
         console.log('Starting optimization...');
-        this.snackBar.open('Optimisation en cours...', 'Fermer', {
+        this.snackBar.open(this.translate.instant('ITINERARY.OPTIMIZING'), this.translate.instant('COMMON.CLOSE'), {
             duration: 2000
         });
 
-        this.itineraryService.optimiserItineraire(this.itinerary.id, this.itinerary.proprietaire.id).subscribe({
+        this.itineraryService.optimiserItineraire(this.itinerary?.id, this.itinerary?.proprietaire?.id).subscribe({
             next: (data) => {
                 console.log('Optimization successful:', data);
-                this.snackBar.open('Itinéraire optimisé avec succès!', 'Fermer', {
+                this.snackBar.open(this.translate.instant('ITINERARY.OPTIMIZE_SUCCESS'), this.translate.instant('COMMON.CLOSE'), {
                     duration: 3000
                 });
                 // Reload itinerary to show updated data
@@ -211,7 +211,7 @@ export class ItineraryDetailComponent implements OnInit, AfterViewInit, OnDestro
             },
             error: (err) => {
                 console.error('Error optimizing itinerary:', err);
-                this.snackBar.open('Erreur lors de l\'optimisation de l\'itinéraire', 'Fermer', {
+                this.snackBar.open(this.translate.instant('ITINERARY.OPTIMIZE_ERROR'), this.translate.instant('COMMON.CLOSE'), {
                     duration: 3000
                 });
             }
@@ -233,7 +233,7 @@ export class ItineraryDetailComponent implements OnInit, AfterViewInit, OnDestro
         } else {
             // Use first as origin, last as destination, others as waypoints
             const origin = validDestinations[0];
-            const destination = validDestinations[validDestinations.length - 1];
+            const destination = validDestinations.at(-1)!;
             const waypoints = validDestinations.slice(1, -1)
                 .map(d => `${d.latitude},${d.longitude}`)
                 .join('|');
@@ -248,7 +248,7 @@ export class ItineraryDetailComponent implements OnInit, AfterViewInit, OnDestro
 
     refreshItinerary(): void {
         console.log('Refresh button clicked');
-        this.snackBar.open('Actualisation en cours...', 'Fermer', {
+        this.snackBar.open(this.translate.instant('ITINERARY.REFRESHING'), this.translate.instant('COMMON.CLOSE'), {
             duration: 1000
         });
         this.loadItinerary();
@@ -275,17 +275,17 @@ export class ItineraryDetailComponent implements OnInit, AfterViewInit, OnDestro
         
         console.log('Delete itinerary clicked');
         
-        if (confirm('Êtes-vous sûr de vouloir supprimer cet itinéraire ? Cette action est irreversible.')) {
-            this.itineraryService.supprimerItineraire(this.itinerary.id, this.itinerary.proprietaire.id).subscribe({
+        if (confirm(this.translate.instant('ITINERARY.DELETE_CONFIRM'))) {
+            this.itineraryService.supprimerItineraire(this.itinerary?.id, this.itinerary?.proprietaire?.id).subscribe({
                 next: () => {
-                    this.snackBar.open('Itinéraire supprimé avec succès', 'Fermer', {
+                    this.snackBar.open(this.translate.instant('ITINERARY.DELETE_SUCCESS'), this.translate.instant('COMMON.CLOSE'), {
                         duration: 3000
                     });
                     this.router.navigate(['/itineraries']);
                 },
                 error: (err) => {
                     console.error('Error deleting itinerary:', err);
-                    this.snackBar.open('Erreur lors de la suppression de l\'itinéraire', 'Fermer', {
+                    this.snackBar.open(this.translate.instant('ITINERARY.DELETE_ERROR'), this.translate.instant('COMMON.CLOSE'), {
                         duration: 3000
                     });
                 }
@@ -307,7 +307,7 @@ export class ItineraryDetailComponent implements OnInit, AfterViewInit, OnDestro
 
     getDurationValue(duration: string): string {
         if (!duration) return '';
-        const match = duration.match(/[\d.]+/);
+        const match = /[\d.]+/.exec(duration);
         return match ? match[0] : '';
     }
 
@@ -337,11 +337,11 @@ export class ItineraryDetailComponent implements OnInit, AfterViewInit, OnDestro
     }
 
     downloadReservationPDF(reservationId: number): void {
-        this.snackBar.open('Génération du PDF...', 'Fermer', {
+        this.snackBar.open(this.translate.instant('ITINERARY.GENERATING_PDF'), this.translate.instant('COMMON.CLOSE'), {
             duration: 2000
         });
 
-        const lang = this.translate.currentLang || this.translate.getDefaultLang() || 'fr';
+        const lang = this.translate.currentLang || 'fr';
 
         this.invoiceService.generateReservationInvoice(reservationId, lang).subscribe({
             next: (invoice) => {
@@ -351,19 +351,19 @@ export class ItineraryDetailComponent implements OnInit, AfterViewInit, OnDestro
                     const downloadUrl = `/uploads/invoices/${fileName}`;
                     window.open(downloadUrl, '_blank');
                     
-                    this.snackBar.open('PDF généré avec succès!', 'Fermer', {
+                    this.snackBar.open(this.translate.instant('ITINERARY.PDF_SUCCESS'), this.translate.instant('COMMON.CLOSE'), {
                         duration: 3000
                     });
                 } else {
-                    this.snackBar.open('Erreur: Chemin du PDF non trouvé', 'Fermer', {
+                    this.snackBar.open(this.translate.instant('ITINERARY.PDF_PATH_ERROR'), this.translate.instant('COMMON.CLOSE'), {
                         duration: 3000
                     });
                 }
             },
             error: (err) => {
                 console.error('Error generating PDF:', err);
-                const errorMessage = err.error?.message || 'Erreur lors de la génération du PDF';
-                this.snackBar.open(errorMessage, 'Fermer', {
+                const errorMessage = err.error?.message || this.translate.instant('ITINERARY.PDF_GEN_ERROR');
+                this.snackBar.open(errorMessage, this.translate.instant('COMMON.CLOSE'), {
                     duration: 3000
                 });
             }

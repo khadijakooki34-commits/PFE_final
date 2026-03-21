@@ -28,11 +28,47 @@ public class Destination {
     @Column(nullable = false, length = 200)
     private String nom;
 
+    @Column(name = "name_en", length = 200)
+    private String nameEn;
+
+    @Column(name = "name_fr", length = 200)
+    private String nameFr;
+
+    @Column(name = "name_ar", length = 200)
+    private String nameAr;
+
+    @Column(name = "name_es", length = 200)
+    private String nameEs;
+
     @Column(columnDefinition = "TEXT")
     private String description;
 
+    @Column(name = "description_en", columnDefinition = "TEXT")
+    private String descriptionEn;
+
+    @Column(name = "description_fr", columnDefinition = "TEXT")
+    private String descriptionFr;
+
+    @Column(name = "description_ar", columnDefinition = "TEXT")
+    private String descriptionAr;
+
+    @Column(name = "description_es", columnDefinition = "TEXT")
+    private String descriptionEs;
+
     @Column(columnDefinition = "TEXT")
     private String histoire;
+
+    @Column(name = "histoire_en", columnDefinition = "TEXT")
+    private String histoireEn;
+
+    @Column(name = "histoire_fr", columnDefinition = "TEXT")
+    private String histoireFr;
+
+    @Column(name = "histoire_ar", columnDefinition = "TEXT")
+    private String histoireAr;
+
+    @Column(name = "histoire_es", columnDefinition = "TEXT")
+    private String histoireEs;
 
     @Column(columnDefinition = "TEXT", name = "historical_description")
     private String historicalDescription;
@@ -74,8 +110,32 @@ public class Destination {
     @Column(name = "best_time")
     private String bestTime;
 
+    @Column(name = "best_time_en")
+    private String bestTimeEn;
+
+    @Column(name = "best_time_fr")
+    private String bestTimeFr;
+
+    @Column(name = "best_time_ar")
+    private String bestTimeAr;
+
+    @Column(name = "best_time_es")
+    private String bestTimeEs;
+
     @Column(name = "languages")
     private String languages;
+
+    @Column(name = "languages_en")
+    private String languagesEn;
+
+    @Column(name = "languages_fr")
+    private String languagesFr;
+
+    @Column(name = "languages_ar")
+    private String languagesAr;
+
+    @Column(name = "languages_es")
+    private String languagesEs;
 
     @Column(name = "average_cost")
     private Double averageCost;

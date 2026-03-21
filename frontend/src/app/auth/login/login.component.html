@@ -5,15 +5,15 @@
             <h1>{{ 'AUTH.LOGIN.WELCOME' | translate }}</h1>
             <p>{{ 'AUTH.LOGIN.SUBTITLE' | translate }}</p>
             <div class="mt-auto opacity-75 small">
-                &copy; 2026 Safar Morocco. Explore the beauty of heritage.
+                &copy; 2026 Safar Morocco. {{ 'AUTH.LOGIN_FOOTER' | translate }}
             </div>
         </div>
 
         <!-- Form Panel -->
         <div class="form-panel">
             <div class="auth-header">
-                <h2 class="fw-800">{{ 'AUTH.LOGIN.SIGN_IN' | translate }}</h2>
-                <p class="text-muted small">Enter your details to access your account</p>
+                <h2 class="fw-800">{{ 'AUTH.SIGN_IN' | translate }}</h2>
+                <p class="text-muted small">{{ 'AUTH.LOGIN_SUBTITLE' | translate }}</p>
             </div>
 
             <!-- 2FA Form -->
@@ -42,7 +42,7 @@
                 *ngIf="!requiresTwoFactor">
                 <mat-form-field appearance="outline" class="w-100">
                     <mat-label>{{ 'AUTH.REGISTER.EMAIL' | translate }}</mat-label>
-                    <input matInput formControlName="email" placeholder="e.g. wanderer@example.com">
+                    <input matInput formControlName="email" [placeholder]="'AUTH.EMAIL_HINT' | translate">
                     <i matSuffix class="bi bi-envelope text-primary opacity-50 px-2"></i>
                     <mat-error *ngIf="loginForm.get('email')?.hasError('required')">
                         {{ 'AUTH.REGISTER.EMAIL_REQ' | translate }}

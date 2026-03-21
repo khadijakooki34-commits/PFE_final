@@ -13,33 +13,33 @@ import { TranslateModule }  from '@ngx-translate/core';
     <div class="auth-container d-flex justify-content-center align-items-center min-vh-100 bg-light">
       <div class="card shadow-lg p-4" style="max-width: 400px; width: 100%;">
         <div class="text-center mb-4">
-          <h2 class="fw-bold text-primary">Mot de passe oublié</h2>
-          <p class="text-muted">Entrez votre email pour recevoir un lien de réinitialisation.</p>
+          <h2 class="fw-bold text-primary">{{ 'AUTH.FORGOT_TITLE' | translate }}</h2>
+          <p class="text-muted">{{ 'AUTH.FORGOT_DESC' | translate }}</p>
         </div>
 
         <form [formGroup]="forgotForm" (ngSubmit)="onSubmit()">
           <div class="mb-3">
-            <label class="form-label">Email</label>
-            <input type="email" class="form-control" formControlName="email" placeholder="exemple@email.com">
+            <label class="form-label">{{ 'AUTH.EMAIL' | translate }}</label>
+            <input type="email" class="form-control" formControlName="email" [placeholder]="'AUTH.EMAIL_HINT' | translate">
             <div *ngIf="forgotForm.get('email')?.touched && forgotForm.get('email')?.invalid" class="text-danger small">
-              Email valide requis.
+              {{ 'AUTH.FORGOT_EMAIL_INV' | translate }}
             </div>
           </div>
 
           <div *ngIf="message" class="alert alert-success small mb-3">
-            {{ message }}
+            {{ message | translate }}
           </div>
           <div *ngIf="error" class="alert alert-danger small mb-3">
-            {{ error }}
+            {{ error | translate }}
           </div>
 
           <button type="submit" class="btn btn-primary w-100 mb-3" [disabled]="forgotForm.invalid || loading">
             <span *ngIf="loading" class="spinner-border spinner-border-sm me-2"></span>
-            Envoyer le lien
+            {{ 'AUTH.FORGOT_SUBMIT' | translate }}
           </button>
 
           <div class="text-center">
-            <a routerLink="/login" class="text-decoration-none">Retour à la connexion</a>
+            <a routerLink="/auth/login" class="text-decoration-none">{{ 'AUTH.TWO_FACTOR.BACK' | translate }}</a>
           </div>
         </form>
       </div>
@@ -67,12 +67,12 @@ export class ForgotPasswordComponent {
 
         this.apiService.forgotPassword(this.forgotForm.value.email).subscribe({
             next: (res: any) => {
-                this.message = (res && res.message) ? res.message : 'Un email de réinitialisation a été envoyé.';
+                this.message = (res && res.message) ? res.message : 'AUTH.FORGOT_SUCCESS';
                 this.loading = false;
                 this.forgotForm.reset();
             },
             error: (err: any) => {
-                this.error = (err.error && err.error.message) ? err.error.message : 'Erreur lors de l\'envoi. Vérifiez que cet email existe.';
+                this.error = (err.error && err.error.message) ? err.error.message : 'AUTH.FORGOT_ERROR';
                 this.loading = false;
             }
         });

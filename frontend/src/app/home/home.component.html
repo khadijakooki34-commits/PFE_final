@@ -5,7 +5,7 @@
         <div class="container hero-content">
             <span class="hero-subtitle">{{ 'HOME.HERO.SUBTITLE' | translate }}</span>
             <h1 class="hero-title">{{ 'HOME.HERO.TITLE' | translate }} <br> <span
-                    class="text-terracotta-light">Morocco</span></h1>
+                    class="text-terracotta-light">{{ 'HOME.HERO.MOROCCO' | translate }}</span></h1>
             <p class="hero-desc">{{ 'HOME.HERO.DESC' | translate }}</p>
 
             <div class="search-box">
@@ -63,14 +63,13 @@
             <div
                 class="section-header text-center text-md-start d-md-flex align-items-end justify-content-between mb-5">
                 <div>
-                    <span class="section-tag">Festivals & Culture</span>
-                    <h2 class="section-title">Upcoming Events</h2>
-                    <p class="section-subtitle">Experience the magic of Morocco through its unique festivals and
-                        cultural gatherings.</p>
+                    <span class="section-tag">{{ 'HOME.EVENTS.TAG' | translate }}</span>
+                    <h2 class="section-title">{{ 'HOME.EVENTS.TITLE' | translate }}</h2>
+                    <p class="section-subtitle">{{ 'HOME.EVENTS.SUBTITLE' | translate }}</p>
                 </div>
                 <a routerLink="/events"
                     class="btn btn-primary mt-3 mt-md-0 d-inline-flex align-items-center rounded-pill px-4">
-                    Explore All Events <i class="bi bi-calendar-event ms-2"></i>
+                    {{ 'HOME.EVENTS.EXPLORE_ALL' | translate }} <i class="bi bi-calendar-event ms-2"></i>
                 </a>
             </div>
 
@@ -80,7 +79,7 @@
                         class="event-preview-card shadow-sm h-100 bg-white rounded-4 overflow-hidden border-0 hover-lift ripple-effect d-block text-decoration-none">
                         <div class="position-relative">
                             <img [src]="(event.imageUrl | imageUrl) || 'https://images.unsplash.com/photo-1549493207-01fc1d4569b6?auto=format&fit=crop&q=80&w=800'"
-                                class="img-fluid w-100" style="height: 220px; object-fit: cover;" [alt]="event.nom">
+                                class="img-fluid w-100" style="height: 220px; object-fit: cover;" [alt]="event | localizedField:'name'">
                             <div
                                 class="position-absolute top-0 end-0 m-3 px-3 py-1 bg-white-glass backdrop-blur rounded-pill shadow-sm">
                                 <span class="fw-bold text-dark small">{{ event.dateDebut | date:'MMM dd' }}</span>
@@ -91,9 +90,8 @@
                                 <i class="bi bi-geo-alt-fill text-terracotta small"></i>
                                 <span class="text-muted small fw-600">{{ event.lieu }}</span>
                             </div>
-                            <h3 class="h5 fw-800 mb-2">{{ event.nom }}</h3>
-                            <p class="text-muted small mb-0 line-clamp-2">{{ event.description || 'Join us for this
-                                amazing cultural experience in Morocco.' }}</p>
+                            <h3 class="h5 fw-800 mb-2">{{ event | localizedField:'name' }}</h3>
+                            <p class="text-muted small mb-0 line-clamp-2">{{ (event | localizedField:'description':'description') || ('HOME.EVENTS.DEFAULT_DESC' | translate) }}</p>
                         </div>
                     </a>
                 </div>
@@ -102,8 +100,8 @@
             <div *ngIf="!loading && upcomingEvents.length === 0"
                 class="text-center py-5 border rounded-4 bg-white border-dashed">
                 <i class="bi bi-calendar-x display-4 text-muted mb-3 d-block"></i>
-                <h4 class="text-secondary">No upcoming events at the moment</h4>
-                <p class="text-muted">Check back later for new cultural gatherings and festivals.</p>
+                <h4 class="text-secondary">{{ 'HOME.EVENTS.NO_EVENTS' | translate }}</h4>
+                <p class="text-muted">{{ 'HOME.EVENTS.NO_EVENTS_DESC' | translate }}</p>
             </div>
         </div>
     </section>

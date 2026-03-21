@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ApiService } from '../../core/services/api.service';
 import { AuthService } from '../../core/services/auth.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
     standalone: false,
@@ -28,6 +29,7 @@ export class EventDetailComponent implements OnInit, OnDestroy {
         private apiService: ApiService,
         private authService: AuthService,
         private snackBar: MatSnackBar,
+        private translate: TranslateService,
         private ngZone: NgZone,
         private cdr: ChangeDetectorRef
     ) {
@@ -115,7 +117,7 @@ export class EventDetailComponent implements OnInit, OnDestroy {
 
     bookSpot(): void {
         if (!this.authService.isLoggedIn) {
-            this.router.navigate(['/login']);
+            this.router.navigate(['/auth/login']);
             return;
         }
 
@@ -126,13 +128,13 @@ export class EventDetailComponent implements OnInit, OnDestroy {
             next: () => {
                 this.booking = false;
                 this.alreadyReserved = true;
-                this.snackBar.open('Réservation réussie!', 'Fermer', { duration: 3000 });
+                this.snackBar.open(this.translate.instant('EVENTS.DETAIL.BOOKING_SUCCESS'), this.translate.instant('COMMON.CLOSE'), { duration: 3000 });
                 this.cdr.detectChanges();
             },
             error: (err: any) => {
                 this.booking = false;
-                const msg = err.error?.message || 'Erreur lors de la réservation.';
-                this.snackBar.open(msg, 'Fermer', { duration: 3000 });
+                const msg = err.error?.message || this.translate.instant('EVENTS.DETAIL.BOOKING_ERROR');
+                this.snackBar.open(msg, this.translate.instant('COMMON.CLOSE'), { duration: 3000 });
                 this.cdr.detectChanges();
             }
         });
@@ -184,26 +186,24 @@ export class EventDetailComponent implements OnInit, OnDestroy {
 
     /** Returns tags based on eventType */
     getEventTags(): string[] {
-        const baseTags = ['#Maroc', '#Culture', '#Voyage'];
-        const typeMap: { [key: string]: string[] } = {
-            'FESTIVAL': ['#Festival', '#Fête', '#Animation'],
-            'CULTURAL': ['#Culturel', '#Patrimoine', '#Art'],
-            'MUSIC': ['#Musique', '#Concert', '#Live'],
-            'TRADITIONAL': ['#Tradition', '#Folklore', '#Artisanat'],
-        };
+        const baseTags = [
+            this.translate.instant('EVENTS.TAG_MOROCCO'),
+            this.translate.instant('EVENTS.TAG_CULTURE'),
+            this.translate.instant('EVENTS.TAG_TRAVEL')
+        ];
         const type = (this.event?.eventType || '').toUpperCase();
-        return [...(typeMap[type] || ['#Événement']), ...baseTags];
+        const eventTypeKey = `EVENTS.${type}`;
+        const translatedType = this.translate.instant(eventTypeKey);
+        const eventTag = translatedType !== eventTypeKey ? `#${translatedType}` : `#${this.translate.instant('EVENTS.TITLE')}`;
+        return [eventTag, ...baseTags];
     }
 
     /** Event type display label */
     getEventTypeLabel(): string {
-        const map: { [k: string]: string } = {
-            'FESTIVAL': 'Festival',
-            'CULTURAL': 'Culturel',
-            'MUSIC': 'Musique',
-            'TRADITIONAL': 'Traditionnel',
-        };
-        return map[(this.event?.eventType || '').toUpperCase()] || this.event?.eventType || 'Événement';
+        const type = (this.event?.eventType || '').toUpperCase();
+        const eventTypeKey = `EVENTS.${type}`;
+        const translated = this.translate.instant(eventTypeKey);
+        return translated !== eventTypeKey ? translated : (this.event?.eventType || this.translate.instant('EVENTS.TITLE'));
     }
 
     /** Event type icon class */
