@@ -30,6 +30,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UtilisateurController {
 
+    private static final String MESSAGE_KEY = "message";
+
     private final UtilisateurService utilisateurService;
     private final OfferReservationService offerReservationService;
 
@@ -144,10 +146,10 @@ public class UtilisateurController {
             String photoUrl = utilisateurService.uploadProfileImage(file);
             Map<String, String> response = new HashMap<>();
             response.put("photoUrl", photoUrl);
-            response.put("message", "Photo de profil mise à jour avec succès");
+            response.put(MESSAGE_KEY, "Photo de profil mise à jour avec succès");
             return ResponseEntity.ok(response);
         } catch (IOException e) {
-            throw new RuntimeException("Erreur lors de l'upload de l'image", e);
+            throw new IllegalStateException("Erreur lors de l'upload de l'image", e);
         }
     }
 
@@ -163,7 +165,7 @@ public class UtilisateurController {
         String photoUrl = request.get("photoUrl");
         utilisateurService.updateProfilePhoto(photoUrl);
         Map<String, String> response = new HashMap<>();
-        response.put("message", "Photo de profil mise à jour avec succès");
+        response.put(MESSAGE_KEY, "Photo de profil mise à jour avec succès");
         return ResponseEntity.ok(response);
     }
 
@@ -176,7 +178,7 @@ public class UtilisateurController {
     public ResponseEntity<Map<String, String>> deleteUser(@PathVariable("id") Long id) {
         utilisateurService.deleteUser(id);
         Map<String, String> response = new HashMap<>();
-        response.put("message", "Utilisateur supprimé avec succès");
+        response.put(MESSAGE_KEY, "Utilisateur supprimé avec succès");
         return ResponseEntity.ok(response);
     }
 
@@ -189,7 +191,7 @@ public class UtilisateurController {
     public ResponseEntity<Map<String, String>> blockUser(@PathVariable("id") Long id) {
         utilisateurService.blockUser(id);
         Map<String, String> response = new HashMap<>();
-        response.put("message", "Utilisateur bloqué avec succès");
+        response.put(MESSAGE_KEY, "Utilisateur bloqué avec succès");
         return ResponseEntity.ok(response);
     }
 
@@ -202,7 +204,7 @@ public class UtilisateurController {
     public ResponseEntity<Map<String, String>> unblockUser(@PathVariable("id") Long id) {
         utilisateurService.unblockUser(id);
         Map<String, String> response = new HashMap<>();
-        response.put("message", "Utilisateur débloqué avec succès");
+        response.put(MESSAGE_KEY, "Utilisateur débloqué avec succès");
         return ResponseEntity.ok(response);
     }
 
@@ -215,7 +217,7 @@ public class UtilisateurController {
     public ResponseEntity<Map<String, String>> deactivateUser(@PathVariable("id") Long id) {
         utilisateurService.deactivateUser(id);
         Map<String, String> response = new HashMap<>();
-        response.put("message", "Utilisateur désactivé avec succès");
+        response.put(MESSAGE_KEY, "Utilisateur désactivé avec succès");
         return ResponseEntity.ok(response);
     }
 
@@ -228,7 +230,7 @@ public class UtilisateurController {
     public ResponseEntity<Map<String, String>> activateUser(@PathVariable("id") Long id) {
         utilisateurService.activateUser(id);
         Map<String, String> response = new HashMap<>();
-        response.put("message", "Utilisateur réactivé avec succès");
+        response.put(MESSAGE_KEY, "Utilisateur réactivé avec succès");
         return ResponseEntity.ok(response);
     }
 
@@ -247,7 +249,7 @@ public class UtilisateurController {
         }
         utilisateurService.changeUserRole(id, roleName);
         Map<String, String> response = new HashMap<>();
-        response.put("message", "Rôle de l'utilisateur changé avec succès");
+        response.put(MESSAGE_KEY, "Rôle de l'utilisateur changé avec succès");
         return ResponseEntity.ok(response);
     }
 
@@ -285,6 +287,9 @@ public class UtilisateurController {
     @GetMapping("/my-itineraries")
     public ResponseEntity<List<OfferReservationDTO>> getMyItineraries() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth == null || !auth.isAuthenticated()) {
+            throw new IllegalStateException("Non authentifié");
+        }
         String email = auth.getName();
         UtilisateurDTO currentUser = utilisateurService.getUserByEmail(email);
         List<OfferReservationDTO> reservations = offerReservationService.getReservationsByUser(currentUser.getId());
@@ -299,13 +304,16 @@ public class UtilisateurController {
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<Map<String, String>> deleteMyAccount() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth == null || !auth.isAuthenticated()) {
+            throw new IllegalStateException("Non authentifié");
+        }
         String email = auth.getName();
         UtilisateurDTO currentUser = utilisateurService.getUserByEmail(email);
 
         utilisateurService.deleteUser(currentUser.getId());
 
         Map<String, String> response = new HashMap<>();
-        response.put("message", "Votre compte a été supprimé avec succès");
+        response.put(MESSAGE_KEY, "Votre compte a été supprimé avec succès");
         return ResponseEntity.ok(response);
     }
 }

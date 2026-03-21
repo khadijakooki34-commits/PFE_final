@@ -1,28 +1,11 @@
 /* Destination List Modern Styling — Harmonized with Events */
 
-.hero-small {
-    position: relative;
-    height: 60vh;
-    min-height: 480px;
+.hero-bg-destinations {
     background: url('https://img.freepik.com/premium-photo/jemaa-elfna-square-sunset-marrakech_656073-15078.jpg') center center/cover no-repeat;
-    background-size: cover;
-    background-position: center;
     background-attachment: fixed;
-    margin-top: calc(-1 * var(--navbar-height, 70px));
 }
 
-.hero-overlay-dark {
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(135deg, rgba(15, 23, 42, 0.4) 0%, rgba(15, 23, 42, 0.8) 100%);
-    z-index: 1;
-}
-
-.bg-white-glass {
-    background: rgba(255, 255, 255, 0.15);
-    backdrop-filter: blur(8px);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-}
+/* Shared styles handled by styles.css */
 
 .hero-search-wrapper {
     max-width: 900px;

@@ -5,8 +5,8 @@ import ma.safar.morocco.ai.dto.ChatResponse;
 import ma.safar.morocco.ai.entity.ChatMessage;
 import ma.safar.morocco.ai.service.ChatbotService;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -19,10 +19,10 @@ import java.util.List;
 @CrossOrigin(origins = "http://localhost:4200")
 @Slf4j
 @PreAuthorize("isAuthenticated()")
+@RequiredArgsConstructor
 public class ChatbotController {
 
-    @Autowired
-    private ChatbotService chatbotService;
+    private final ChatbotService chatbotService;
 
     @PostMapping("/chat")
     public ResponseEntity<ChatResponse> chat(@Valid @RequestBody ChatRequest request) {

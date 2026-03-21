@@ -58,11 +58,10 @@ export class LoginComponent {
             error: (err: any) => {
                 this.loading = false;
                 console.error('Login error:', err);
-                const errorMessage = err.error && typeof err.error === 'string'
-                    ? err.error
-                    : err.status === 401
-                        ? 'Invalid Username or Password'
-                        : 'Login failed. Please check your connection.';
+                let errorMessage = 'Login failed. Please check your connection.';
+                if (err && err.message) {
+                    errorMessage = err.message.includes('Error Code: 0') ? errorMessage : err.message;
+                }
                 this.snackBar.open(errorMessage, 'Close', { duration: 3000, panelClass: ['error-snackbar'] });
             }
         });

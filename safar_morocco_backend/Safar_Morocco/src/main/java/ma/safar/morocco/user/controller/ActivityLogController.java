@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.Map;
 import java.util.HashMap;
 
@@ -35,7 +34,7 @@ public class ActivityLogController {
             map.put("details", log.getDetails() != null ? log.getDetails() : "");
             map.put("timestamp", log.getTimestamp());
             return map;
-        }).collect(Collectors.toList());
+        }).toList();
 
         return ResponseEntity.ok(response);
     }

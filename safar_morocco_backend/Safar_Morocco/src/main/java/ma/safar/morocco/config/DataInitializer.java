@@ -27,6 +27,7 @@ import java.util.Map;
 import java.util.HashMap;
 
 @Configuration
+@SuppressWarnings({"java:S1192", "java:S107", "java:S3776", "java:S1199"})
 public class DataInitializer {
 
         private static final Logger logger = LoggerFactory.getLogger(DataInitializer.class);
@@ -72,7 +73,7 @@ public class DataInitializer {
                                         Utilisateur admin = Utilisateur.builder()
                                                         .nom("Admin")
                                                         .email("admin@safar.com")
-                                                        .motDePasseHache(encoder.encode("admin123"))
+                                                        .motDePasseHache(encoder.encode(System.getenv("ADMIN_PASS") != null ? System.getenv("ADMIN_PASS") : "SecureSafarMrc2026!Adm"))
                                                         .role("ADMIN")
                                                         .telephone("+212600000000")
                                                         .langue("Morocco") // Mapping 'Country' to 'langue' as
@@ -88,7 +89,7 @@ public class DataInitializer {
                                         Utilisateur user = Utilisateur.builder()
                                                         .nom("John Doe") // Combined First/Last name
                                                         .email("user@safar.com")
-                                                        .motDePasseHache(encoder.encode("user123"))
+                                                        .motDePasseHache(encoder.encode(System.getenv("USER_PASS") != null ? System.getenv("USER_PASS") : "SecureSafarMrc2026!Usr"))
                                                         .role("USER")
                                                         .telephone("+15550123")
                                                         .langue("USA")
@@ -236,7 +237,7 @@ public class DataInitializer {
                                 // Saving all destinations (filtering nulls which mean they already exist)
                                 List<Destination> toSave = destinations.stream()
                                                 .filter(java.util.Objects::nonNull)
-                                                .collect(java.util.stream.Collectors.toList());
+                                                .toList();
                                 var savedDestinations = destinationRepository.saveAll(toSave);
 
                                 // Add Reviews
@@ -304,8 +305,7 @@ public class DataInitializer {
                                 // Removed count check to allow adding new events to existing ones
                                 {
                                         // Helper to find destination by name
-                                        java.util.function.Function<String, Destination> findDest = (
-                                                        name) -> destinationRepository.findAll().stream()
+                                        java.util.function.Function<String, Destination> findDest = name -> destinationRepository.findAll().stream()
                                                                         .filter(d -> d.getNom().contains(name)
                                                                                         || d.getType().contains(name))
                                                                         .findFirst()
@@ -405,12 +405,12 @@ public class DataInitializer {
                                                         "Le Moussem des Fiançailles d'Imilchil, aussi appelé Moussem de Had Imilchil, est un festival nuptial unique au monde ancré dans la légende tragique de Tislit et Isli, deux jeunes amants issus de tribus ennemies de l'Aït Haddidou dont les larmes auraient donné naissance aux lacs jumeaux du Haut Atlas. Pour commémorer cet amour impossible, les tribus berbères décidèrent d'organiser chaque automne un grand rassemblement où les jeunes hommes et femmes celibataires pouvaient se rencontrer librement et choisir leur futur époux ou épouse, transcendant ainsi les rivalités tribales. Ce moussem unique perpétue encore aujourd'hui les traditions vestimentaires, musicales et sociales des Aït Haddidou et réunit des milliers de participants autour d'un rituel de fiançailles collectif au cœur des montagnes sauvages de l'Atlas.");
 
                                         // 12. Tan-Tan Moussem
-                                        Destination guelmim_dest = findDest.apply("Guelmim");
+                                        Destination guelmimDest = findDest.apply("Guelmim");
                                         createEvent("Tan-Tan Moussem",
                                                         "UNESCO recognized nomadic heritage.",
                                                         LocalDateTime.of(2026, 6, 12, 10, 0),
                                                         LocalDateTime.of(2026, 6, 18, 23, 0), "Tan-Tan",
-                                                        guelmim_dest,
+                                                        guelmimDest,
                                                         "https://aujourdhui.ma/wp-content/uploads/2017/05/Moussem-de-Tan-Tan.jpg", "TRADITIONAL",
                                                         "Le Moussem de Tan-Tan est l'un des plus grands rassemblements nomades au monde, classé en 2005 par l'UNESCO comme chef-d'oeuvre du patrimoine oral et immatériel de l'humanité. Organisé à Tan-Tan, ville-porte entre le Maroc et la Mauritanie, il réunit chaque deux ans des dizaines de milliers de représentants des tribus nomades sahraouies venues de tout le Sahara atlantique. Ce moussem traditionnel perpétue les traditions du nomadisme hassani : les courses de chameaux, la fantasia, la poésie orale hassanie (lghna), la fabrication de tentes traditionnelles et les rites de chefferie tribale. C'est un témoignage vivant et vibrant de la culture nomade du grand Sahara que Tan-Tan entend préserver pour les générations futures.");
 

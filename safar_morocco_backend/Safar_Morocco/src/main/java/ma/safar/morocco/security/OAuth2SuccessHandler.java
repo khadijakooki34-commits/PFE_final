@@ -28,6 +28,8 @@ import java.util.Optional;
 @Slf4j
 public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
+    private static final String PROVIDER_GOOGLE = "GOOGLE";
+
     private final UtilisateurRepository utilisateurRepository;
     private final JwtService jwtService;
     private final AuditService auditService;
@@ -50,7 +52,7 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 
             // Chercher l'utilisateur existant d'abord par provider/providerId
             Optional<Utilisateur> existingUser = utilisateurRepository
-                    .findByProviderAndProviderId("GOOGLE", providerId);
+                    .findByProviderAndProviderId(PROVIDER_GOOGLE, providerId);
 
             // Si pas trouvé, chercher par email (au cas où il existe déjà avec une
             // tentative échouée)
@@ -59,7 +61,7 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
                 // Si trouvé par email, mettre à jour le provider et providerId
                 if (existingUser.isPresent()) {
                     Utilisateur existingByEmail = existingUser.get();
-                    existingByEmail.setProvider("GOOGLE");
+                    existingByEmail.setProvider(PROVIDER_GOOGLE);
                     existingByEmail.setProviderId(providerId);
                 }
             }
@@ -73,7 +75,7 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
                         .email(email)
                         .nom(nom)
                         .photoUrl(photoUrl)
-                        .provider("GOOGLE")
+                        .provider(PROVIDER_GOOGLE)
                         .providerId(providerId)
                         .motDePasseHache("OAUTH2_USER_" + System.currentTimeMillis())
                         .role("USER")
@@ -97,9 +99,9 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
             }
 
             // Vérifier que le compte n'est pas bloqué
-            if (user.getCompteBloquer()) {
+            if (Boolean.TRUE.equals(user.getCompteBloquer())) {
                 log.warn("Blocked account OAuth2 login attempt: {}", email);
-                throw new RuntimeException("Votre compte a été bloqué");
+                throw new IllegalStateException("Votre compte a été bloqué");
             }
 
             // Générer les tokens JWT

@@ -1,5 +1,5 @@
 <!-- Hero Section -->
-<section class="hero-small d-flex align-items-center justify-content-center text-center text-white" *ngIf="itinerary">
+<section class="hero-small hero-bg-itinerary-detail text-center text-white" *ngIf="itinerary">
     <div class="hero-overlay-dark"></div>
     <div class="container position-relative z-2">
         <div class="fade-in-up">
@@ -8,7 +8,7 @@
                     <i class="bi bi-arrow-left fs-5"></i>
                 </button>
                 <div class="badge bg-white-glass text-white px-4 py-2 rounded-pill fw-800 letter-spacing-2 m-0 border-0">
-                    {{ 'ITINERARIES.DETAIL.OVERVIEW' | translate }}
+                    {{ 'ITINERARIES.DETAIL.OVERVIEW' | translate | uppercase }}
                 </div>
                 <div class="dropdown">
                     <button class="btn btn-outline-light rounded-circle p-2 d-flex align-items-center justify-content-center bg-white-glass shadow-sm dropdown-toggle dropdown-toggle-no-caret" type="button" (click)="toggleDropdown()" style="width: 45px; height: 45px; border: none; cursor: pointer;">

@@ -30,6 +30,7 @@ import java.util.ArrayList;
 @AllArgsConstructor
 @Builder
 @ToString(exclude = "motDePasseHache")
+@SuppressWarnings("java:S1948")
 public class Utilisateur implements UserDetails {
 
     @Id

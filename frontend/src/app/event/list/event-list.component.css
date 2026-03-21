@@ -1,38 +1,8 @@
 /* Base styles identical to Destinations list */
-.events-hero {
+.hero-bg-events {
     background: url('https://www.lesjardinsdelamedina.com/blog/wp-content/uploads/2019/06/festival-arts-populaires.jpg') center center/cover no-repeat;
 }
 
-.hero-small {
-    min-height: 500px;
-    position: relative;
-    margin-top: calc(-1 * var(--navbar-height));
-    padding-top: var(--navbar-height);
-    padding-bottom: 4rem;
-}
-
-.hero-overlay-dark {
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(rgba(15, 23, 42, 0.4), rgba(15, 23, 42, 0.75));
-    backdrop-filter: blur(2px);
-}
-
-.font-display {
-    font-family: var(--font-display);
-}
-
-.letter-spacing-2 {
-    letter-spacing: 2px;
-}
-
-.bg-white-glass {
-    background: rgba(255, 255, 255, 0.15);
-    backdrop-filter: blur(8px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-}
-
-/* Event Cards Modern */
 .event-card-modern {
     display: block;
     text-decoration: none;

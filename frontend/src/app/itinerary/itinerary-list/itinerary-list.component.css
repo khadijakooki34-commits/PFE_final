@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /* Hero Section - Redesigned to match image */
 .itinerary-hero {
     background: url('https://lesglobeblogueurs.com/wp-content/uploads/2019/12/car-2417295erikawittlieb-pixabay-3-1920x1179.jpg') center center/cover no-repeat;
@@ -55,6 +56,17 @@
 
 .hero-stats-row {
     margin-top: 3rem;
+=======
+/* Hero Section - Matched to Destinations */
+.hero-bg-itinerary {
+    background: url('https://lesglobeblogueurs.com/wp-content/uploads/2019/12/car-2417295erikawittlieb-pixabay-3-1920x1179.jpg') center center/cover no-repeat;
+}
+
+.hero-stats {
+    display: flex;
+    justify-content: center;
+    gap: 3rem;
+>>>>>>> 9da0d882eeb0a0f77b3bfc443a4e4262ea0c96e6
 }
 
 .stat-item {

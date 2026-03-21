@@ -10,7 +10,7 @@ import ma.safar.morocco.ai.repository.UserMemoryRepository;
 import ma.safar.morocco.ai.entity.UserMemory;
 import ma.safar.morocco.user.repository.UtilisateurRepository;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,22 +21,18 @@ import java.util.Optional;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class ChatbotService {
 
-    @Autowired
-    private RecommendationService recommendationService;
+    private final RecommendationService recommendationService;
 
-    @Autowired
-    private ConversationRepository conversationRepository;
+    private final ConversationRepository conversationRepository;
 
-    @Autowired
-    private ChatMessageRepository chatMessageRepository;
+    private final ChatMessageRepository chatMessageRepository;
 
-    @Autowired
-    private UserMemoryRepository userMemoryRepository;
+    private final UserMemoryRepository userMemoryRepository;
 
-    @Autowired
-    private UtilisateurRepository utilisateurRepository;
+    private final UtilisateurRepository utilisateurRepository;
 
     @Value("${ai.conversation.max.history:10}")
     private int maxHistory;
@@ -94,7 +90,7 @@ public class ChatbotService {
             detectedName = message.substring(lowerMsg.indexOf("je m'appelle ") + 13).trim();
         }
 
-        if (detectedName != null && detectedName.length() > 0) {
+        if (detectedName != null && !detectedName.isEmpty()) {
             // Nettoyer le nom des ponctuations finales si présentes
             if (detectedName.endsWith(".") || detectedName.endsWith("!")) {
                 detectedName = detectedName.substring(0, detectedName.length() - 1);

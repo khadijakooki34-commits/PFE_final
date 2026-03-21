@@ -1,39 +1,16 @@
 /* Hero Section - Matched to Destinations */
 /* Hero Section - Matched to Destinations */
-.hero-small {
+.hero-bg-itinerary-detail {
     background: url('https://best-itinerary.com/wp-content/uploads/2019/06/maroc-itineraire-voyage1-carte.jpg') center center/cover no-repeat;
-    min-height: 500px;
-    position: relative;
-    margin-top: calc(-1 * var(--navbar-height, 80px));
-    padding-top: var(--navbar-height, 80px);
-    padding-bottom: 4rem;
 }
 
-.hero-overlay-dark {
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(rgba(15, 23, 42, 0.2), rgba(15, 23, 42, 0.6));
-    backdrop-filter: blur(2px);
-}
+/* Shared styles handled by styles.css */
 
 .font-display {
     font-family: var(--font-display, 'Playfair Display', serif);
 }
 
-.letter-spacing-2 {
-    letter-spacing: 2px;
-}
-
-.bg-white-glass {
-    background: rgba(255, 255, 255, 0.2) !important;
-    backdrop-filter: blur(8px) !important;
-    border: 1px solid rgba(255, 255, 255, 0.3) !important;
-    color: white !important;
-}
-
-.bg-white-glass:hover {
-    background: rgba(255, 255, 255, 0.3) !important;
-}
+/* Shared styles handled by styles.css */
 
 .hero-stats {
     display: flex;

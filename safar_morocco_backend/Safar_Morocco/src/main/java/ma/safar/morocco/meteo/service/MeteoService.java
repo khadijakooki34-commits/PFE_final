@@ -15,7 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -81,41 +80,44 @@ public class MeteoService {
             int days = daily.getTime() != null ? daily.getTime().size() : 0;
             
             for (int i = 0; i < days; i++) {
-                MeteoDTO dto = new MeteoDTO();
-                dto.setDestinationId(destinationId);
-                dto.setDestinationNom(destination.getNom());
-                
-                try {
-                    dto.setDatePrevision(LocalDateTime.parse(daily.getTime().get(i) + "T12:00:00"));
-                } catch (Exception e) {
-                    log.warn("Erreur de parsing de la date météo: {}", daily.getTime().get(i));
-                }
-                
-                if (daily.getTemperatureMax() != null && daily.getTemperatureMax().size() > i) {
-                    dto.setTemperatureMax(daily.getTemperatureMax().get(i));
-                    dto.setTemperature(daily.getTemperatureMax().get(i));
-                }
-                if (daily.getTemperatureMin() != null && daily.getTemperatureMin().size() > i) {
-                    dto.setTemperatureMin(daily.getTemperatureMin().get(i));
-                }
-                if (daily.getWeatherCode() != null && daily.getWeatherCode().size() > i) {
-                    Integer code = daily.getWeatherCode().get(i);
-                    dto.setConditions(openMeteoService.getWeatherDescription(code));
-                    dto.setDescription(openMeteoService.getWeatherDescription(code));
-                    dto.setIconeCode(openMeteoService.getWeatherIcon(code));
-                }
-                
-                // On met une fausse "derniereMiseAJour" pour éviter les null et on copie aussi l'URL de l'icone
-                dto.setDerniereMiseAJour(LocalDateTime.now());
-                if (dto.getIconeCode() != null) {
-                    dto.setIconeUrl("https://openweathermap.org/img/wn/" + dto.getIconeCode() + "@2x.png");
-                }
-                
-                forecasts.add(dto);
+                forecasts.add(buildMeteoDTOForDay(daily, i, destinationId, destination.getNom()));
             }
         }
 
         return forecasts;
+    }
+
+    private MeteoDTO buildMeteoDTOForDay(OpenMeteoResponse.Daily daily, int i, Long destinationId, String destinationNom) {
+        MeteoDTO dto = new MeteoDTO();
+        dto.setDestinationId(destinationId);
+        dto.setDestinationNom(destinationNom);
+        
+        try {
+            dto.setDatePrevision(LocalDateTime.parse(daily.getTime().get(i) + "T12:00:00"));
+        } catch (Exception e) {
+            log.warn("Erreur de parsing de la date météo: {}", daily.getTime().get(i));
+        }
+        
+        if (daily.getTemperatureMax() != null && daily.getTemperatureMax().size() > i) {
+            dto.setTemperatureMax(daily.getTemperatureMax().get(i));
+            dto.setTemperature(daily.getTemperatureMax().get(i));
+        }
+        if (daily.getTemperatureMin() != null && daily.getTemperatureMin().size() > i) {
+            dto.setTemperatureMin(daily.getTemperatureMin().get(i));
+        }
+        if (daily.getWeatherCode() != null && daily.getWeatherCode().size() > i) {
+            Integer code = daily.getWeatherCode().get(i);
+            dto.setConditions(openMeteoService.getWeatherDescription(code));
+            dto.setDescription(openMeteoService.getWeatherDescription(code));
+            dto.setIconeCode(openMeteoService.getWeatherIcon(code));
+        }
+        
+        dto.setDerniereMiseAJour(LocalDateTime.now());
+        if (dto.getIconeCode() != null) {
+            dto.setIconeUrl("https://openweathermap.org/img/wn/" + dto.getIconeCode() + "@2x.png");
+        }
+        
+        return dto;
     }
 
     /**
@@ -130,12 +132,13 @@ public class MeteoService {
         return meteoRepository.findByDestinationIdAndDateRange(destinationId, debut, fin)
                 .stream()
                 .map(this::convertToDTO)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     /**
      * MAPPER : Open-Meteo Response → Entity
      */
+    @SuppressWarnings("java:S3776")
     private void mapOpenMeteoToEntity(OpenMeteoResponse api, Meteo meteo, Destination destination) {
         meteo.setDestination(destination);
 
@@ -188,7 +191,7 @@ public class MeteoService {
         }
 
         meteo.setDerniereMiseAJour(LocalDateTime.now());
-        meteo.mettreAJourDonnees(api.toString());
+        meteo.mettreAJourDonnees();
     }
 
     /**

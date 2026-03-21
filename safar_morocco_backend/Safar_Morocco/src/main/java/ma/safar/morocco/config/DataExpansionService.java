@@ -21,6 +21,10 @@ import java.nio.file.StandardCopyOption;
 public class DataExpansionService {
     private static final Logger log = LoggerFactory.getLogger(DataExpansionService.class);
     private static final String UPLOAD_DIR = "uploads";
+    private static final String WEBP_EXT = ".webp";
+    private static final String PNG_EXT = ".png";
+    private static final String JPG_EXT = ".jpg";
+    private static final String UPLOADS_PREFIX = "/uploads/";
 
     private final DestinationRepository destinationRepository;
     private final EvenementCulturelRepository eventRepository;
@@ -40,6 +44,22 @@ public class DataExpansionService {
         java.util.Set<String> referencedFiles = new java.util.HashSet<>();
 
         // 1. Sync Event Images
+        syncEventImages(referencedFiles);
+
+        // 2. Sync Destination Media Images
+        syncDestinationMedias(referencedFiles);
+
+        // 3. Cleanup unused files in uploads/
+        cleanupUnusedFiles(referencedFiles);
+    }
+
+    private String getExtensionFromUrl(String url) {
+        if (url.contains(PNG_EXT)) return PNG_EXT;
+        if (url.contains(WEBP_EXT)) return WEBP_EXT;
+        return JPG_EXT;
+    }
+
+    private void syncEventImages(java.util.Set<String> referencedFiles) {
         eventRepository.findAll().forEach(e -> {
             String url = e.getImageUrl();
             if (url == null)
@@ -47,21 +67,22 @@ public class DataExpansionService {
 
             if (url.startsWith("http")) {
                 // External URL - Download it
-                String extension = url.contains(".png") ? ".png" : (url.contains(".webp") ? ".webp" : ".jpg");
+                String extension = getExtensionFromUrl(url);
                 String filename = "event_" + e.getNom().toLowerCase().replaceAll("[^a-z0-9]", "_") + extension;
                 String downloaded = downloadImage(url, filename, true);
                 if (downloaded != null) {
-                    e.setImageUrl("/uploads/" + downloaded);
+                    e.setImageUrl(UPLOADS_PREFIX + downloaded);
                     eventRepository.save(e);
                     referencedFiles.add(downloaded);
                 }
-            } else if (url.startsWith("/uploads/")) {
-                String filename = url.substring(9);
+            } else if (url.startsWith(UPLOADS_PREFIX)) {
+                String filename = url.substring(UPLOADS_PREFIX.length());
                 referencedFiles.add(filename);
             }
         });
+    }
 
-        // 2. Sync Destination Media Images
+    private void syncDestinationMedias(java.util.Set<String> referencedFiles) {
         destinationRepository.findAllWithMedias().forEach(d -> {
             boolean changed = false;
             for (Media m : d.getMedias()) {
@@ -70,17 +91,17 @@ public class DataExpansionService {
                     continue;
 
                 if (url.startsWith("http")) {
-                    String extension = url.contains(".png") ? ".png" : (url.contains(".webp") ? ".webp" : ".jpg");
+                    String extension = getExtensionFromUrl(url);
                     String filename = "dest_" + d.getNom().toLowerCase().replaceAll("[^a-z0-9]", "_") + "_" + m.getId()
                             + extension;
                     String downloaded = downloadImage(url, filename, true);
                     if (downloaded != null) {
-                        m.setUrl("/uploads/" + downloaded);
+                        m.setUrl(UPLOADS_PREFIX + downloaded);
                         referencedFiles.add(downloaded);
                         changed = true;
                     }
-                } else if (url.startsWith("/uploads/")) {
-                    String filename = url.substring(9);
+                } else if (url.startsWith(UPLOADS_PREFIX)) {
+                    String filename = url.substring(UPLOADS_PREFIX.length());
                     referencedFiles.add(filename);
                 }
             }
@@ -88,15 +109,12 @@ public class DataExpansionService {
                 destinationRepository.save(d);
             }
         });
-
-        // 3. Cleanup unused files in uploads/
-        cleanupUnusedFiles(referencedFiles);
     }
 
     private void cleanupUnusedFiles(java.util.Set<String> referencedFiles) {
         log.info("🧹 Starting cleanup of unused images...");
-        try {
-            Files.list(Paths.get(UPLOAD_DIR)).forEach(path -> {
+        try (java.util.stream.Stream<Path> stream = Files.list(Paths.get(UPLOAD_DIR))) {
+            stream.forEach(path -> {
                 if (Files.isDirectory(path))
                     return; // Keep subdirectories like 'invoices' or 'media'
 
@@ -127,7 +145,7 @@ public class DataExpansionService {
             }
 
             log.info("📥 Downloading image from: {}", urlStr);
-            URL url = new URL(urlStr);
+            URL url = java.net.URI.create(urlStr).toURL();
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestProperty("User-Agent",
                     "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36");

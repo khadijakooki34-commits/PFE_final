@@ -11,7 +11,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -27,13 +26,13 @@ public class AvisService {
     public List<ReviewResponseDTO> findByDestinationDTO(Long destinationId) {
         return findByDestination(destinationId).stream()
                 .map(this::convertToDTO)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     public List<ReviewResponseDTO> findAllDTO() {
         return avisRepository.findAll().stream()
                 .map(this::convertToDTO)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @Transactional
@@ -93,15 +92,19 @@ public class AvisService {
     public ReviewResponseDTO convertToDTO(Avis avis) {
         if (avis == null)
             return null;
+        
+        String travelerName = "Unknown";
+        if (avis.getAuteur() != null) {
+            travelerName = avis.getAuteur().getNom() != null ? avis.getAuteur().getNom() : avis.getAuteur().getEmail();
+        }
+
         return ReviewResponseDTO.builder()
                 .id(avis.getId())
                 .commentaire(avis.getCommentaire())
                 .datePublication(avis.getDatePublication())
                 .note(avis.getNote())
                 .status(avis.getStatus())
-                .travelerName(avis.getAuteur() != null
-                        ? (avis.getAuteur().getNom() != null ? avis.getAuteur().getNom() : avis.getAuteur().getEmail())
-                        : "Unknown")
+                .travelerName(travelerName)
                 .travelerPhotoUrl(avis.getAuteur() != null ? avis.getAuteur().getPhotoUrl() : null)
                 .destinationName(avis.getDestination() != null ? avis.getDestination().getNom() : "Unknown")
                 .build();

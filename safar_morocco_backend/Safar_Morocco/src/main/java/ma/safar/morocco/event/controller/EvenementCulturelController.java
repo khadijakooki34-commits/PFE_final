@@ -93,7 +93,12 @@ public class EvenementCulturelController {
      */
     @PostMapping("/destination/{destinationId}")
     @PreAuthorize("hasRole('ADMIN')")
+<<<<<<< HEAD
     public ResponseEntity<EvenementResponseDTO> createEvenement(
+=======
+    @SuppressWarnings("java:S4684")
+    public ResponseEntity<EvenementCulturel> createEvenement(
+>>>>>>> 9da0d882eeb0a0f77b3bfc443a4e4262ea0c96e6
             @PathVariable("destinationId") Long destinationId,
             @RequestBody EvenementCulturel evenement) {
         EvenementCulturel created = evenementService.create(destinationId, evenement);
@@ -106,7 +111,12 @@ public class EvenementCulturelController {
      */
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
+<<<<<<< HEAD
     public ResponseEntity<EvenementResponseDTO> updateEvenement(
+=======
+    @SuppressWarnings("java:S4684")
+    public ResponseEntity<EvenementCulturel> updateEvenement(
+>>>>>>> 9da0d882eeb0a0f77b3bfc443a4e4262ea0c96e6
             @PathVariable("id") Long id,
             @RequestBody EvenementCulturel evenement) {
         EvenementCulturel updated = evenementService.update(id, evenement);

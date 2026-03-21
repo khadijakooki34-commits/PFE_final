@@ -24,7 +24,7 @@ public class ReservationController {
 
     @PutMapping("/{id}/cancel")
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<?> cancelReservation(@PathVariable("id") Long id) {
+    public ResponseEntity<Void> cancelReservation(@PathVariable("id") Long id) {
         reservationService.cancelReservation(id);
         return ResponseEntity.ok().build();
     }

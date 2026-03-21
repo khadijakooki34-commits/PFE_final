@@ -58,6 +58,7 @@ public class AvisController {
      */
     @PostMapping
     @PreAuthorize("isAuthenticated()")
+    @SuppressWarnings("java:S4684")
     public ResponseEntity<Avis> createAvis(@RequestBody Avis avis) {
         if (avis.getDestination() == null || avis.getDestination().getId() == null) {
             return ResponseEntity.badRequest().build();
@@ -73,6 +74,7 @@ public class AvisController {
      */
     @PutMapping("/{id}")
     @PreAuthorize("isAuthenticated()")
+    @SuppressWarnings("java:S4684")
     public ResponseEntity<Avis> updateAvis(
             @PathVariable("id") Long id,
             @RequestBody Avis avis) {

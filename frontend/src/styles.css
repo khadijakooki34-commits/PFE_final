@@ -78,11 +78,51 @@
   /* Deep float */
   --shadow-inner: inset 0 2px 4px 0 rgba(0, 0, 0, 0.06);
 
-  --navbar-height: 80px;
+  --navbar-height: 70px;
   --transition-base: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Base Reset */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* Global Hero & Glassmorphism Styles */
+.bg-white-glass {
+    background: rgba(255, 255, 255, 0.15) !important;
+    backdrop-filter: blur(8px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+}
+
+.letter-spacing-2 {
+    letter-spacing: 2px !important;
+}
+
+.hero-small {
+    height: 70vh;
+    min-height: 600px;
+    position: relative;
+    margin-top: calc(-1 * var(--navbar-height));
+    padding-top: var(--navbar-height); /* Offset for navbar */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-bottom: 4rem;
+}
+
+.hero-overlay-dark {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(rgba(15, 23, 42, 0.4), rgba(15, 23, 42, 0.75));
+    backdrop-filter: blur(2px);
+    z-index: 1;
+}
+
+.font-display {
+    font-family: var(--font-display, 'Playfair Display', serif) !important;
+}
+
 html,
 body {
   height: 100%;

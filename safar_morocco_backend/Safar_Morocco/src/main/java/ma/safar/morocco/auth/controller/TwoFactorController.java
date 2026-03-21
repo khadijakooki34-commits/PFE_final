@@ -25,8 +25,12 @@ public class TwoFactorController {
 
     @PostMapping("/setup")
     public ResponseEntity<Map<String, String>> setup2FA() {
+        var authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null) {
+            throw new IllegalStateException("Authentication is required");
+        }
         String secret = authService.generate2FASecret();
-        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        String email = authentication.getName();
         String qrCodeUri = authService.getQrCodeUri(secret, email);
 
         Map<String, String> response = new HashMap<>();
@@ -61,7 +65,7 @@ public class TwoFactorController {
         Utilisateur user = utilisateurService.getUserByEmailEntity(request.getEmail());
 
         if (!authService.verify2FA(user.getTwoFactorSecret(), request.getCode())) {
-            throw new RuntimeException("Code 2FA invalide");
+            throw new IllegalArgumentException("Code 2FA invalide");
         }
 
         var accessToken = jwtService.generateToken(user);

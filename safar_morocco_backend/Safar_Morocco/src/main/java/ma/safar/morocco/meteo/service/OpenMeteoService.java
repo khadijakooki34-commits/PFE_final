@@ -49,7 +49,7 @@ public class OpenMeteoService {
         } catch (Exception e) {
             log.error("Erreur lors de l'appel à Open-Meteo API pour lat={}, lon={}",
                     latitude, longitude, e);
-            throw new RuntimeException("Impossible de récupérer les données météo: " + e.getMessage(), e);
+            throw new IllegalStateException("Impossible de récupérer les données météo: " + e.getMessage(), e);
         }
     }
 
@@ -96,23 +96,11 @@ public class OpenMeteoService {
             case 1: return "02d"; // Peu nuageux
             case 2: return "03d"; // Nuageux
             case 3: return "04d"; // Couvert
-            case 45:
-            case 48: return "50d"; // Brouillard
-            case 51:
-            case 53:
-            case 55:
-            case 61:
-            case 63:
-            case 65: return "10d"; // Pluie
-            case 71:
-            case 73:
-            case 75: return "13d"; // Neige
-            case 80:
-            case 81:
-            case 82: return "09d"; // Averses
-            case 95:
-            case 96:
-            case 99: return "11d"; // Orage
+            case 45, 48: return "50d"; // Brouillard
+            case 51, 53, 55, 61, 63, 65: return "10d"; // Pluie
+            case 71, 73, 75: return "13d"; // Neige
+            case 80, 81, 82: return "09d"; // Averses
+            case 95, 96, 99: return "11d"; // Orage
             default: return "01d";
         }
     }

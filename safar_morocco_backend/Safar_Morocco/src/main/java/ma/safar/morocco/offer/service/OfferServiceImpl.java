@@ -11,11 +11,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class OfferServiceImpl implements OfferService {
+
+    private static final String OFFER_NOT_FOUND_MSG = "Offer not found with id: ";
 
     private final OfferRepository offerRepository;
     private final DestinationRepository destinationRepository;
@@ -37,7 +38,7 @@ public class OfferServiceImpl implements OfferService {
     @Override
     public OfferDTO getOfferById(Long id) {
         Offer offer = offerRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Offer not found with id: " + id));
+                .orElseThrow(() -> new IllegalArgumentException(OFFER_NOT_FOUND_MSG + id));
         return mapToDTO(offer);
     }
 
@@ -45,21 +46,21 @@ public class OfferServiceImpl implements OfferService {
     public List<OfferDTO> getOffersByDestination(Long destinationId) {
         return offerRepository.findByDestinationIdAndDeletedFalse(destinationId).stream()
                 .map(this::mapToDTO)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @Override
     public List<OfferDTO> getAllOffers() {
         return offerRepository.findAll().stream()
                 .map(this::mapToDTO)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @Override
     @Transactional
     public OfferDTO updateOffer(Long id, OfferDTO offerDTO) {
         Offer offer = offerRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Offer not found with id: " + id));
+                .orElseThrow(() -> new IllegalArgumentException(OFFER_NOT_FOUND_MSG + id));
 
         offer.setName(offerDTO.getName());
         offer.setDescription(offerDTO.getDescription());
@@ -91,7 +92,7 @@ public class OfferServiceImpl implements OfferService {
     @Transactional
     public void deleteOffer(Long id) {
         Offer offer = offerRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Offer not found with id: " + id));
+                .orElseThrow(() -> new IllegalArgumentException(OFFER_NOT_FOUND_MSG + id));
         offer.setDeleted(true);
         offerRepository.save(offer);
     }

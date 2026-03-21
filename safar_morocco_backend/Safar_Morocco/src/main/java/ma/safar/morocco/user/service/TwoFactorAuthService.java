@@ -112,7 +112,7 @@ public class TwoFactorAuthService {
         TwoFactorAuth twoFactorAuth = twoFA.get();
 
         // Vérifier si le compte est bloqué
-        if (twoFactorAuth.getLocked()) {
+        if (Boolean.TRUE.equals(twoFactorAuth.getLocked())) {
             log.warn("2FA account locked for user: {}", utilisateur.getEmail());
             return false;
         }
@@ -147,9 +147,9 @@ public class TwoFactorAuthService {
     /**
      * Active le 2FA pour un utilisateur après vérification du code
      */
-    public void enableTwoFactorAuth(Utilisateur utilisateur, String code) throws Exception {
+    public void enableTwoFactorAuth(Utilisateur utilisateur, String code) {
         if (!verifyCode(utilisateur, code)) {
-            throw new Exception("Code 2FA invalide");
+            throw new IllegalArgumentException("Code 2FA invalide");
         }
 
         Optional<TwoFactorAuth> twoFA = twoFactorAuthRepository.findByUtilisateur(utilisateur);

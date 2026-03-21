@@ -41,6 +41,9 @@ import java.util.UUID;
 @Slf4j
 public class AuthService {
 
+    private static final String USER_NOT_FOUND_MSG = "Utilisateur non trouvé";
+    private static final String BEARER_PREFIX = "Bearer";
+
     private final UtilisateurRepository utilisateurRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
@@ -54,7 +57,7 @@ public class AuthService {
     @Transactional
     public AuthResponse register(RegisterRequest request) {
         if (utilisateurRepository.existsByEmail(request.getEmail())) {
-            throw new RuntimeException("Un compte existe déjà avec cet email");
+            throw new IllegalArgumentException("Un compte existe déjà avec cet email");
         }
 
         var user = Utilisateur.builder()
@@ -99,10 +102,10 @@ public class AuthService {
     @Transactional
     public AuthResponse verifyEmailToken(String token) {
         VerificationToken verificationToken = verificationTokenRepository.findByToken(token)
-                .orElseThrow(() -> new RuntimeException("Token invalide"));
+                .orElseThrow(() -> new IllegalArgumentException("Token invalide"));
 
         if (verificationToken.isExpired()) {
-            throw new RuntimeException("Token expiré");
+            throw new IllegalStateException("Token expiré");
         }
 
         Utilisateur user = verificationToken.getUtilisateur();
@@ -117,7 +120,7 @@ public class AuthService {
         return AuthResponse.builder()
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
-                .tokenType("Bearer")
+                .tokenType(BEARER_PREFIX)
                 .userId(user.getId())
                 .email(user.getEmail())
                 .nom(user.getNom())
@@ -132,17 +135,17 @@ public class AuthService {
                         request.getMotDePasse()));
 
         var user = utilisateurRepository.findByEmail(request.getEmail())
-                .orElseThrow(() -> new RuntimeException("Utilisateur non trouvé"));
+                .orElseThrow(() -> new IllegalArgumentException(USER_NOT_FOUND_MSG));
 
         auditService.logAction(user.getId(), "USER_LOGIN", "Utilisateur", user.getId(),
                 "User logged in: " + user.getEmail());
 
-        if (user.getCompteBloquer()) {
-            throw new RuntimeException("Votre compte a été bloqué. Contactez l'administrateur.");
+        if (Boolean.TRUE.equals(user.getCompteBloquer())) {
+            throw new IllegalStateException("Votre compte a été bloqué. Contactez l'administrateur.");
         }
 
-        if (!user.getActif()) {
-            throw new RuntimeException("Votre compte est désactivé.");
+        if (!Boolean.TRUE.equals(user.getActif())) {
+            throw new IllegalStateException("Votre compte est désactivé.");
         }
 
         if (user.isTwoFactorEnabled()) {
@@ -157,7 +160,7 @@ public class AuthService {
         return AuthResponse.builder()
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
-                .tokenType("Bearer")
+                .tokenType(BEARER_PREFIX)
                 .userId(user.getId())
                 .email(user.getEmail())
                 .nom(user.getNom())
@@ -171,7 +174,7 @@ public class AuthService {
 
         if (userEmail != null) {
             var user = utilisateurRepository.findByEmail(userEmail)
-                    .orElseThrow(() -> new RuntimeException("Utilisateur non trouvé"));
+                    .orElseThrow(() -> new IllegalArgumentException(USER_NOT_FOUND_MSG));
 
             if (jwtService.isTokenValid(refreshToken, user)) {
                 var accessToken = jwtService.generateToken(user);
@@ -180,7 +183,7 @@ public class AuthService {
                 return AuthResponse.builder()
                         .accessToken(accessToken)
                         .refreshToken(newRefreshToken)
-                        .tokenType("Bearer")
+                        .tokenType(BEARER_PREFIX)
                         .userId(user.getId())
                         .email(user.getEmail())
                         .nom(user.getNom())
@@ -188,14 +191,12 @@ public class AuthService {
                         .build();
             }
         }
-        throw new RuntimeException("Refresh token invalide");
+        throw new IllegalArgumentException("Refresh token invalide");
     }
 
     @Transactional
     public void updateProfile(UpdateProfileRequest request) {
-        String email = SecurityContextHolder.getContext().getAuthentication().getName();
-        Utilisateur user = utilisateurRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("Utilisateur non trouvé"));
+        Utilisateur user = getCurrentUser();
 
         if (request.getNom() != null) {
             user.setNom(request.getNom());
@@ -213,12 +214,10 @@ public class AuthService {
 
     @Transactional
     public void changePassword(ChangePasswordRequest request) {
-        String email = SecurityContextHolder.getContext().getAuthentication().getName();
-        Utilisateur user = utilisateurRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("Utilisateur non trouvé"));
+        Utilisateur user = getCurrentUser();
 
         if (!passwordEncoder.matches(request.getAncienMotDePasse(), user.getMotDePasseHache())) {
-            throw new RuntimeException("Ancien mot de passe incorrect");
+            throw new IllegalArgumentException("Ancien mot de passe incorrect");
         }
 
         user.setMotDePasseHache(passwordEncoder.encode(request.getNouveauMotDePasse()));
@@ -226,15 +225,19 @@ public class AuthService {
     }
 
     public Utilisateur getCurrentUser() {
-        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        var authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || authentication.getName() == null) {
+            throw new IllegalStateException("Utilisateur non authentifié");
+        }
+        String email = authentication.getName();
         return utilisateurRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("Utilisateur non trouvé"));
+                .orElseThrow(() -> new IllegalArgumentException(USER_NOT_FOUND_MSG));
     }
 
     @Transactional
     public void forgotPassword(ForgotPasswordRequest request) {
         Utilisateur user = utilisateurRepository.findByEmail(request.getEmail())
-                .orElseThrow(() -> new RuntimeException("Utilisateur non trouvé avec cet email"));
+                .orElseThrow(() -> new IllegalArgumentException("Utilisateur non trouvé avec cet email"));
 
         String token = UUID.randomUUID().toString();
         PasswordResetToken resetToken = PasswordResetToken.builder()
@@ -252,20 +255,17 @@ public class AuthService {
         PasswordResetToken resetToken = passwordResetTokenRepository.findByToken(token)
                 .orElse(null);
         
-        if (resetToken == null || resetToken.isExpired()) {
-            return false;
-        }
-        return true;
+        return resetToken != null && !resetToken.isExpired();
     }
 
     @Transactional
     public void resetPassword(ResetPasswordRequest request) {
         PasswordResetToken resetToken = passwordResetTokenRepository.findByToken(request.getToken())
-                .orElseThrow(() -> new RuntimeException("Token invalide ou inexistant"));
+                .orElseThrow(() -> new IllegalArgumentException("Token invalide ou inexistant"));
 
         if (resetToken.isExpired()) {
             passwordResetTokenRepository.delete(resetToken);
-            throw new RuntimeException("Token de réinitialisation expiré");
+            throw new IllegalStateException("Token de réinitialisation expiré");
         }
 
         Utilisateur user = resetToken.getUtilisateur();
@@ -295,7 +295,7 @@ public class AuthService {
         try {
             imageData = generator.generate(data);
         } catch (QrGenerationException e) {
-            throw new RuntimeException("Erreur de génération QR Code", e);
+            throw new IllegalStateException("Erreur de génération QR Code", e);
         }
 
         return getDataUriForImage(imageData, generator.getImageMimeType());
@@ -337,12 +337,10 @@ public class AuthService {
 
     @Transactional
     public void enable2FA(String secret, String code) {
-        String email = SecurityContextHolder.getContext().getAuthentication().getName();
-        Utilisateur user = utilisateurRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("Utilisateur non trouvé"));
+        Utilisateur user = getCurrentUser();
 
         if (!verify2FA(secret, code)) {
-            throw new RuntimeException("Code 2FA invalide");
+            throw new IllegalArgumentException("Code 2FA invalide");
         }
 
         user.setTwoFactorSecret(secret);
@@ -352,9 +350,7 @@ public class AuthService {
 
     @Transactional
     public void disable2FA() {
-        String email = SecurityContextHolder.getContext().getAuthentication().getName();
-        Utilisateur user = utilisateurRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("Utilisateur non trouvé"));
+        Utilisateur user = getCurrentUser();
 
         user.setTwoFactorEnabled(false);
         user.setTwoFactorSecret(null);

@@ -12,18 +12,20 @@ import org.springframework.web.bind.annotation.PathVariable;
 @RequiredArgsConstructor
 public class WebController {
 
+    private static final String ATTR_DESTINATIONS = "destinations";
+
     private final DestinationRepository destinationRepository;
 
     @GetMapping({"/", "/index"})
     public String index(Model model) {
-        model.addAttribute("destinations", destinationRepository.findAll());
+        model.addAttribute(ATTR_DESTINATIONS, destinationRepository.findAll());
         return "index";
     }
 
     @GetMapping("/destinations")
     public String destinations(Model model) {
-        model.addAttribute("destinations", destinationRepository.findAll());
-        return "destinations";
+        model.addAttribute(ATTR_DESTINATIONS, destinationRepository.findAll());
+        return ATTR_DESTINATIONS;
     }
 
     @GetMapping("/destinations/{id}")

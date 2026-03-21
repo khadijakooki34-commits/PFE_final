@@ -22,6 +22,8 @@ import java.util.List;
 @CrossOrigin(origins = "*", maxAge = 3600)
 public class ItineraireController {
 
+    private static final String ERROR_MSG = "Erreur: {}";
+
     private final ItineraireService itineraireService;
 
     // ============================================
@@ -45,7 +47,7 @@ public class ItineraireController {
             return ResponseEntity.status(HttpStatus.CREATED).body(response);
         } catch (Exception e) {
             log.error("Erreur lors de la création: {}", e.getMessage());
-            throw new RuntimeException("Erreur lors de la création de l'itinéraire: " + e.getMessage());
+            throw new IllegalStateException("Erreur lors de la création de l'itinéraire: " + e.getMessage(), e);
         }
     }
 
@@ -78,8 +80,8 @@ public class ItineraireController {
             ItineraireDetailDTO itineraire = itineraireService.getItineraireById(id, utilisateurId);
             return ResponseEntity.ok(itineraire);
         } catch (Exception e) {
-            log.error("Erreur: {}", e.getMessage());
-            throw new RuntimeException("Itinéraire non trouvé ou accès non autorisé");
+            log.error(ERROR_MSG, e.getMessage());
+            throw new IllegalArgumentException("Itinéraire non trouvé ou accès non autorisé", e);
         }
     }
 
@@ -99,8 +101,8 @@ public class ItineraireController {
             ItineraireResponseDTO response = itineraireService.updateItineraire(id, request, utilisateurId);
             return ResponseEntity.ok(response);
         } catch (Exception e) {
-            log.error("Erreur: {}", e.getMessage());
-            throw new RuntimeException("Erreur lors de la mise à jour: " + e.getMessage());
+            log.error(ERROR_MSG, e.getMessage());
+            throw new IllegalStateException("Erreur lors de la mise à jour: " + e.getMessage(), e);
         }
     }
 
@@ -119,8 +121,8 @@ public class ItineraireController {
             itineraireService.supprimerItineraire(id, utilisateurId);
             return ResponseEntity.noContent().build();
         } catch (Exception e) {
-            log.error("Erreur: {}", e.getMessage());
-            throw new RuntimeException("Erreur lors de la suppression");
+            log.error(ERROR_MSG, e.getMessage());
+            throw new IllegalStateException("Erreur lors de la suppression", e);
         }
     }
 
@@ -143,8 +145,8 @@ public class ItineraireController {
             ItineraireResponseDTO response = itineraireService.optimiserItineraire(id, utilisateurId);
             return ResponseEntity.ok(response);
         } catch (Exception e) {
-            log.error("Erreur: {}", e.getMessage());
-            throw new RuntimeException("Erreur lors de l'optimisation");
+            log.error(ERROR_MSG, e.getMessage());
+            throw new IllegalStateException("Erreur lors de l'optimisation", e);
         }
     }
 
@@ -164,8 +166,8 @@ public class ItineraireController {
             ItineraireResponseDTO response = itineraireService.ajouterDestination(id, destinationId, utilisateurId);
             return ResponseEntity.ok(response);
         } catch (Exception e) {
-            log.error("Erreur: {}", e.getMessage());
-            throw new RuntimeException("Erreur lors de l'ajout de la destination");
+            log.error(ERROR_MSG, e.getMessage());
+            throw new IllegalStateException("Erreur lors de l'ajout de la destination", e);
         }
     }
 
@@ -185,8 +187,8 @@ public class ItineraireController {
             ItineraireResponseDTO response = itineraireService.supprimerDestination(id, destinationId, utilisateurId);
             return ResponseEntity.ok(response);
         } catch (Exception e) {
-            log.error("Erreur: {}", e.getMessage());
-            throw new RuntimeException("Erreur lors de la suppression de la destination");
+            log.error(ERROR_MSG, e.getMessage());
+            throw new IllegalStateException("Erreur lors de la suppression de la destination", e);
         }
     }
 

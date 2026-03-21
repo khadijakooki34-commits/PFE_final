@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Service de gestion des itinéraires
@@ -27,6 +26,10 @@ import java.util.stream.Collectors;
 @Slf4j
 @Transactional
 public class ItineraireServiceImpl implements ItineraireService {
+
+    private static final String ERR_ITINERAIRE_NOT_FOUND = "Itinéraire non trouvé";
+    private static final String ERR_UNAUTHORIZED = "Accès non autorisé";
+    private static final String ERR_DESTINATION_NOT_FOUND = "Destination non trouvée";
 
     private final ItineraireRepository itineraireRepository;
     private final UtilisateurRepository utilisateurRepository;
@@ -43,11 +46,11 @@ public class ItineraireServiceImpl implements ItineraireService {
 
         // Récupérer l'utilisateur
         Utilisateur proprietaire = utilisateurRepository.findById(utilisateurId)
-                .orElseThrow(() -> new RuntimeException("Utilisateur non trouvé"));
+                .orElseThrow(() -> new IllegalArgumentException("Utilisateur non trouvé"));
 
         // Vérifier si un itinéraire avec ce nom existe déjà
         if (itineraireRepository.existsByNomAndProprietaire_Id(request.getNom(), utilisateurId)) {
-            throw new RuntimeException("Un itinéraire avec ce nom existe déjà");
+            throw new IllegalStateException("Un itinéraire avec ce nom existe déjà");
         }
 
         // Récupérer les destinations (attention: findAllById ne préserve pas l'ordre)
@@ -55,7 +58,7 @@ public class ItineraireServiceImpl implements ItineraireService {
         List<Destination> unsortedDestinations = destinationRepository.findAllById(destinationIds);
 
         if (unsortedDestinations.size() != destinationIds.size()) {
-            throw new RuntimeException("Certaines destinations n'existent pas");
+            throw new IllegalArgumentException("Certaines destinations n'existent pas");
         }
 
         // Trier les destinations pour respecter l'ordre choisi par l'utilisateur
@@ -63,8 +66,8 @@ public class ItineraireServiceImpl implements ItineraireService {
                 .map(destId -> unsortedDestinations.stream()
                         .filter(d -> d.getId().equals(destId))
                         .findFirst()
-                        .orElseThrow(() -> new RuntimeException("Destination non trouvée: " + destId)))
-                .collect(Collectors.toList());
+                        .orElseThrow(() -> new IllegalArgumentException(ERR_DESTINATION_NOT_FOUND + ": " + destId)))
+                .toList();
 
         // Créer l'itinéraire
         Itineraire itineraire = Itineraire.builder()
@@ -94,7 +97,7 @@ public class ItineraireServiceImpl implements ItineraireService {
         return itineraireRepository.findByProprietaire_Id(utilisateurId)
                 .stream()
                 .map(i -> mapToResponse(i, null))
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @Override
@@ -103,11 +106,11 @@ public class ItineraireServiceImpl implements ItineraireService {
         log.info("Récupération de l'itinéraire ID={}", id);
 
         Itineraire itineraire = itineraireRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Itinéraire non trouvé"));
+                .orElseThrow(() -> new IllegalArgumentException(ERR_ITINERAIRE_NOT_FOUND));
 
         // Vérifier que l'utilisateur est le propriétaire
         if (!itineraire.getProprietaire().getId().equals(utilisateurId)) {
-            throw new RuntimeException("Accès non autorisé à cet itinéraire");
+            throw new IllegalStateException(ERR_UNAUTHORIZED);
         }
 
         return mapToDetailDTO(itineraire);
@@ -118,11 +121,11 @@ public class ItineraireServiceImpl implements ItineraireService {
         log.info("Mise à jour de l'itinéraire ID={}", id);
 
         Itineraire itineraire = itineraireRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Itinéraire non trouvé"));
+                .orElseThrow(() -> new IllegalArgumentException(ERR_ITINERAIRE_NOT_FOUND));
 
         // Vérifier que l'utilisateur est le propriétaire
         if (!itineraire.getProprietaire().getId().equals(utilisateurId)) {
-            throw new RuntimeException("Accès non autorisé à cet itinéraire");
+            throw new IllegalStateException(ERR_UNAUTHORIZED);
         }
 
         // Mettre à jour le nom si fourni
@@ -140,8 +143,8 @@ public class ItineraireServiceImpl implements ItineraireService {
                     .map(destId -> unsortedDestinations.stream()
                             .filter(d -> d.getId().equals(destId))
                             .findFirst()
-                            .orElseThrow(() -> new RuntimeException("Destination non trouvée: " + destId)))
-                    .collect(Collectors.toList());
+                            .orElseThrow(() -> new IllegalArgumentException(ERR_DESTINATION_NOT_FOUND + ": " + destId)))
+                    .toList();
                     
             itineraire.getDestinations().clear();
             itineraire.getDestinations().addAll(destinations);
@@ -159,11 +162,11 @@ public class ItineraireServiceImpl implements ItineraireService {
         log.info("Suppression de l'itinéraire ID={}", id);
 
         Itineraire itineraire = itineraireRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Itinéraire non trouvé"));
+                .orElseThrow(() -> new IllegalArgumentException(ERR_ITINERAIRE_NOT_FOUND));
 
         // Vérifier que l'utilisateur est le propriétaire
         if (!itineraire.getProprietaire().getId().equals(utilisateurId)) {
-            throw new RuntimeException("Accès non autorisé à cet itinéraire");
+            throw new IllegalStateException(ERR_UNAUTHORIZED);
         }
 
         itineraireRepository.delete(itineraire);
@@ -179,11 +182,11 @@ public class ItineraireServiceImpl implements ItineraireService {
         log.info("Optimisation de l'itinéraire ID={}", id);
 
         Itineraire itineraire = itineraireRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Itinéraire non trouvé"));
+                .orElseThrow(() -> new IllegalArgumentException(ERR_ITINERAIRE_NOT_FOUND));
 
         // Vérifier que l'utilisateur est le propriétaire
         if (!itineraire.getProprietaire().getId().equals(utilisateurId)) {
-            throw new RuntimeException("Accès non autorisé");
+            throw new IllegalStateException(ERR_UNAUTHORIZED);
         }
 
         itineraire.calculerItineraireOptimise();
@@ -198,14 +201,14 @@ public class ItineraireServiceImpl implements ItineraireService {
         log.info("Ajout de la destination {} à l'itinéraire {}", destinationId, id);
 
         Itineraire itineraire = itineraireRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Itinéraire non trouvé"));
+                .orElseThrow(() -> new IllegalArgumentException(ERR_ITINERAIRE_NOT_FOUND));
 
         Destination destination = destinationRepository.findById(destinationId)
-                .orElseThrow(() -> new RuntimeException("Destination non trouvée"));
+                .orElseThrow(() -> new IllegalArgumentException(ERR_DESTINATION_NOT_FOUND));
 
         // Vérifier que l'utilisateur est le propriétaire
         if (!itineraire.getProprietaire().getId().equals(utilisateurId)) {
-            throw new RuntimeException("Accès non autorisé");
+            throw new IllegalStateException(ERR_UNAUTHORIZED);
         }
 
         itineraire.ajouterDestination(destination);
@@ -219,14 +222,14 @@ public class ItineraireServiceImpl implements ItineraireService {
         log.info("Suppression de la destination {} de l'itinéraire {}", destinationId, id);
 
         Itineraire itineraire = itineraireRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Itinéraire non trouvé"));
+                .orElseThrow(() -> new IllegalArgumentException(ERR_ITINERAIRE_NOT_FOUND));
 
         Destination destination = destinationRepository.findById(destinationId)
-                .orElseThrow(() -> new RuntimeException("Destination non trouvée"));
+                .orElseThrow(() -> new IllegalArgumentException(ERR_DESTINATION_NOT_FOUND));
 
         // Vérifier que l'utilisateur est le propriétaire
         if (!itineraire.getProprietaire().getId().equals(utilisateurId)) {
-            throw new RuntimeException("Accès non autorisé");
+            throw new IllegalStateException(ERR_UNAUTHORIZED);
         }
 
         itineraire.supprimerDestination(destination);
@@ -273,12 +276,12 @@ public class ItineraireServiceImpl implements ItineraireService {
         if (request.getOptimise() != null) {
             resultats = resultats.stream()
                     .filter(i -> i.getEstOptimise().equals(request.getOptimise()))
-                    .collect(Collectors.toList());
+                    .toList();
         }
 
         return resultats.stream()
                 .map(i -> mapToResponse(i, null))
-                .collect(Collectors.toList());
+                .toList();
     }
 
     // ============================================
@@ -305,8 +308,13 @@ public class ItineraireServiceImpl implements ItineraireService {
                 .estOptimise(itineraire.getEstOptimise())
                 .destinations(
                         itineraire.getDestinations().stream()
+<<<<<<< HEAD
                                 .map(d -> Translator.translate(d, "name"))
                                 .collect(Collectors.toList()))
+=======
+                                .map(Destination::getNom)
+                                .toList())
+>>>>>>> 9da0d882eeb0a0f77b3bfc443a4e4262ea0c96e6
                 .message(message)
                 .build();
     }
@@ -348,7 +356,7 @@ public class ItineraireServiceImpl implements ItineraireService {
                                         .latitude(dest.getLatitude())
                                         .longitude(dest.getLongitude())
                                         .build())
-                                .collect(Collectors.toList()))
+                                .toList())
                 .reservations(reservationService.getReservationsByItinerary(itineraire.getId()))
                 .build();
     }

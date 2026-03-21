@@ -8,8 +8,8 @@ import ma.safar.morocco.favori.repository.FavoriRepository;
 import ma.safar.morocco.reservation.entity.Reservation;
 import ma.safar.morocco.reservation.repository.ReservationRepository;
 import ma.safar.morocco.user.entity.Utilisateur;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -17,16 +17,12 @@ import java.util.stream.Collectors;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class RecommendationService {
 
-    @Autowired
-    private DestinationRepository destinationRepository;
-
-    @Autowired
-    private FavoriRepository favoriRepository;
-
-    @Autowired
-    private ReservationRepository reservationRepository;
+    private final DestinationRepository destinationRepository;
+    private final FavoriRepository favoriRepository;
+    private final ReservationRepository reservationRepository;
 
     //Génère des suggestions de destinations basées sur le message
 
@@ -74,7 +70,7 @@ public class RecommendationService {
 
         return new ArrayList<>(suggestions).stream()
                 .limit(5)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     private List<String> getDestinationsByType(String type, int limit) {
@@ -83,7 +79,7 @@ public class RecommendationService {
                     .filter(d -> d.getType() != null && d.getType().toLowerCase().contains(type))
                     .limit(limit)
                     .map(Destination::getNom)
-                    .collect(Collectors.toList());
+                    .toList();
         } catch (Exception e) {
             log.error("Erreur récupération destinations par type", e);
             return Collections.emptyList();
@@ -99,7 +95,7 @@ public class RecommendationService {
             return destinations.stream()
                     .limit(limit)
                     .map(Destination::getNom)
-                    .collect(Collectors.toList());
+                    .toList();
         } catch (Exception e) {
             log.error("Erreur récupération destinations populaires", e);
             return Arrays.asList("Marrakech", "Fès", "Chefchaouen");
@@ -118,6 +114,13 @@ public class RecommendationService {
         List<Favori> favoris = favoriRepository.findByUtilisateurId(user.getId());
         List<Reservation> reservations = reservationRepository.findByUtilisateurId(user.getId());
 
+        Set<String> preferredCategories = getPreferredCategories(favoris, reservations);
+        Set<Long> visitedOrFavoredDestIds = getVisitedDestinations(favoris, reservations);
+
+        return buildRecommendationsList(allDestinations, preferredCategories, visitedOrFavoredDestIds);
+    }
+
+    private Set<String> getPreferredCategories(List<Favori> favoris, List<Reservation> reservations) {
         Set<String> favoredCategories = favoris.stream()
                 .map(f -> f.getDestination().getCategorie())
                 .filter(Objects::nonNull)
@@ -131,45 +134,47 @@ public class RecommendationService {
 
         Set<String> preferredCategories = new HashSet<>(favoredCategories);
         preferredCategories.addAll(reservedCategories);
+        return preferredCategories;
+    }
 
+    private Set<Long> getVisitedDestinations(List<Favori> favoris, List<Reservation> reservations) {
         Set<Long> visitedOrFavoredDestIds = new HashSet<>();
         favoris.forEach(f -> visitedOrFavoredDestIds.add(f.getDestination().getId()));
         reservations.stream()
                 .filter(r -> r.getEvenement() != null && r.getEvenement().getDestination() != null)
                 .forEach(r -> visitedOrFavoredDestIds.add(r.getEvenement().getDestination().getId()));
+        return visitedOrFavoredDestIds;
+    }
 
-        // Map to store destination score and reason
+    private void scoreDestination(Destination dest, Set<String> preferredCategories, Map<Destination, Integer> scores, Map<Destination, String> reasons) {
+        int score = 0;
+        String reason = "Popular choice";
+
+        if (dest.getCategorie() != null && preferredCategories.contains(dest.getCategorie())) {
+            score += 3;
+            reason = "Because you like " + dest.getCategorie() + " destinations";
+        }
+
+        if (dest.getViewCount() != null && dest.getViewCount() > 100) {
+            score += 1;
+            if (score == 1) {
+                reason = "Trending destination";
+            }
+        }
+        
+        if (score > 0) {
+            scores.put(dest, score);
+            reasons.put(dest, reason);
+        }
+    }
+
+    private List<RecommendationDTO> buildRecommendationsList(List<Destination> allDestinations, Set<String> preferredCategories, Set<Long> visitedOrFavoredDestIds) {
         Map<Destination, Integer> scores = new HashMap<>();
         Map<Destination, String> reasons = new HashMap<>();
 
         for (Destination dest : allDestinations) {
-            // Skip already favored or reserved destinations for recommendations
-            if (visitedOrFavoredDestIds.contains(dest.getId())) {
-                continue;
-            }
-
-            int score = 0;
-            String reason = "Popular choice";
-
-            // 3 points for category match
-            if (dest.getCategorie() != null && preferredCategories.contains(dest.getCategorie())) {
-                score += 3;
-                reason = "Because you like " + dest.getCategorie() + " destinations";
-            }
-
-            // 1 point for globally popular (e.g., highly viewed)
-            if (dest.getViewCount() != null && dest.getViewCount() > 100) {
-                score += 1;
-                if (score == 1) {
-                    reason = "Trending destination";
-                }
-            }
-            
-            // Note: In a more complex scenario we'd add 2 points for similar users here.
-
-            if (score > 0) {
-                scores.put(dest, score);
-                reasons.put(dest, reason);
+            if (!visitedOrFavoredDestIds.contains(dest.getId())) {
+                scoreDestination(dest, preferredCategories, scores, reasons);
             }
         }
 
@@ -177,36 +182,40 @@ public class RecommendationService {
                 .sorted(Map.Entry.<Destination, Integer>comparingByValue().reversed())
                 .limit(10)
                 .map(Map.Entry::getKey)
-                .collect(Collectors.toList());
+                .toList();
 
-        // Fallback to popular destinations if no recommendations could be made
         if (topDestinations.isEmpty()) {
-            topDestinations = allDestinations.stream()
-                    .filter(d -> !visitedOrFavoredDestIds.contains(d.getId()))
-                    .sorted((d1, d2) -> Long.compare(
-                            d2.getViewCount() != null ? d2.getViewCount() : 0L,
-                            d1.getViewCount() != null ? d1.getViewCount() : 0L))
-                    .limit(5)
-                    .collect(Collectors.toList());
-            
+            topDestinations = getFallbackDestinations(allDestinations, visitedOrFavoredDestIds);
             for (Destination d : topDestinations) {
                 reasons.put(d, "Popular among users");
             }
         }
 
-        return topDestinations.stream().map(dest -> {
-            String imageUrl = null;
-            if (dest.getMedias() != null && !dest.getMedias().isEmpty()) {
-                imageUrl = dest.getMedias().get(0).getUrl();
-            }
-            return RecommendationDTO.builder()
-                    .id(dest.getId())
-                    .name(dest.getNom())
-                    .description(dest.getDescription() != null && dest.getDescription().length() > 100 ? 
-                            dest.getDescription().substring(0, 100) + "..." : dest.getDescription())
-                    .reason(reasons.getOrDefault(dest, "Recommended for you"))
-                    .imageUrl(imageUrl)
-                    .build();
-        }).collect(Collectors.toList());
+        return topDestinations.stream().map(dest -> createDTO(dest, reasons.getOrDefault(dest, "Recommended for you"))).toList();
+    }
+
+    private List<Destination> getFallbackDestinations(List<Destination> allDestinations, Set<Long> visitedOrFavoredDestIds) {
+        return allDestinations.stream()
+                .filter(d -> !visitedOrFavoredDestIds.contains(d.getId()))
+                .sorted((d1, d2) -> Long.compare(
+                        d2.getViewCount() != null ? d2.getViewCount() : 0L,
+                        d1.getViewCount() != null ? d1.getViewCount() : 0L))
+                .limit(5)
+                .toList();
+    }
+
+    private RecommendationDTO createDTO(Destination dest, String reason) {
+        String imageUrl = null;
+        if (dest.getMedias() != null && !dest.getMedias().isEmpty()) {
+            imageUrl = dest.getMedias().get(0).getUrl();
+        }
+        return RecommendationDTO.builder()
+                .id(dest.getId())
+                .name(dest.getNom())
+                .description(dest.getDescription() != null && dest.getDescription().length() > 100 ? 
+                        dest.getDescription().substring(0, 100) + "..." : dest.getDescription())
+                .reason(reason)
+                .imageUrl(imageUrl)
+                .build();
     }
 }

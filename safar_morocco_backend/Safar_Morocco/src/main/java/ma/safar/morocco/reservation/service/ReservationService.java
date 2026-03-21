@@ -19,6 +19,8 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class ReservationService {
 
+    public static final String ENTITY_NAME = "Reservation";
+
     private final ReservationRepository reservationRepository;
     private final EvenementCulturelRepository evenementRepository;
     private final UtilisateurService utilisateurService;
@@ -34,19 +36,19 @@ public class ReservationService {
         if (existingOpt.isPresent()) {
             Reservation existing = existingOpt.get();
             if ("CONFIRMED".equals(existing.getStatus())) {
-                throw new RuntimeException("Vous avez déjà réservé cet événement.");
+                throw new IllegalStateException("Vous avez déjà réservé cet événement.");
             } else {
                 // It's cancelled, reactivate it
                 existing.setStatus("CONFIRMED");
                 Reservation saved = reservationRepository.save(existing);
-                auditService.logAction(currentUser.getId(), "RESERVATION_CREATED", "Reservation", saved.getId(),
+                auditService.logAction(currentUser.getId(), "RESERVATION_CREATED", ENTITY_NAME, saved.getId(),
                         "Reservation reactivated for event: " + saved.getEvenement().getNom());
                 return saved;
             }
         }
 
         EvenementCulturel event = evenementRepository.findById(evenementId)
-                .orElseThrow(() -> new RuntimeException("Événement non trouvé"));
+                .orElseThrow(() -> new IllegalArgumentException("Événement non trouvé"));
 
         Reservation reservation = Reservation.builder()
                 .utilisateur(currentUser)
@@ -54,7 +56,7 @@ public class ReservationService {
                 .build();
 
         Reservation saved = reservationRepository.save(reservation);
-        auditService.logAction(currentUser.getId(), "RESERVATION_CREATED", "Reservation", saved.getId(),
+        auditService.logAction(currentUser.getId(), "RESERVATION_CREATED", ENTITY_NAME, saved.getId(),
                 "Reservation created for event: " + event.getNom());
         return saved;
     }
@@ -63,19 +65,19 @@ public class ReservationService {
     public void cancelReservation(Long reservationId) {
         Utilisateur currentUser = utilisateurService.getCurrentUser();
         Reservation reservation = reservationRepository.findById(reservationId)
-                .orElseThrow(() -> new RuntimeException("Reservation not found"));
+                .orElseThrow(() -> new IllegalArgumentException("Reservation not found"));
 
         if (!reservation.getUtilisateur().getId().equals(currentUser.getId())) {
-            throw new RuntimeException("Unauthorized to cancel this reservation");
+            throw new IllegalStateException("Unauthorized to cancel this reservation");
         }
 
         if ("CANCELLED".equals(reservation.getStatus())) {
-            throw new RuntimeException("Reservation is already cancelled");
+            throw new IllegalStateException("Reservation is already cancelled");
         }
 
         reservation.setStatus("CANCELLED");
         reservationRepository.save(reservation);
-        auditService.logAction(currentUser.getId(), "RESERVATION_CANCELLED", "Reservation", reservation.getId(),
+        auditService.logAction(currentUser.getId(), "RESERVATION_CANCELLED", ENTITY_NAME, reservation.getId(),
                 "Reservation cancelled for event: " + reservation.getEvenement().getNom());
     }
 
