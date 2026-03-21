@@ -8,7 +8,7 @@
         "target": "http://127.0.0.1:8088",
         "secure": false
     },
-    "/oauth2": {
+    "/oauth2/authorization": {
         "target": "http://127.0.0.1:8088",
         "secure": false
     },
