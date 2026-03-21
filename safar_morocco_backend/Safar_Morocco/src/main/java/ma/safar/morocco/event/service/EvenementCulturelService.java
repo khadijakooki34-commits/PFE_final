@@ -46,7 +46,7 @@ public class EvenementCulturelService {
     @Transactional
     public EvenementCulturel create(Long destinationId, EvenementCulturel evenement) {
         Destination destination = destinationRepository.findById(destinationId)
-                .orElseThrow(() -> new RuntimeException("Destination non trouvée"));
+                .orElseThrow(() -> new IllegalArgumentException("Destination non trouvée"));
 
         evenement.setDestination(destination);
         return evenementRepository.save(evenement);
@@ -58,7 +58,7 @@ public class EvenementCulturelService {
     @Transactional
     public EvenementCulturel update(Long id, EvenementCulturel updated) {
         EvenementCulturel existing = evenementRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Événement non trouvé"));
+                .orElseThrow(() -> new IllegalArgumentException("Événement non trouvé"));
 
         existing.setNom(updated.getNom());
         existing.setDescription(updated.getDescription());
@@ -77,7 +77,7 @@ public class EvenementCulturelService {
     @Transactional
     public void delete(Long id) {
         if (!evenementRepository.existsById(id)) {
-            throw new RuntimeException("Événement non trouvé");
+            throw new IllegalArgumentException("Événement non trouvé");
         }
         evenementRepository.deleteById(id);
     }

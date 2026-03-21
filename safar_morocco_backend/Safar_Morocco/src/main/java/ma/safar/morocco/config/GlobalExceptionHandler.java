@@ -36,6 +36,12 @@ import java.util.Map;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
+    private static final String TIMESTAMP_KEY = "timestamp";
+    private static final String STATUS_KEY = "status";
+    private static final String ERROR_KEY = "error";
+    private static final String MESSAGE_KEY = "message";
+    private static final String PATH_KEY = "path";
+
     /**
      * Gère les erreurs de validation (@Valid)
      */
@@ -52,12 +58,12 @@ public class GlobalExceptionHandler {
         });
 
         Map<String, Object> response = new HashMap<>();
-        response.put("timestamp", LocalDateTime.now());
-        response.put("status", HttpStatus.BAD_REQUEST.value());
-        response.put("error", "Erreur de Validation");
-        response.put("message", "Les données fournies sont invalides");
+        response.put(TIMESTAMP_KEY, LocalDateTime.now());
+        response.put(STATUS_KEY, HttpStatus.BAD_REQUEST.value());
+        response.put(ERROR_KEY, "Erreur de Validation");
+        response.put(MESSAGE_KEY, "Les données fournies sont invalides");
         response.put("details", errors);
-        response.put("path", request.getDescription(false).replace("uri=", ""));
+        response.put(PATH_KEY, request.getDescription(false).replace("uri=", ""));
 
         log.warn("Validation error: {}", errors);
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
@@ -72,11 +78,11 @@ public class GlobalExceptionHandler {
             BadCredentialsException ex,
             WebRequest request) {
         Map<String, Object> response = new HashMap<>();
-        response.put("timestamp", LocalDateTime.now());
-        response.put("status", HttpStatus.UNAUTHORIZED.value());
-        response.put("error", "Authentification Échouée");
-        response.put("message", "Email ou mot de passe incorrect");
-        response.put("path", request.getDescription(false).replace("uri=", ""));
+        response.put(TIMESTAMP_KEY, LocalDateTime.now());
+        response.put(STATUS_KEY, HttpStatus.UNAUTHORIZED.value());
+        response.put(ERROR_KEY, "Authentification Échouée");
+        response.put(MESSAGE_KEY, "Email ou mot de passe incorrect");
+        response.put(PATH_KEY, request.getDescription(false).replace("uri=", ""));
 
         log.warn("Authentication failed: {}", ex.getMessage());
         return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
@@ -91,11 +97,11 @@ public class GlobalExceptionHandler {
             UsernameNotFoundException ex,
             WebRequest request) {
         Map<String, Object> response = new HashMap<>();
-        response.put("timestamp", LocalDateTime.now());
-        response.put("status", HttpStatus.NOT_FOUND.value());
-        response.put("error", "Utilisateur Non Trouvé");
-        response.put("message", ex.getMessage());
-        response.put("path", request.getDescription(false).replace("uri=", ""));
+        response.put(TIMESTAMP_KEY, LocalDateTime.now());
+        response.put(STATUS_KEY, HttpStatus.NOT_FOUND.value());
+        response.put(ERROR_KEY, "Utilisateur Non Trouvé");
+        response.put(MESSAGE_KEY, ex.getMessage());
+        response.put(PATH_KEY, request.getDescription(false).replace("uri=", ""));
 
         log.warn("User not found: {}", ex.getMessage());
         return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
@@ -110,11 +116,11 @@ public class GlobalExceptionHandler {
             DisabledException ex,
             WebRequest request) {
         Map<String, Object> response = new HashMap<>();
-        response.put("timestamp", LocalDateTime.now());
-        response.put("status", HttpStatus.FORBIDDEN.value());
-        response.put("error", "Compte Désactivé");
-        response.put("message", "Votre compte a été désactivé. Contactez l'administrateur.");
-        response.put("path", request.getDescription(false).replace("uri=", ""));
+        response.put(TIMESTAMP_KEY, LocalDateTime.now());
+        response.put(STATUS_KEY, HttpStatus.FORBIDDEN.value());
+        response.put(ERROR_KEY, "Compte Désactivé");
+        response.put(MESSAGE_KEY, "Votre compte a été désactivé. Contactez l'administrateur.");
+        response.put(PATH_KEY, request.getDescription(false).replace("uri=", ""));
 
         log.warn("Disabled account access attempt");
         return new ResponseEntity<>(response, HttpStatus.FORBIDDEN);
@@ -129,11 +135,11 @@ public class GlobalExceptionHandler {
             LockedException ex,
             WebRequest request) {
         Map<String, Object> response = new HashMap<>();
-        response.put("timestamp", LocalDateTime.now());
-        response.put("status", HttpStatus.FORBIDDEN.value());
-        response.put("error", "Compte Verrouillé");
-        response.put("message", "Votre compte a été verrouillé suite à plusieurs tentatives échouées.");
-        response.put("path", request.getDescription(false).replace("uri=", ""));
+        response.put(TIMESTAMP_KEY, LocalDateTime.now());
+        response.put(STATUS_KEY, HttpStatus.FORBIDDEN.value());
+        response.put(ERROR_KEY, "Compte Verrouillé");
+        response.put(MESSAGE_KEY, "Votre compte a été verrouillé suite à plusieurs tentatives échouées.");
+        response.put(PATH_KEY, request.getDescription(false).replace("uri=", ""));
 
         log.warn("Locked account access attempt");
         return new ResponseEntity<>(response, HttpStatus.FORBIDDEN);
@@ -148,11 +154,11 @@ public class GlobalExceptionHandler {
             AccessDeniedException ex,
             WebRequest request) {
         Map<String, Object> response = new HashMap<>();
-        response.put("timestamp", LocalDateTime.now());
-        response.put("status", HttpStatus.FORBIDDEN.value());
-        response.put("error", "Accès Refusé");
-        response.put("message", "Vous n'avez pas les permissions pour accéder à cette ressource");
-        response.put("path", request.getDescription(false).replace("uri=", ""));
+        response.put(TIMESTAMP_KEY, LocalDateTime.now());
+        response.put(STATUS_KEY, HttpStatus.FORBIDDEN.value());
+        response.put(ERROR_KEY, "Accès Refusé");
+        response.put(MESSAGE_KEY, "Vous n'avez pas les permissions pour accéder à cette ressource");
+        response.put(PATH_KEY, request.getDescription(false).replace("uri=", ""));
 
         log.warn("Access denied: {}", ex.getMessage());
         return new ResponseEntity<>(response, HttpStatus.FORBIDDEN);
@@ -167,11 +173,11 @@ public class GlobalExceptionHandler {
             AuthenticationException ex,
             WebRequest request) {
         Map<String, Object> response = new HashMap<>();
-        response.put("timestamp", LocalDateTime.now());
-        response.put("status", HttpStatus.UNAUTHORIZED.value());
-        response.put("error", "Erreur d'Authentification");
-        response.put("message", "Authentification échouée: " + ex.getMessage());
-        response.put("path", request.getDescription(false).replace("uri=", ""));
+        response.put(TIMESTAMP_KEY, LocalDateTime.now());
+        response.put(STATUS_KEY, HttpStatus.UNAUTHORIZED.value());
+        response.put(ERROR_KEY, "Erreur d'Authentification");
+        response.put(MESSAGE_KEY, "Authentification échouée: " + ex.getMessage());
+        response.put(PATH_KEY, request.getDescription(false).replace("uri=", ""));
 
         log.warn("Authentication error: {}", ex.getMessage());
         return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
@@ -186,11 +192,11 @@ public class GlobalExceptionHandler {
             IllegalArgumentException ex,
             WebRequest request) {
         Map<String, Object> response = new HashMap<>();
-        response.put("timestamp", LocalDateTime.now());
-        response.put("status", HttpStatus.BAD_REQUEST.value());
-        response.put("error", "Requête Invalide");
-        response.put("message", ex.getMessage());
-        response.put("path", request.getDescription(false).replace("uri=", ""));
+        response.put(TIMESTAMP_KEY, LocalDateTime.now());
+        response.put(STATUS_KEY, HttpStatus.BAD_REQUEST.value());
+        response.put(ERROR_KEY, "Requête Invalide");
+        response.put(MESSAGE_KEY, ex.getMessage());
+        response.put(PATH_KEY, request.getDescription(false).replace("uri=", ""));
 
         log.warn("Illegal argument: {}", ex.getMessage());
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
@@ -205,17 +211,17 @@ public class GlobalExceptionHandler {
             org.springframework.http.converter.HttpMessageNotReadableException ex,
             WebRequest request) {
         Map<String, Object> response = new HashMap<>();
-        response.put("timestamp", LocalDateTime.now());
-        response.put("status", HttpStatus.BAD_REQUEST.value());
-        response.put("error", "Format de Requête Invalide");
+        response.put(TIMESTAMP_KEY, LocalDateTime.now());
+        response.put(STATUS_KEY, HttpStatus.BAD_REQUEST.value());
+        response.put(ERROR_KEY, "Format de Requête Invalide");
 
         String specificError = ex.getMostSpecificCause() != null ? ex.getMostSpecificCause().getMessage()
                 : ex.getMessage();
 
-        response.put("message",
+        response.put(MESSAGE_KEY,
                 "Le format des données envoyées est incorrect. Veuillez vérifier les types de données (ex: format de date non valide).");
         response.put("details", specificError);
-        response.put("path", request.getDescription(false).replace("uri=", ""));
+        response.put(PATH_KEY, request.getDescription(false).replace("uri=", ""));
 
         log.warn("Message not readable. Exact cause: {}", specificError);
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
@@ -246,11 +252,11 @@ public class GlobalExceptionHandler {
         }
 
         Map<String, Object> response = new HashMap<>();
-        response.put("timestamp", LocalDateTime.now());
-        response.put("status", status.value());
-        response.put("error", error);
-        response.put("message", ex.getMessage());
-        response.put("path", request.getDescription(false).replace("uri=", ""));
+        response.put(TIMESTAMP_KEY, LocalDateTime.now());
+        response.put(STATUS_KEY, status.value());
+        response.put(ERROR_KEY, error);
+        response.put(MESSAGE_KEY, ex.getMessage());
+        response.put(PATH_KEY, request.getDescription(false).replace("uri=", ""));
 
         log.error("Runtime error: {}", ex.getMessage(), ex);
         return new ResponseEntity<>(response, status);
@@ -265,11 +271,11 @@ public class GlobalExceptionHandler {
             Exception ex,
             WebRequest request) {
         Map<String, Object> response = new HashMap<>();
-        response.put("timestamp", LocalDateTime.now());
-        response.put("status", HttpStatus.INTERNAL_SERVER_ERROR.value());
-        response.put("error", "Erreur Interne");
-        response.put("message", "Une erreur inattendue s'est produite. Veuillez réessayer plus tard.");
-        response.put("path", request.getDescription(false).replace("uri=", ""));
+        response.put(TIMESTAMP_KEY, LocalDateTime.now());
+        response.put(STATUS_KEY, HttpStatus.INTERNAL_SERVER_ERROR.value());
+        response.put(ERROR_KEY, "Erreur Interne");
+        response.put(MESSAGE_KEY, "Une erreur inattendue s'est produite. Veuillez réessayer plus tard.");
+        response.put(PATH_KEY, request.getDescription(false).replace("uri=", ""));
 
         log.error("Unexpected error: {}", ex.getMessage(), ex);
         return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);

@@ -102,7 +102,7 @@ public class Meteo {
     /**
      * Méthode du diagramme : Mise à jour depuis API
      */
-    public void mettreAJourDonnees(String donneesAPI) {
+    public void mettreAJourDonnees() {
         this.derniereMiseAJour = LocalDateTime.now();
     }
 

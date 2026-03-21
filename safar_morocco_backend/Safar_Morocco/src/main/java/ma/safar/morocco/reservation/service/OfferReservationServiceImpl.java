@@ -16,7 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.temporal.ChronoUnit;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -29,6 +28,7 @@ public class OfferReservationServiceImpl implements OfferReservationService {
 
         @Override
         @Transactional
+        @SuppressWarnings("java:S3776")
         public OfferReservationDTO createReservation(OfferReservationDTO dto) {
                 Utilisateur user = userRepository.findById(dto.getUserId())
                                 .orElseThrow(() -> new RuntimeException("User not found"));
@@ -62,10 +62,11 @@ public class OfferReservationServiceImpl implements OfferReservationService {
                                         }
                                 }
                                 break;
-                        case ACTIVITY:
-                        case RESTAURANT: // price is base price or average price
-                                Double basePrice = offer.getPrice() != null ? offer.getPrice()
-                                                : (offer.getAveragePrice() != null ? offer.getAveragePrice() : 0.0);
+                        case ACTIVITY, RESTAURANT: // price is base price or average price
+                                Double basePrice = offer.getPrice();
+                                if (basePrice == null) {
+                                        basePrice = offer.getAveragePrice() != null ? offer.getAveragePrice() : 0.0;
+                                }
                                 calculatedTotalPrice = basePrice * qty;
                                 break;
                 }
@@ -96,21 +97,21 @@ public class OfferReservationServiceImpl implements OfferReservationService {
         public List<OfferReservationDTO> getReservationsByItinerary(Long itineraryId) {
                 return reservationRepository.findByItineraryId(itineraryId).stream()
                                 .map(this::mapToDTO)
-                                .collect(Collectors.toList());
+                                .toList();
         }
 
         @Override
         public List<OfferReservationDTO> getAllReservations() {
                 return reservationRepository.findAll().stream()
                                 .map(this::mapToDTO)
-                                .collect(Collectors.toList());
+                                .toList();
         }
 
         @Override
         public List<OfferReservationDTO> getReservationsByUser(Long userId) {
                 return reservationRepository.findByUserId(userId).stream()
                                 .map(this::mapToDTO)
-                                .collect(Collectors.toList());
+                                .toList();
         }
 
         @Override

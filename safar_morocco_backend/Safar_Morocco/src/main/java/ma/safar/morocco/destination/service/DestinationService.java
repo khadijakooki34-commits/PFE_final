@@ -11,7 +11,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -20,6 +19,8 @@ public class DestinationService {
     private final AvisRepository avisRepository;
     private final AuditService auditService;
 
+    private static final String DESTINATION_CONST = "Destination";
+
     public List<Destination> findAll() {
         return destinationRepository.findAll();
     }
@@ -27,7 +28,7 @@ public class DestinationService {
     public List<DestinationResponseDTO> findAllDTO() {
         return destinationRepository.findAll().stream()
                 .map(this::convertToDTO)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     public Optional<Destination> findById(Long id) {
@@ -41,7 +42,7 @@ public class DestinationService {
     @Transactional
     public Destination create(Destination d) {
         Destination created = destinationRepository.save(d);
-        auditService.logAction(null, "DESTINATION_CREATED", "Destination", created.getId(),
+        auditService.logAction(null, "DESTINATION_CREATED", DESTINATION_CONST, created.getId(),
                 "Created destination: " + created.getNom());
         return created;
     }
@@ -49,7 +50,7 @@ public class DestinationService {
     @Transactional
     public Destination update(Long id, Destination updated) {
         Destination existing = destinationRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Destination non trouvée"));
+                .orElseThrow(() -> new IllegalArgumentException("Destination non trouvée"));
         existing.setNom(updated.getNom());
         existing.setDescription(updated.getDescription());
         existing.setLatitude(updated.getLatitude());
@@ -60,7 +61,7 @@ public class DestinationService {
         existing.setAverageCost(updated.getAverageCost());
         existing.setVideoUrl(updated.getVideoUrl());
         Destination result = destinationRepository.save(existing);
-        auditService.logAction(null, "DESTINATION_UPDATED", "Destination", id,
+        auditService.logAction(null, "DESTINATION_UPDATED", DESTINATION_CONST, id,
                 "Updated destination: " + result.getNom());
         return result;
     }
@@ -72,22 +73,22 @@ public class DestinationService {
     public List<DestinationResponseDTO> findByCategorieDTO(String categorie) {
         return destinationRepository.findByCategorie(categorie).stream()
                 .map(this::convertToDTO)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @Transactional
     public void delete(Long id) {
         if (!destinationRepository.existsById(id)) {
-            throw new RuntimeException("Destination non trouvée");
+            throw new IllegalArgumentException("Destination non trouvée");
         }
-        auditService.logAction(null, "DESTINATION_DELETED", "Destination", id, "Deleted destination ID: " + id);
+        auditService.logAction(null, "DESTINATION_DELETED", DESTINATION_CONST, id, "Deleted destination ID: " + id);
         destinationRepository.deleteById(id);
     }
 
     @Transactional
     public void incrementViewCount(Long id) {
         Destination destination = destinationRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Destination non trouvée"));
+                .orElseThrow(() -> new IllegalArgumentException("Destination non trouvée"));
         destination.setViewCount(destination.getViewCount() == null ? 1 : destination.getViewCount() + 1);
         destinationRepository.save(destination);
     }
@@ -118,10 +119,10 @@ public class DestinationService {
                                 .url(m.getUrl())
                                 .type(m.getType())
                                 .build())
-                        .collect(Collectors.toList()) : java.util.Collections.emptyList())
+                        .toList() : java.util.Collections.emptyList())
                 .imageUrls(
-                        d.getMedias() != null ? d.getMedias().stream().map(m -> m.getUrl())
-                                .collect(Collectors.toList())
+                        d.getMedias() != null ? d.getMedias().stream().map(ma.safar.morocco.media.entity.Media::getUrl)
+                                .toList()
                                 : java.util.Collections.emptyList())
                 .bestTime(d.getBestTime())
                 .languages(d.getLanguages())

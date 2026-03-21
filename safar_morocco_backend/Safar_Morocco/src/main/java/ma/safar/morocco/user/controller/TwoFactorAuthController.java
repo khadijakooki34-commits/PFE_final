@@ -22,6 +22,9 @@ import java.util.Optional;
 public class
                TwoFactorAuthController {
 
+    public static final String USER_NOT_FOUND_MSG = "Utilisateur non trouvé";
+    public static final String ERROR_PREFIX = "Erreur: ";
+
     private final TwoFactorAuthService twoFactorAuthService;
     private final UtilisateurRepository utilisateurRepository;
 
@@ -30,11 +33,11 @@ public class
      */
     @PostMapping("/setup")
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<?> setupTwoFactor(Authentication authentication) {
+    public ResponseEntity<Object> setupTwoFactor(Authentication authentication) {
         try {
             String email = authentication.getName();
             Utilisateur user = utilisateurRepository.findByEmail(email)
-                    .orElseThrow(() -> new Exception("Utilisateur non trouvé"));
+                    .orElseThrow(() -> new IllegalArgumentException(USER_NOT_FOUND_MSG));
 
             TwoFactorAuth twoFactorAuth = twoFactorAuthService.generateSecretAndQrCode(user);
 
@@ -59,14 +62,14 @@ public class
      */
     @PostMapping("/confirm")
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<?> confirmCode(
+    public ResponseEntity<Object> confirmCode(
             Authentication authentication,
             @RequestParam String code
     ) {
         try {
             String email = authentication.getName();
             Utilisateur user = utilisateurRepository.findByEmail(email)
-                    .orElseThrow(() -> new Exception("Utilisateur non trouvé"));
+                    .orElseThrow(() -> new IllegalArgumentException(USER_NOT_FOUND_MSG));
 
             boolean isValid = twoFactorAuthService.verifyCode(user, code);
 
@@ -88,14 +91,14 @@ public class
      */
     @PostMapping("/verify")
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<?> verifyAndEnable(
+    public ResponseEntity<Object> verifyAndEnable(
             Authentication authentication,
             @RequestParam String code
     ) {
         try {
             String email = authentication.getName();
             Utilisateur user = utilisateurRepository.findByEmail(email)
-                    .orElseThrow(() -> new Exception("Utilisateur non trouvé"));
+                    .orElseThrow(() -> new IllegalArgumentException(USER_NOT_FOUND_MSG));
 
             twoFactorAuthService.enableTwoFactorAuth(user, code);
 
@@ -103,7 +106,7 @@ public class
             return ResponseEntity.ok("2FA activé avec succès");
         } catch (Exception e) {
             log.error("Error verifying 2FA: {}", e.getMessage());
-            return ResponseEntity.badRequest().body("Erreur: " + e.getMessage());
+            return ResponseEntity.badRequest().body(ERROR_PREFIX + e.getMessage());
         }
     }
 
@@ -112,14 +115,14 @@ public class
      */
     @PostMapping("/validate")
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<?> validateCode(
+    public ResponseEntity<Object> validateCode(
             Authentication authentication,
             @RequestParam String code
     ) {
         try {
             String email = authentication.getName();
             Utilisateur user = utilisateurRepository.findByEmail(email)
-                    .orElseThrow(() -> new Exception("Utilisateur non trouvé"));
+                    .orElseThrow(() -> new IllegalArgumentException(USER_NOT_FOUND_MSG));
 
             boolean isValid = twoFactorAuthService.verifyCode(user, code);
 
@@ -132,7 +135,7 @@ public class
             }
         } catch (Exception e) {
             log.error("Error validating 2FA: {}", e.getMessage());
-            return ResponseEntity.badRequest().body("Erreur: " + e.getMessage());
+            return ResponseEntity.badRequest().body(ERROR_PREFIX + e.getMessage());
         }
     }
 
@@ -141,11 +144,11 @@ public class
      */
     @PostMapping("/disable")
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<?> disableTwoFactor(Authentication authentication) {
+    public ResponseEntity<Object> disableTwoFactor(Authentication authentication) {
         try {
             String email = authentication.getName();
             Utilisateur user = utilisateurRepository.findByEmail(email)
-                    .orElseThrow(() -> new Exception("Utilisateur non trouvé"));
+                    .orElseThrow(() -> new IllegalArgumentException(USER_NOT_FOUND_MSG));
 
             twoFactorAuthService.disableTwoFactorAuth(user);
 
@@ -153,7 +156,7 @@ public class
             return ResponseEntity.ok("2FA désactivé");
         } catch (Exception e) {
             log.error("Error disabling 2FA: {}", e.getMessage());
-            return ResponseEntity.badRequest().body("Erreur: " + e.getMessage());
+            return ResponseEntity.badRequest().body(ERROR_PREFIX + e.getMessage());
         }
     }
 
@@ -162,11 +165,11 @@ public class
      */
     @GetMapping("/status")
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<?> getTwoFactorStatus(Authentication authentication) {
+    public ResponseEntity<Object> getTwoFactorStatus(Authentication authentication) {
         try {
             String email = authentication.getName();
             Utilisateur user = utilisateurRepository.findByEmail(email)
-                    .orElseThrow(() -> new Exception("Utilisateur non trouvé"));
+                    .orElseThrow(() -> new IllegalArgumentException(USER_NOT_FOUND_MSG));
 
             Optional<TwoFactorAuth> twoFA = twoFactorAuthService.getTwoFactorAuth(user);
 
@@ -181,7 +184,7 @@ public class
             return ResponseEntity.ok(TwoFactorAuthDTO.builder().enabled(false).confirmed(false).build());
         } catch (Exception e) {
             log.error("Error fetching 2FA status: {}", e.getMessage());
-            return ResponseEntity.badRequest().body("Erreur: " + e.getMessage());
+            return ResponseEntity.badRequest().body(ERROR_PREFIX + e.getMessage());
         }
     }
 }

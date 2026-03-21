@@ -50,7 +50,7 @@ public class EmailService {
 
         } catch (MessagingException | UnsupportedEncodingException e) {
             log.error("Erreur lors de l'envoi de l'email de vérification à {}: {}", toEmail, e.getMessage());
-            throw new RuntimeException("Erreur lors de l'envoi de l'email");
+            throw new IllegalStateException("Erreur lors de l'envoi de l'email", e);
         }
     }
 
@@ -81,7 +81,7 @@ public class EmailService {
 
         } catch (MessagingException | UnsupportedEncodingException e) {
             log.error("Erreur lors de l'envoi de l'email de réinitialisation à {}: {}", toEmail, e.getMessage());
-            throw new RuntimeException("Erreur lors de l'envoi de l'email");
+            throw new IllegalStateException("Erreur lors de l'envoi de l'email", e);
         }
     }
 }

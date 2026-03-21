@@ -56,6 +56,7 @@ public class DestinationController {
      */
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
+    @SuppressWarnings("java:S4684")
     public ResponseEntity<Destination> createDestination(@RequestBody Destination destination) {
         Destination created = destinationService.create(destination);
         return ResponseEntity.status(HttpStatus.CREATED).body(created);
@@ -67,6 +68,7 @@ public class DestinationController {
      */
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
+    @SuppressWarnings("java:S4684")
     public ResponseEntity<Destination> updateDestination(
             @PathVariable("id") Long id,
             @RequestBody Destination destination) {

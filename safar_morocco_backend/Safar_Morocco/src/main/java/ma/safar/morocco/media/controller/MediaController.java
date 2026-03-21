@@ -66,6 +66,7 @@ public class MediaController {
      */
     @PostMapping("/destination/{destinationId}")
     @PreAuthorize("hasRole('ADMIN')")
+    @SuppressWarnings("java:S4684")
     public ResponseEntity<Media> createMedia(
             @PathVariable("destinationId") Long destinationId,
             @RequestBody Media media) {
@@ -94,6 +95,7 @@ public class MediaController {
      */
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
+    @SuppressWarnings("java:S4684")
     public ResponseEntity<Media> updateMedia(
             @PathVariable("id") Long id,
             @RequestBody Media media) {

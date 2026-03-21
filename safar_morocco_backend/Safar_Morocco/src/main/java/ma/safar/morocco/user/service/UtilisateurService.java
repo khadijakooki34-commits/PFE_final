@@ -18,7 +18,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.UUID;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Service: UtilisateurService
@@ -36,14 +35,17 @@ public class UtilisateurService {
     private final PasswordEncoder passwordEncoder;
     private final ActivityLogService activityLogService;
     private final AuditService auditService;
+    
+    private static final String MSG_USER_NOT_FOUND = "Utilisateur non trouvé";
+    private static final String ENTITY_USER = "Utilisateur";
 
     /**
      * Récupère l'utilisateur actuellement connecté
      */
     public Utilisateur getCurrentUser() {
-        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        String email = getAuth().getName();
         return utilisateurRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("Utilisateur non trouvé"));
+                .orElseThrow(() -> new IllegalArgumentException(MSG_USER_NOT_FOUND));
     }
 
     /**
@@ -61,7 +63,7 @@ public class UtilisateurService {
         return utilisateurRepository.findAll()
                 .stream()
                 .map(this::convertToDTO)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     /**
@@ -71,7 +73,7 @@ public class UtilisateurService {
         return utilisateurRepository.findAllActiveUsers()
                 .stream()
                 .map(this::convertToDTO)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     /**
@@ -82,7 +84,7 @@ public class UtilisateurService {
         return utilisateurRepository.findBlockedUsers()
                 .stream()
                 .map(this::convertToDTO)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     /**
@@ -91,25 +93,25 @@ public class UtilisateurService {
     @PreAuthorize("hasRole('ADMIN')")
     public UtilisateurDTO getUserById(Long id) {
         Utilisateur user = utilisateurRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Utilisateur non trouvé avec l'ID: " + id));
+                .orElseThrow(() -> new IllegalArgumentException(MSG_USER_NOT_FOUND + " avec l'ID: " + id));
         return convertToDTO(user);
     }
 
     public Utilisateur getUserByEmailEntity(String email) {
         return utilisateurRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("Utilisateur non trouvé"));
+                .orElseThrow(() -> new IllegalArgumentException(MSG_USER_NOT_FOUND));
     }
 
     /**
      * Récupère un utilisateur par email (admin ou l'utilisateur lui-même)
      */
     public UtilisateurDTO getUserByEmail(String email) {
-        String currentEmail = SecurityContextHolder.getContext().getAuthentication().getName();
+        String currentEmail = getAuth().getName();
         if (!email.equals(currentEmail) && !isAdmin()) {
-            throw new RuntimeException("Accès refusé");
+            throw new IllegalStateException("Accès refusé");
         }
         Utilisateur user = utilisateurRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("Utilisateur non trouvé: " + email));
+                .orElseThrow(() -> new IllegalArgumentException(MSG_USER_NOT_FOUND + ": " + email));
         return convertToDTO(user);
     }
 
@@ -121,7 +123,7 @@ public class UtilisateurService {
         return utilisateurRepository.findByRole(role)
                 .stream()
                 .map(this::convertToDTO)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     /**
@@ -131,7 +133,7 @@ public class UtilisateurService {
     @Transactional
     public UtilisateurDTO createUser(UtilisateurDTO dto) {
         if (utilisateurRepository.existsByEmail(dto.getEmail())) {
-            throw new RuntimeException("Un utilisateur existe déjà avec cet email");
+            throw new IllegalStateException("Un utilisateur existe déjà avec cet email");
         }
 
         Utilisateur user = Utilisateur.builder()
@@ -147,7 +149,7 @@ public class UtilisateurService {
                 .build();
 
         user = utilisateurRepository.save(user);
-        auditService.logAction(null, "USER_CREATED_BY_ADMIN", "Utilisateur", user.getId(),
+        auditService.logAction(null, "USER_CREATED_BY_ADMIN", ENTITY_USER, user.getId(),
                 "Admin-initiated account creation for: " + user.getEmail());
         activityLogService.logActivity(user, "ACCOUNT_CREATED", "Compte créé par l'administrateur");
         return convertToDTO(user);
@@ -160,7 +162,7 @@ public class UtilisateurService {
     @Transactional
     public UtilisateurDTO updateUser(Long id, UtilisateurDTO dto) {
         Utilisateur user = utilisateurRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Utilisateur non trouvé"));
+                .orElseThrow(() -> new IllegalArgumentException(MSG_USER_NOT_FOUND));
 
         if (dto.getNom() != null && !dto.getNom().isBlank()) {
             user.setNom(dto.getNom());
@@ -212,8 +214,8 @@ public class UtilisateurService {
      */
     @Transactional
     public String uploadProfileImage(MultipartFile file) throws IOException {
-        String UPLOAD_DIR = "uploads/users";
-        Path uploadPath = Paths.get(UPLOAD_DIR);
+        String uploadDir = "uploads/users";
+        Path uploadPath = Paths.get(uploadDir);
         if (!Files.exists(uploadPath)) {
             Files.createDirectories(uploadPath);
         }
@@ -243,7 +245,7 @@ public class UtilisateurService {
     @Transactional
     public void deleteUser(Long id) {
         if (!utilisateurRepository.existsById(id)) {
-            throw new RuntimeException("Utilisateur non trouvé");
+            throw new IllegalArgumentException(MSG_USER_NOT_FOUND);
         }
         utilisateurRepository.deleteById(id);
     }
@@ -255,10 +257,10 @@ public class UtilisateurService {
     @Transactional
     public void blockUser(Long id) {
         Utilisateur user = utilisateurRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Utilisateur non trouvé"));
+                .orElseThrow(() -> new IllegalArgumentException(MSG_USER_NOT_FOUND));
         user.setCompteBloquer(true);
         utilisateurRepository.save(user);
-        auditService.logAction(null, "USER_BLOCKED", "Utilisateur", id, "Account blocked by admin");
+        auditService.logAction(null, "USER_BLOCKED", ENTITY_USER, id, "Account blocked by admin");
     }
 
     /**
@@ -268,10 +270,10 @@ public class UtilisateurService {
     @Transactional
     public void unblockUser(Long id) {
         Utilisateur user = utilisateurRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Utilisateur non trouvé"));
+                .orElseThrow(() -> new IllegalArgumentException(MSG_USER_NOT_FOUND));
         user.setCompteBloquer(false);
         utilisateurRepository.save(user);
-        auditService.logAction(null, "USER_UNBLOCKED", "Utilisateur", id, "Account unblocked by admin");
+        auditService.logAction(null, "USER_UNBLOCKED", ENTITY_USER, id, "Account unblocked by admin");
     }
 
     /**
@@ -281,7 +283,7 @@ public class UtilisateurService {
     @Transactional
     public void deactivateUser(Long id) {
         Utilisateur user = utilisateurRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Utilisateur non trouvé"));
+                .orElseThrow(() -> new IllegalArgumentException(MSG_USER_NOT_FOUND));
         user.setActif(false);
         utilisateurRepository.save(user);
     }
@@ -293,7 +295,7 @@ public class UtilisateurService {
     @Transactional
     public void activateUser(Long id) {
         Utilisateur user = utilisateurRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Utilisateur non trouvé"));
+                .orElseThrow(() -> new IllegalArgumentException(MSG_USER_NOT_FOUND));
         user.setActif(true);
         utilisateurRepository.save(user);
     }
@@ -305,10 +307,10 @@ public class UtilisateurService {
     @Transactional
     public void changeUserRole(Long id, String newRole) {
         if (!newRole.equalsIgnoreCase("USER") && !newRole.equalsIgnoreCase("ADMIN")) {
-            throw new RuntimeException("Rôle invalide. Les rôles autorisés sont: USER, ADMIN");
+            throw new IllegalArgumentException("Rôle invalide. Les rôles autorisés sont: USER, ADMIN");
         }
         Utilisateur user = utilisateurRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Utilisateur non trouvé"));
+                .orElseThrow(() -> new IllegalArgumentException(MSG_USER_NOT_FOUND));
         user.setRole(newRole.toUpperCase());
         utilisateurRepository.save(user);
     }
@@ -352,15 +354,22 @@ public class UtilisateurService {
      * Vérifie si l'utilisateur actuel est admin
      */
     private boolean isAdmin() {
-        return SecurityContextHolder.getContext()
-                .getAuthentication()
+        return getAuth()
                 .getAuthorities()
                 .stream()
                 .anyMatch(auth -> auth.getAuthority().equals("ROLE_ADMIN"));
     }
 
+    private org.springframework.security.core.Authentication getAuth() {
+        org.springframework.security.core.Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth == null || !auth.isAuthenticated()) {
+            throw new IllegalStateException("Non authentifié");
+        }
+        return auth;
+    }
+
     public Utilisateur findByEmail(String email) {
         return utilisateurRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("User not found with email: " + email));
+                .orElseThrow(() -> new IllegalArgumentException("User not found with email: " + email));
     }
 }

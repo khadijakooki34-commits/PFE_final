@@ -32,6 +32,8 @@ import java.util.List;
 @Slf4j
 public class AuditService {
 
+    private static final String USER_AGENT_HEADER = "User-Agent";
+
     private final AuditLogRepository auditLogRepository;
     private final ObjectMapper objectMapper;
     private final UtilisateurRepository utilisateurRepository;
@@ -52,7 +54,7 @@ public class AuditService {
                     .entityId(entityId)
                     .description(description)
                     .ipAddress(request != null ? getClientIpAddress(request) : null)
-                    .userAgent(request != null ? request.getHeader("User-Agent") : null)
+                    .userAgent(request != null ? request.getHeader(USER_AGENT_HEADER) : null)
                     .status(AuditLog.AuditStatus.SUCCESS)
                     .build();
 
@@ -82,7 +84,7 @@ public class AuditService {
                     .oldValues(oldValues != null ? objectMapper.writeValueAsString(oldValues) : null)
                     .newValues(newValues != null ? objectMapper.writeValueAsString(newValues) : null)
                     .ipAddress(request != null ? getClientIpAddress(request) : null)
-                    .userAgent(request != null ? request.getHeader("User-Agent") : null)
+                    .userAgent(request != null ? request.getHeader(USER_AGENT_HEADER) : null)
                     .status(AuditLog.AuditStatus.SUCCESS)
                     .build();
 
@@ -108,7 +110,7 @@ public class AuditService {
                     .status(AuditLog.AuditStatus.FAILURE)
                     .errorMessage(errorMessage)
                     .ipAddress(request != null ? getClientIpAddress(request) : null)
-                    .userAgent(request != null ? request.getHeader("User-Agent") : null)
+                    .userAgent(request != null ? request.getHeader(USER_AGENT_HEADER) : null)
                     .build();
 
             auditLogRepository.save(auditLog);

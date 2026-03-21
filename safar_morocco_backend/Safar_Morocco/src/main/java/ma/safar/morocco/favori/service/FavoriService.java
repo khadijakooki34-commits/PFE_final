@@ -24,11 +24,11 @@ public class FavoriService {
     public Favori addFavori(Long destinationId) {
         Utilisateur currentUser = utilisateurService.getCurrentUser();
         if (favoriRepository.existsByUtilisateurIdAndDestinationId(currentUser.getId(), destinationId)) {
-            throw new RuntimeException("Destination déjà dans les favoris");
+            throw new IllegalStateException("Destination déjà dans les favoris");
         }
 
         Destination destination = destinationRepository.findById(destinationId)
-                .orElseThrow(() -> new RuntimeException("Destination non trouvée"));
+                .orElseThrow(() -> new IllegalArgumentException("Destination non trouvée"));
 
         Favori favori = Favori.builder()
                 .utilisateur(currentUser)

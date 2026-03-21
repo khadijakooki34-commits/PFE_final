@@ -16,14 +16,18 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Service
 @RequiredArgsConstructor
+@Slf4j
+@SuppressWarnings("java:S1075")
 public class MediaService {
     
     private final MediaRepository mediaRepository;
     private final DestinationRepository destinationRepository;
     private static final String UPLOAD_DIR = "uploads/media";
-    private static final long MAX_FILE_SIZE = 10 * 1024 * 1024; // 10 MB
+    private static final long MAX_FILE_SIZE = 10L * 1024 * 1024; // 10 MB
     
     /**
      * Récupère tous les médias d'une destination
@@ -52,7 +56,7 @@ public class MediaService {
     @Transactional
     public Media create(Long destinationId, Media media) {
         Destination destination = destinationRepository.findById(destinationId)
-                .orElseThrow(() -> new RuntimeException("Destination non trouvée"));
+                .orElseThrow(() -> new IllegalArgumentException("Destination non trouvée"));
         
         media.setDestination(destination);
         return mediaRepository.save(media);
@@ -65,11 +69,11 @@ public class MediaService {
     public Media uploadMedia(Long destinationId, MultipartFile file, String description) throws IOException {
         // Vérifier la destination existe
         Destination destination = destinationRepository.findById(destinationId)
-                .orElseThrow(() -> new RuntimeException("Destination non trouvée"));
+                .orElseThrow(() -> new IllegalArgumentException("Destination non trouvée"));
         
         // Vérifier la taille du fichier
         if (file.getSize() > MAX_FILE_SIZE) {
-            throw new RuntimeException("Fichier trop volumineux. Taille maximale: 10 MB");
+            throw new IllegalArgumentException("Fichier trop volumineux. Taille maximale: 10 MB");
         }
         
         // Créer le répertoire s'il n'existe pas
@@ -103,7 +107,7 @@ public class MediaService {
     @Transactional
     public Media update(Long id, Media updated) {
         Media existing = mediaRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Média non trouvé"));
+                .orElseThrow(() -> new IllegalArgumentException("Média non trouvé"));
         
         existing.setDescription(updated.getDescription());
         if (updated.getType() != null) {
@@ -119,7 +123,7 @@ public class MediaService {
     @Transactional
     public void delete(Long id) {
         Media media = mediaRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Média non trouvé"));
+                .orElseThrow(() -> new IllegalArgumentException("Média non trouvé"));
         
         // Supprimer le fichier
         try {
@@ -127,7 +131,7 @@ public class MediaService {
             Files.deleteIfExists(filePath);
         } catch (IOException e) {
             // Log l'erreur mais continue la suppression de l'enregistrement
-            System.err.println("Erreur lors de la suppression du fichier: " + e.getMessage());
+            log.error("Erreur lors de la suppression du fichier: {}", e.getMessage());
         }
         
         mediaRepository.deleteById(id);

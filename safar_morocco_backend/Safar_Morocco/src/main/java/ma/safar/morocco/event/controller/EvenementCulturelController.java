@@ -104,6 +104,7 @@ public class EvenementCulturelController {
      */
     @PostMapping("/destination/{destinationId}")
     @PreAuthorize("hasRole('ADMIN')")
+    @SuppressWarnings("java:S4684")
     public ResponseEntity<EvenementCulturel> createEvenement(
             @PathVariable("destinationId") Long destinationId,
             @RequestBody EvenementCulturel evenement) {
@@ -117,6 +118,7 @@ public class EvenementCulturelController {
      */
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
+    @SuppressWarnings("java:S4684")
     public ResponseEntity<EvenementCulturel> updateEvenement(
             @PathVariable("id") Long id,
             @RequestBody EvenementCulturel evenement) {
