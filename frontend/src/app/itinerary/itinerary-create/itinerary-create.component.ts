@@ -288,6 +288,10 @@ export class ItineraryCreateComponent implements OnInit {
     }
 
     goBack(): void {
-        this.router.navigate(['/destinations']);
+        if (this.editMode && this.editId) {
+            this.router.navigate(['/itineraries/detail', this.editId]);
+        } else {
+            this.router.navigate(['/destinations']);
+        }
     }
 }

@@ -1,35 +1,8 @@
 /* Hero Section - Matched to Destinations */
-.hero-small {
+.hero-bg-itinerary {
     background: url('https://lesglobeblogueurs.com/wp-content/uploads/2019/12/car-2417295erikawittlieb-pixabay-3-1920x1179.jpg') center center/cover no-repeat;
-    min-height: 500px;
-    position: relative;
-    margin-top: calc(-1 * var(--navbar-height, 80px));
-    padding-top: var(--navbar-height, 80px);
-    padding-bottom: 4rem;
 }
 
-.hero-overlay-dark {
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(rgba(15, 23, 42, 0.4), rgba(15, 23, 42, 0.75));
-    backdrop-filter: blur(2px);
-}
-
-.font-display {
-    font-family: var(--font-display, 'Playfair Display', serif);
-}
-
-.letter-spacing-2 {
-    letter-spacing: 2px;
-}
-
-.bg-white-glass {
-    background: rgba(255, 255, 255, 0.15);
-    backdrop-filter: blur(8px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-}
-
-/* Quick Statistics */
 .hero-stats {
     display: flex;
     justify-content: center;

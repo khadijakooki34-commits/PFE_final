@@ -12,7 +12,7 @@
     top: 0;
     left: 0;
     width: 100%;
-    height: 70px;
+    height: var(--navbar-height);
     background: var(--bg-white, #ffffff);
     border-bottom: 1px solid rgba(0, 0, 0, 0.05);
     z-index: 1100;
@@ -42,7 +42,7 @@
 /* Mobile Menu Overlay */
 .mobile-menu {
     position: fixed;
-    top: 70px;
+    top: var(--navbar-height);
     left: 0;
     width: 100%;
     background: white;
@@ -50,7 +50,7 @@
     transform: translateY(-120%);
     transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     z-index: 1050;
-    max-height: calc(100vh - 70px);
+    max-height: calc(100vh - var(--navbar-height));
     overflow-y: auto;
     border-bottom: 1px solid var(--border-light);
 }
@@ -490,8 +490,8 @@
 
 @media (max-width: 991px) {
     .modern-navbar {
-        height: 60px;
-        min-height: 60px;
+        height: calc(var(--navbar-height) - 10px);
+        min-height: calc(var(--navbar-height) - 10px);
     }
 
     .container {

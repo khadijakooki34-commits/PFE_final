@@ -99,13 +99,12 @@
             <!-- Action Buttons -->
             <div class="d-flex justify-content-end gap-3 mb-5">
                 <button type="button" class="btn btn-light rounded-pill px-5 py-3 fw-bold shadow-sm" (click)="goBack()">
-                    <i class="bi bi-x-lg me-2"></i> {{ 'ITINERARY.CANCEL' | translate }}
+                    {{ 'ITINERARY.CANCEL' | translate }}
                 </button>
                 <button type="button" class="btn btn-primary rounded-pill px-5 py-3 fw-bold shadow-sm d-flex align-items-center" 
                         (click)="onCreateItinerary()" 
                         [disabled]="itineraryForm.invalid || selectedDestinations.length === 0 || loading">
                     <ng-container *ngIf="!loading">
-                        <i class="bi bi-check-lg me-2 fs-5"></i>
                         {{ editMode ? ('ITINERARY.SAVE' | translate) : ('ITINERARY.CREATE_ITINERARY' | translate) }}
                     </ng-container>
                     <ng-container *ngIf="loading">
