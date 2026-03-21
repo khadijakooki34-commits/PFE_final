@@ -120,8 +120,8 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 
             // Rediriger vers le front-end avec les tokens
             String targetUrl = UriComponentsBuilder
-                    .fromUriString("http://localhost:4200/auth/auth-callback")
-                    .queryParam("accessToken", accessToken)
+                    .fromUriString("http://localhost:4200/oauth2/redirect")
+                    .queryParam("token", accessToken)
                     .queryParam("refreshToken", refreshToken)
                     .queryParam("userId", user.getId())
                     .queryParam("email", user.getEmail())

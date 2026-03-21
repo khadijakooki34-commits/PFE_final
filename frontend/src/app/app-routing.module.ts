@@ -27,6 +27,7 @@ const routes: Routes = [
     { path: 'events', loadChildren: () => import('./event/event.module').then(m => m.EventModule), canActivate: [AuthGuard], data: { animation: 'EventsPage' } },
     { path: 'map', loadChildren: () => import('./map/map.module').then(m => m.MapModule), canActivate: [AuthGuard], data: { animation: 'MapPage' } },
     { path: 'settings', loadChildren: () => import('./settings/settings-module').then(m => m.SettingsModule) },
+    { path: 'oauth2/redirect', loadComponent: () => import('./oauth2-redirect/oauth2-redirect.component').then(m => m.OAuth2RedirectComponent) },
     { path: '**', redirectTo: '' }
 ];
 

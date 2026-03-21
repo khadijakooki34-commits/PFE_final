@@ -190,7 +190,7 @@ export class ProfileComponent implements OnInit {
     }
 
     viewItinerary(id: number) {
-        this.router.navigate(['/itineraries', id]);
+        this.router.navigate(['/itineraries/detail', id]);
     }
 
     editProfile() {
