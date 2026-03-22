@@ -40,7 +40,16 @@
     "TOTAL": "Total",
     "DATE": "Date",
     "USER": "User",
-    "ARCHIVED": "Archived"
+    "ARCHIVED": "Archived",
+    "EVENT": "COMMON.EVENT",
+    "RESTAURANT": "COMMON.RESTAURANT",
+    "SENDING": "COMMON.SENDING",
+    "CREATE_ACCOUNT": "COMMON.CREATE_ACCOUNT",
+    "ACTIVITY": "COMMON.ACTIVITY",
+    "RETURN_HOME": "COMMON.RETURN_HOME",
+    "PAGE_SELECT": "COMMON.PAGE_SELECT",
+    "HOTEL": "COMMON.HOTEL",
+    "LOG_IN": "COMMON.LOG_IN"
   },
   "NAV": {
     "HOME": "Home",
@@ -55,7 +64,9 @@
     "LOGIN": "Login",
     "SIGNUP": "Sign Up",
     "LANGUAGE": "Language",
-    "DASHBOARD": "Dashboard"
+    "DASHBOARD": "Dashboard",
+    "USER_ROLE": "NAV.USER_ROLE",
+    "ADMIN_ROLE": "NAV.ADMIN_ROLE"
   },
   "LANG": {
     "EN": "English",
@@ -89,10 +100,22 @@
       "TAG": "Why Choose Us",
       "TITLE": "Your ultimate travel companion",
       "DESC": "We provide you with all the tools necessary to plan your perfect trip.",
-      "VERIFIED": { "TITLE": "Verified Destinations", "DESC": "Explore top-rated places." },
-      "EVENTS": { "TITLE": "Live Events", "DESC": "Never miss a local festival." },
-      "AI": { "TITLE": "AI Assistant", "DESC": "Smart travel recommendations." },
-      "MAPPED": { "TITLE": "Interactive Maps", "DESC": "Navigate your journey easily." },
+      "VERIFIED": {
+        "TITLE": "Verified Destinations",
+        "DESC": "Explore top-rated places."
+      },
+      "EVENTS": {
+        "TITLE": "Live Events",
+        "DESC": "Never miss a local festival."
+      },
+      "AI": {
+        "TITLE": "AI Assistant",
+        "DESC": "Smart travel recommendations."
+      },
+      "MAPPED": {
+        "TITLE": "Interactive Maps",
+        "DESC": "Navigate your journey easily."
+      },
       "COMPANION": "Safar Morocco Companion"
     },
     "MAP_PREVIEW": {
@@ -473,7 +496,11 @@
   },
   "PROFILE": {
     "BIO": "Bio",
-    "BIO_PLACEHOLDER": "Tell us a bit about your travel interests...",
+    "BIO_PLACEHOLDER": "Tell us about yourself...",
+    "CHANGE_PHOTO": "Change Photo",
+    "FRENCH": "French",
+    "ENGLISH": "English",
+    "ARABIC": "Arabic",
     "TOTAL_RESERVATIONS": "Total Reservations",
     "UPCOMING_EVENTS": "Upcoming Events",
     "ITINERARIES_CREATED": "Itineraries Created",
@@ -499,16 +526,39 @@
     "NATURE": "Nature Reserves",
     "HISTORICAL": "Historical Monuments",
     "RELIGIOUS": "Religious Sites",
+    "FOLLOW_US": "Follow Us",
+    "FACEBOOK": "Facebook",
+    "INSTAGRAM": "Instagram",
+    "TWITTER": "Twitter",
+    "YOUTUBE": "YouTube",
     "COPYRIGHT": "© 2026 Safar Morocco. All rights reserved.",
     "MADE_WITH": "Made with"
   },
   "FORMS": {
-    "SAVE": "Save Changes",
+    "SAVE_CHANGES": "Save Changes",
     "CANCEL": "Cancel",
+    "CLOSE": "Close",
+    "PAGE_SELECT": "Select page",
+    "LOG_IN": "Log In",
+    "CREATE_ACCOUNT": "Create Account",
+    "RETURN_HOME": "Return to Home",
+    "MAD": "MAD",
+    "LOADING": "Loading...",
+    "EVENT": "Event",
+    "BREADCRUMB": "Breadcrumb",
+    "CLOSE_ARIA": "Close",
+    "HOTEL": "Hotel",
+    "RESTAURANT": "Restaurant",
+    "ACTIVITY": "Activity",
+    "SENDING": "Sending...",
+    "NADOR": "Nador",
+    "PHONE_VAL": "+212 633 725 965",
+    "EMAIL_VAL": "mynameisossama@gmail.com",
     "DELETE": "Delete",
     "EDIT": "Edit",
     "UPDATE": "Update",
-    "CREATE": "Create"
+    "CREATE": "Create",
+    "SAVE": "FORMS.SAVE"
   },
   "ADMIN": {
     "MANAGE_LOCATIONS": "Add, edit or remove travel destinations",
@@ -588,7 +638,11 @@
       "DESTINATION_REQUIRED": "Destination is required",
       "LOADING_DESTINATIONS": "Loading destinations...",
       "STARS_COUNT": "{{count}} Stars",
-      "STAR_COUNT": "1 Star"
+      "STAR_COUNT": "1 Star",
+      "PLACEHOLDER_PRICE": "500",
+      "PLACEHOLDER_HOTEL": "1000",
+      "PLACEHOLDER_RESTO": "300",
+      "PLACEHOLDER_DURATION": "2 hours"
     },
     "EVENTS": {
       "NAME": "Name",
@@ -630,12 +684,116 @@
     "INITIATOR": "Initiator",
     "SYSTEM": "System",
     "DETAILS": "Details",
-    "NO_AUDIT_LOGS": "No audit logs found"
+    "NO_AUDIT_LOGS": "No audit logs found",
+    "DESTINATIONS_TITLE": "ADMIN.DESTINATIONS_TITLE",
+    "DESTINATIONS_DESC": "ADMIN.DESTINATIONS_DESC"
   },
   "ERRORS": {
     "REQUIRED": "This field is required.",
     "INVALID_EMAIL": "Please enter a valid email address.",
     "MIN_LENGTH": "Value is too short.",
     "PASSWORDS_MATCH": "Passwords must match."
+  },
+  "CONTACT_PAGE": {
+    "HERO_TITLE": "Get in Touch",
+    "HERO_SUBTITLE": "We'd love to hear from you. Let us know how we can help.",
+    "FORM_TITLE": "Send us a Message",
+    "LABEL_NAME": "Full Name",
+    "LABEL_EMAIL": "Email",
+    "LABEL_SUBJECT": "Subject",
+    "LABEL_MESSAGE": "Message",
+    "BTN_SEND": "Send Message",
+    "ERROR_NAME": "Please enter your name",
+    "ERROR_EMAIL": "Please enter a valid email",
+    "ERROR_SUBJECT": "Please enter a subject",
+    "ERROR_MESSAGE": "Please enter your message",
+    "INFO_LOCATION_TITLE": "Our Location",
+    "INFO_PHONE_TITLE": "Phone Number",
+    "INFO_EMAIL_TITLE": "Email Address",
+    "INFO_SOCIAL_TITLE": "Follow Us",
+    "PLACEHOLDER_NAME": "Full Name",
+    "PLACEHOLDER_EMAIL": "Email",
+    "PLACEHOLDER_SUBJECT": "Subject",
+    "PLACEHOLDER_MESSAGE": "Message"
+  },
+  "LEGAL": {
+    "PRIVACY_TITLE": "Privacy Policy",
+    "PRIVACY": {
+      "SECTION1_TITLE": "1. Information Collection",
+      "SECTION1_DESC": "We collect information you provide directly to us, such as when you create an account, make a reservation, or contact us for support.",
+      "SECTION2_TITLE": "2. Use of Information",
+      "SECTION2_DESC": "We use the information we collect to provide, maintain, and improve our services, including processing your reservations and sending you travel updates.",
+      "SECTION3_TITLE": "3. Data Handling",
+      "SECTION3_DESC": "Your reservation details and personal information are handled with strict confidentiality and are only shared with relevant partners (like event organizers) to facilitate your bookings.",
+      "SECTION4_TITLE": "4. Reviews and Ratings",
+      "SECTION4_DESC": "Public reviews and ratings you provide will be visible to other users of the platform to help them make informed travel decisions.",
+      "SECTION5_TITLE": "5. Security",
+      "SECTION5_DESC": "We implement a variety of security measures to maintain the safety of your personal information when you enter, submit, or access your personal information."
+    },
+    "TERMS_TITLE": "Terms of Service",
+    "TERMS": {
+      "SECTION1_TITLE": "1. Acceptance of Terms",
+      "SECTION1_DESC": "By accessing and using Safar Morocco, you agree to bound by these Terms of Service and all applicable laws and regulations.",
+      "SECTION2_TITLE": "2. Use License",
+      "SECTION2_DESC": "Permission is granted to temporarily download one copy of the materials on Safar Morocco's website for personal, non-commercial transitory viewing only.",
+      "SECTION3_TITLE": "3. Platform Usage",
+      "SECTION3_DESC": "Users are responsible for maintaining the confidentiality of their accounts and for all activities that occur under their account.",
+      "SECTION4_TITLE": "4. Content",
+      "SECTION4_DESC": "Users may post reviews and photos. By doing so, you grant Safar Morocco a non-exclusive, royalty-free license to use, reproduce, and display such content.",
+      "SECTION5_TITLE": "5. Modifications",
+      "SECTION5_DESC": "Safar Morocco may revise these terms of service for its website at any time without notice."
+    },
+    "TANDC_TITLE": "Terms & Conditions",
+    "TANDC": {
+      "SECTION1_TITLE": "1. Introduction",
+      "SECTION1_DESC": "Welcome to Safar Morocco, your premier platform for discovering and booking unique travel experiences across the Kingdom. By accessing or using our website, services, or mobile applications, you agree to be bound by these Terms and Conditions. If you do not agree with any part of these terms, please refrain from using our platform.",
+      "SECTION2_TITLE": "2. User Accounts",
+      "SECTION2_DESC": "To access certain features of Safar Morocco, you must create an account. You agree to provide accurate, current, and complete information during the registration process, maintain and promptly update your account information, protect your login credentials and maintain the security of your password.",
+      "SECTION3_TITLE": "3. Reservations and Offers",
+      "SECTION3_DESC": "Safar Morocco facilitates bookings for various tourism activities and accommodations. All reservations made through our platform are subject to availability and confirmation by the service provider. Prices and availability are subject to change without notice until a booking is confirmed.",
+      "SECTION4_TITLE": "4. Acceptable Use",
+      "SECTION4_DESC": "You agree not to misuse the platform. Prohibited activities include attempting to gain unauthorized access to our systems, publishing harmful content, or using the platform for fraudulent purposes.",
+      "SECTION5_TITLE": "5. Privacy and Data Protection",
+      "SECTION5_DESC": "At Safar Morocco, we value your privacy. We collect user information primarily to provide and improve our services, and personalize your experience. For more details, please refer to our Privacy Policy.",
+      "SECTION6_TITLE": "6. Reviews and User Content",
+      "SECTION6_DESC": "Users are encouraged to share their experiences. By posting content, you grant us a non-exclusive license to use it for promotional purposes. Safar Morocco reserves the right to remove any inappropriate content.",
+      "SECTION7_TITLE": "7. Changes to Terms",
+      "SECTION7_DESC": "Safar Morocco reserves the right to update or modify these terms at any time. Your continued use of the platform after such changes constitutes acceptance of the new terms.",
+      "SECTION8_TITLE": "8. Contact",
+      "SECTION8_DESC": "If you have any questions or concerns regarding these Terms and Conditions, please contact us."
+    }
+  },
+  "HELP": {
+    "TITLE": "Help Center",
+    "WELCOME": "Welcome to the Safar Morocco Help Center",
+    "SUBTITLE": "Everything you need to know about using our platform.",
+    "NAVIGATE": {
+      "TITLE": "How to Navigate the Platform",
+      "DESC": "Our platform is designed to be intuitive. Use the navigation bar to explore destinations, find upcoming events, or view your personalized itineraries on the interactive map."
+    },
+    "ITINERARIES": {
+      "TITLE": "Creating Itineraries",
+      "DESC": "Go to the \"Itineraries\" section to start planning your trip. You can add destinations, set dates, and organize your daily activities easily."
+    },
+    "BOOKING": {
+      "TITLE": "Booking Events",
+      "DESC": "Discover local festivals, workshops, and tours in the \"Events\" section. Simply select an event and follow the booking process to secure your spot."
+    },
+    "RESERVATIONS": {
+      "TITLE": "Managing Reservations",
+      "DESC": "Access your profile to view and manage all your active reservations, past trips, and saved destinations."
+    }
+  },
+  "RECOMMENDATIONS": {
+    "TITLE": "Recommended For You",
+    "SUBTITLE": "Curated destinations based on your activity and preferences",
+    "LOADING": "Finding perfect spots for you...",
+    "EMPTY": "No recommendations available yet.",
+    "EMPTY_DESC": "Explore more destinations and favorite them to get personalized suggestions.",
+    "EXPLORE": "Explore"
+  },
+  "AUTH_REQUIRED": {
+    "TITLE": "Authentication Required",
+    "DESC": "You need to log in or create an account to access this content."
   }
 }

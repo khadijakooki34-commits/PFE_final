@@ -98,7 +98,7 @@
             </table>
         </div>
 
-        <mat-paginator [pageSizeOptions]="[10, 25, 50]" class="border-top"
-            aria-label="Select page of logs"></mat-paginator>
+        <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" [attr.aria-label]="'COMMON.PAGE_SELECT' | translate">
+        </mat-paginator>
     </mat-card>
 </div>

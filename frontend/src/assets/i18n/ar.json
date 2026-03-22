@@ -40,7 +40,16 @@
     "REJECTED": "مرفوض",
     "CANCELLED": "ملغي",
     "ARCHIVED": "مؤرشف",
-    "FAILURE": "فشل"
+    "FAILURE": "فشل",
+    "EVENT": "فعالية",
+    "HOTEL": "فندق",
+    "RESTAURANT": "مطعم",
+    "ACTIVITY": "نشاط",
+    "SENDING": "جاري الإرسال...",
+    "PAGE_SELECT": "اختر الصفحة",
+    "LOG_IN": "تسجيل الدخول",
+    "CREATE_ACCOUNT": "إنشاء حساب",
+    "RETURN_HOME": "العودة للرئيسية"
   },
   "NAV": {
     "HOME": "الرئيسية",
@@ -55,7 +64,9 @@
     "LOGIN": "تسجيل الدخول",
     "SIGNUP": "إنشاء حساب",
     "LANGUAGE": "لغة",
-    "DASHBOARD": "لوحة القيادة"
+    "DASHBOARD": "لوحة القيادة",
+    "USER_ROLE": "NAV.USER_ROLE",
+    "ADMIN_ROLE": "NAV.ADMIN_ROLE"
   },
   "LANG": {
     "EN": "إنجليزي",
@@ -497,7 +508,12 @@
     "HISTORICAL": "معالم تاريخية",
     "RELIGIOUS": "مواقع دينية",
     "COPYRIGHT": "© 2026 سفر المغرب. جميع الحقوق محفوظة.",
-    "MADE_WITH": "صُنع بـ"
+    "MADE_WITH": "صُنع بـ",
+    "TWITTER": "Twitter",
+    "FACEBOOK": "Facebook",
+    "FOLLOW_US": "Follow Us",
+    "YOUTUBE": "YouTube",
+    "INSTAGRAM": "Instagram"
   },
   "FORMS": {
     "SAVE": "حفظ التغييرات",
@@ -505,7 +521,25 @@
     "DELETE": "حذف",
     "EDIT": "تعديل",
     "UPDATE": "تحديث",
-    "CREATE": "إنشاء"
+    "CREATE": "إنشاء",
+    "CREATE_ACCOUNT": "Create Account",
+    "SAVE_CHANGES": "Save Changes",
+    "CLOSE": "Close",
+    "LOG_IN": "Log In",
+    "RETURN_HOME": "Return to Home",
+    "PAGE_SELECT": "Select page",
+    "PHONE_VAL": "+212 633 725 965",
+    "NADOR": "Nador",
+    "SENDING": "Sending...",
+    "RESTAURANT": "Restaurant",
+    "EVENT": "Event",
+    "ACTIVITY": "Activity",
+    "HOTEL": "Hotel",
+    "EMAIL_VAL": "mynameisossama@gmail.com",
+    "MAD": "MAD",
+    "LOADING": "Loading...",
+    "BREADCRUMB": "Breadcrumb",
+    "CLOSE_ARIA": "Close"
   },
   "ADMIN": {
     "MANAGE_LOCATIONS": "إدارة جميع المواقع القابلة للعرض على المنصة",
@@ -595,7 +629,11 @@
       "DESTINATION_REQUIRED": "الوجهة مطلوبة",
       "LOADING_DESTINATIONS": "جاري تحميل الوجهات...",
       "STARS_COUNT": "{{count}} نجوم",
-      "STAR_COUNT": "نجمة واحدة"
+      "STAR_COUNT": "نجمة واحدة",
+      "PLACEHOLDER_DURATION": "2 hours",
+      "PLACEHOLDER_RESTO": "300",
+      "PLACEHOLDER_PRICE": "500",
+      "PLACEHOLDER_HOTEL": "1000"
     },
     "EVENTS": {
       "NAME": "الاسم",
@@ -627,7 +665,9 @@
       "STATUS": "الحالة",
       "ACTIONS": "إجراءات",
       "NO_REVIEWS": "لم يتم العثور على مراجعات مطابقة"
-    }
+    },
+    "DESTINATIONS_TITLE": "ADMIN.DESTINATIONS_TITLE",
+    "DESTINATIONS_DESC": "ADMIN.DESTINATIONS_DESC"
   },
   "ERRORS": {
     "REQUIRED": "هذا الحقل مطلوب.",
@@ -648,6 +688,112 @@
     "NO_UPCOMING_DESC": "تصفح كتالوج الفعاليات لدينا للعثور على أنشطة مثيرة!",
     "NO_ITINERARIES": "لم يتم إنشاء مسارات.",
     "NO_ITINERARIES_DESC": "أنشئ مسارك الأول وابدأ في الاستكشاف!",
-    "DESTINATIONS": "وجهات"
+    "DESTINATIONS": "وجهات",
+    "FRENCH": "الفرنسية",
+    "CHANGE_PHOTO": "تغيير الصورة",
+    "ARABIC": "العربية",
+    "ENGLISH": "الإنجليزية"
+  },
+  "LEGAL": {
+    "TANDC": {
+      "SECTION4_TITLE": "4. Acceptable Use",
+      "SECTION5_DESC": "At Safar Morocco, we value your privacy. We collect user information primarily to provide and improve our services, and personalize your experience. For more details, please refer to our Privacy Policy.",
+      "SECTION5_TITLE": "5. Privacy and Data Protection",
+      "SECTION7_DESC": "Safar Morocco reserves the right to update or modify these terms at any time. Your continued use of the platform after such changes constitutes acceptance of the new terms.",
+      "SECTION8_DESC": "If you have any questions or concerns regarding these Terms and Conditions, please contact us.",
+      "SECTION3_TITLE": "3. Reservations and Offers",
+      "SECTION7_TITLE": "7. Changes to Terms",
+      "SECTION3_DESC": "Safar Morocco facilitates bookings for various tourism activities and accommodations. All reservations made through our platform are subject to availability and confirmation by the service provider. Prices and availability are subject to change without notice until a booking is confirmed.",
+      "SECTION8_TITLE": "8. Contact",
+      "SECTION1_TITLE": "1. Introduction",
+      "SECTION4_DESC": "You agree not to misuse the platform. Prohibited activities include attempting to gain unauthorized access to our systems, publishing harmful content, or using the platform for fraudulent purposes.",
+      "SECTION1_DESC": "Welcome to Safar Morocco, your premier platform for discovering and booking unique travel experiences across the Kingdom. By accessing or using our website, services, or mobile applications, you agree to be bound by these Terms and Conditions. If you do not agree with any part of these terms, please refrain from using our platform.",
+      "SECTION2_TITLE": "2. User Accounts",
+      "SECTION2_DESC": "To access certain features of Safar Morocco, you must create an account. You agree to provide accurate, current, and complete information during the registration process, maintain and promptly update your account information, protect your login credentials and maintain the security of your password.",
+      "SECTION6_DESC": "Users are encouraged to share their experiences. By posting content, you grant us a non-exclusive license to use it for promotional purposes. Safar Morocco reserves the right to remove any inappropriate content.",
+      "SECTION6_TITLE": "6. Reviews and User Content"
+    },
+    "TERMS": {
+      "SECTION3_TITLE": "3. Platform Usage",
+      "SECTION4_TITLE": "4. Content",
+      "SECTION4_DESC": "يجوز للمستخدمين نشر المراجعات والصور. من خلال القيام بذلك، فإنك تمنح سفر المغرب ترخيصًا غير حصري وخالٍ من حقوق الملكية لاستخدام هذا المحتوى وإعادة إنتاجه وعرضه.",
+      "SECTION2_DESC": "يُمنح الإذن لتنزيل نسخة واحدة مؤقتًا من المواد الموجودة على موقع سفر المغرب للعرض الانتقالي الشخصي وغير التجاري فقط.",
+      "SECTION3_DESC": "يتحمل المستخدمون مسؤولية الحفاظ على سرية حساباتهم وعن جميع الأنشطة التي تحدث تحت حساباتهم.",
+      "SECTION5_TITLE": "5. Modifications",
+      "SECTION5_DESC": "قد يقوم سفر المغرب بمراجعة شروط الخدمة هذه لموقعه على الويب في أي وقت دون إشعار مسبق.",
+      "SECTION1_DESC": "من خلال الوصول إلى سفر المغرب واستخدامه، فإنك توافق على الالتزام بشروط الخدمة هذه وجميع القوانين واللوائح المعمول بها.",
+      "SECTION1_TITLE": "1. Acceptance of Terms",
+      "SECTION2_TITLE": "2. Use License"
+    },
+    "PRIVACY": {
+      "SECTION1_TITLE": "1. Information Collection",
+      "SECTION5_TITLE": "5. Security",
+      "SECTION4_TITLE": "4. Reviews and Ratings",
+      "SECTION4_DESC": "المراجعات والتقييمات العامة التي تقدمها ستكون مرئية للمستخدمين الآخرين للمنصة لمساعدتهم في اتخاذ قرارات سفر مدروسة.",
+      "SECTION2_DESC": "نستخدم المعلومات التي نجمعها لتوفير خدماتنا وصيانتها وتحسينها، بما في ذلك معالجة حجوزاتك وإرسال تحديثات السفر إليك.",
+      "SECTION5_DESC": "نحن نطبق مجموعة متنوعة من التدابير الأمنية للحفاظ على سلامة معلوماتك الشخصية عند إدخال معلوماتك الشخصية أو إرسالها أو الوصول إليها.",
+      "SECTION1_DESC": "نحن نجمع المعلومات التي تقدمها لنا مباشرة، مثل عند إنشاء حساب، أو إجراء حجز، أو الاتصال بنا للحصول على الدعم.",
+      "SECTION2_TITLE": "2. Use of Information",
+      "SECTION3_TITLE": "3. Data Handling",
+      "SECTION3_DESC": "يتم التعامل مع تفاصيل حجزك ومعلوماتك الشخصية بسرية تامة ولا يتم مشاركتها إلا مع الشركاء ذوي الصلة لتسهيل حجوزاتك."
+    },
+    "PRIVACY_TITLE": "سياسة الخصوصية",
+    "TERMS_TITLE": "شروط الخدمة",
+    "TANDC_TITLE": "الأحكام والشروط"
+  },
+  "RECOMMENDATIONS": {
+    "EXPLORE": "استكشف",
+    "EMPTY": "لا توجد توصيات متاحة حالياً.",
+    "TITLE": "موصى به لك",
+    "LOADING": "جاري البحث عن أفضل الأماكن لك...",
+    "EMPTY_DESC": "Explore more destinations and favorite them to get personalized suggestions.",
+    "SUBTITLE": "وجهات مختارة بناءً على نشاطك وتفضيلاتك"
+  },
+  "HELP": {
+    "BOOKING": {
+      "TITLE": "حجز الفعاليات",
+      "DESC": "اكتشف المهرجانات المحلية وورش العمل والجولات في قسم \"الفعاليات\". ما عليك سوى اختيار فعالية واتباع عملية الحجز لتأمين مكانك."
+    },
+    "TITLE": "مركز المساعدة",
+    "RESERVATIONS": {
+      "DESC": "ادخل إلى ملفك الشخصي لعرض وإدارة جميع حجوزاتك النشطة ورحلاتك السابقة ووجهاتك المحفوظة.",
+      "TITLE": "إدارة الحجوزات"
+    },
+    "NAVIGATE": {
+      "DESC": "منصتنا مصممة لتكون بديهية. استخدم شريط التنقل لاستكشاف الوجهات، أو العثور على الفعاليات القادمة، أو عرض مسارات رحلاتك المخصصة على الخريطة التفاعلية.",
+      "TITLE": "كيفية التنقل في المنصة"
+    },
+    "SUBTITLE": "كل ما تحتاج معرفته حول استخدام منصتنا.",
+    "ITINERARIES": {
+      "TITLE": "إنشاء مسارات الرحلة",
+      "DESC": "انتقل إلى قسم \"مسارات الرحلة\" لبدء التخطيط لرحلتك. يمكنك إضافة وجهات وتحديد المواعيد وتنظيم أنشطتك اليومية بسهولة."
+    },
+    "WELCOME": "مرحباً بكم في مركز مساعدة سفر المغرب"
+  },
+  "AUTH_REQUIRED": {
+    "TITLE": "مطلوب تسجيل الدخول",
+    "DESC": "يجب عليك تسجيل الدخول أو إنشاء حساب للوصول إلى هذا المحتوى."
+  },
+  "CONTACT_PAGE": {
+    "INFO_SOCIAL_TITLE": "Follow Us",
+    "LABEL_SUBJECT": "الموضوع",
+    "ERROR_SUBJECT": "Please enter a subject",
+    "LABEL_MESSAGE": "الرسالة",
+    "PLACEHOLDER_EMAIL": "البريد الإلكتروني",
+    "BTN_SEND": "إرسال الرسالة",
+    "PLACEHOLDER_MESSAGE": "الرسالة",
+    "ERROR_NAME": "Please enter your name",
+    "HERO_SUBTITLE": "يسعدنا دائماً سماع آرائكم.",
+    "ERROR_MESSAGE": "Please enter your message",
+    "HERO_TITLE": "تواصل معنا",
+    "INFO_PHONE_TITLE": "Phone Number",
+    "FORM_TITLE": "أرسل لنا رسالة",
+    "PLACEHOLDER_SUBJECT": "الموضوع",
+    "LABEL_NAME": "الاسم الكامل",
+    "LABEL_EMAIL": "البريد الإلكتروني",
+    "INFO_EMAIL_TITLE": "Email Address",
+    "PLACEHOLDER_NAME": "الاسم الكامل",
+    "ERROR_EMAIL": "Please enter a valid email",
+    "INFO_LOCATION_TITLE": "Our Location"
   }
 }

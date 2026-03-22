@@ -6,14 +6,14 @@
             </div>
             <div class="logo-text">
                 <span class="safar">Safar</span>
-                <span class="morocco">Morocco</span>
+                <span class="morocco">{{ 'HOME.HERO.MOROCCO' | translate }}</span>
             </div>
         </div>
     </div>
 
     <div class="sidebar-menu">
         <div class="menu-label">{{ 'DASHBOARD.MAIN_MENU' | translate }}</div>
-        <nav class="nav-links">
+        <nav class="nav-links" [attr.aria-label]="'DASHBOARD.MAIN_MENU' | translate">
             <a routerLink="/admin/dashboard" routerLinkActive="active" class="nav-link">
                 <i class="bi bi-grid-1x2"></i>
                 <span>{{ 'NAV.DASHBOARD' | translate }}</span>
@@ -45,7 +45,7 @@
         </nav>
 
         <div class="menu-label">{{ 'DASHBOARD.SYSTEM' | translate }}</div>
-        <nav class="nav-links">
+        <nav class="nav-links" [attr.aria-label]="'DASHBOARD.SYSTEM' | translate">
             <a routerLink="/admin/logs" routerLinkActive="active" class="nav-link">
                 <i class="bi bi-journal-text"></i>
                 <span>{{ 'DASHBOARD.ACTIVITY_LOGS' | translate }}</span>

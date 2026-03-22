@@ -4,7 +4,7 @@
   <section class="ed-hero" [style.backgroundImage]="'url(' + (event.imageUrl | imageUrl) + ')'">
     <div class="ed-hero__overlay"></div>
     <div class="ed-hero__content">
-      <nav aria-label="breadcrumb" class="mb-3">
+      <nav [attr.aria-label]="'COMMON.BREADCRUMB' | translate" class="mb-3">
         <ol class="breadcrumb mb-0">
           <li class="breadcrumb-item">
             <a routerLink="/events" class="text-white opacity-75">

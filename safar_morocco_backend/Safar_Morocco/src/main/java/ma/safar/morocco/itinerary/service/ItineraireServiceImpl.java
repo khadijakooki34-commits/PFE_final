@@ -308,13 +308,8 @@ public class ItineraireServiceImpl implements ItineraireService {
                 .estOptimise(itineraire.getEstOptimise())
                 .destinations(
                         itineraire.getDestinations().stream()
-<<<<<<< HEAD
                                 .map(d -> Translator.translate(d, "name"))
-                                .collect(Collectors.toList()))
-=======
-                                .map(Destination::getNom)
                                 .toList())
->>>>>>> 9da0d882eeb0a0f77b3bfc443a4e4262ea0c96e6
                 .message(message)
                 .build();
     }

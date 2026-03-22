@@ -25,7 +25,7 @@
             <!-- Destination List -->
             <div class="sidebar-content" [class.loading]="isLoading">
                 <div *ngIf="isLoading" class="p-4 text-center">
-                    <div class="spinner-border text-primary" role="status"></div>
+                    <output class="spinner-border text-primary"></output>
                 </div>
 
                 <div *ngIf="!isLoading && filteredDestinations.length === 0" class="empty-results">
@@ -35,8 +35,9 @@
 
                 <div class="destination-scroll-list" *ngIf="!isLoading">
                     <div *ngFor="let dest of filteredDestinations" class="dest-item-card"
-                        [class.selected]="selectedDestination?.id === dest.id" (click)="selectDestination(dest)">
-                        <img [src]="(dest.thumbnailUrl || dest.medias?.[0]) | imageUrl" class="item-img">
+                        [class.selected]="selectedDestination?.id === dest.id" (click)="selectDestination(dest)"
+                        (keydown.enter)="selectDestination(dest)" tabindex="0" role="button">
+                        <img [src]="(dest.thumbnailUrl || dest.medias?.[0]) | imageUrl" class="item-img" [alt]="dest.nom">
                         <div class="item-info">
                             <h6>{{ dest.nom }}</h6>
                             <span class="badge-cat">{{ dest.categorie | categoryName }}</span>
@@ -54,7 +55,7 @@
 
             <!-- Floating Actions -->
             <div class="map-actions">
-                <button class="btn-action shadow-sm" (click)="locateUser()" title="My Location">
+                <button class="control-btn locate-btn" (click)="locateUser()" [attr.title]="'MAP.MY_LOCATION' | translate">
                     <i class="bi bi-crosshair"></i>
                 </button>
             </div>

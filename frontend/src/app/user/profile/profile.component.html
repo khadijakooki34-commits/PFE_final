@@ -11,7 +11,7 @@
                         <div class="avatar-container" [class.uploading]="uploadingPhoto">
                             <img [src]="imagePreview || user.photoUrl || 'assets/default-avatar.png'"
                                 alt="Profile Photo" class="profile-avatar shadow-lg">
-                            <div class="avatar-upload-overlay" (click)="fileInput.click()" title="Change Photo">
+                            <div class="avatar-upload-overlay" (click)="fileInput.click()" [attr.title]="'PROFILE.CHANGE_PHOTO' | translate">
                                 <i class="bi bi-camera-fill"></i>
                             </div>
                             <div class="avatar-loader" *ngIf="uploadingPhoto">
@@ -134,7 +134,7 @@
                                         <div
                                             class="d-flex justify-content-between align-items-start mb-3 position-relative z-1">
                                             <div>
-                                                <span class="badge bg-warning text-dark fw-700 mb-2">EVENT</span>
+                                                <span class="badge bg-warning text-dark fw-700 mb-2">{{ 'COMMON.EVENT' | translate }}</span>
                                                 <h6 class="fw-800 mb-0 text-dark">{{ res.evenement?.nom }}</h6>
                                             </div>
                                             <span class="badge rounded-pill fw-700"
@@ -168,11 +168,11 @@
                                             class="d-flex justify-content-between align-items-start mb-3 position-relative z-1">
                                             <div>
                                                 <span class="badge bg-primary text-white fw-700 mb-2"
-                                                    *ngIf="res.offer?.type === 'HOTEL'">HOTEL</span>
+                                                    *ngIf="res.offer?.type === 'HOTEL'">{{ 'COMMON.HOTEL' | translate }}</span>
                                                 <span class="badge bg-danger text-white fw-700 mb-2"
-                                                    *ngIf="res.offer?.type === 'RESTO'">RESTAURANT</span>
+                                                    *ngIf="res.offer?.type === 'RESTO'">{{ 'COMMON.RESTAURANT' | translate }}</span>
                                                 <span class="badge bg-success text-white fw-700 mb-2"
-                                                    *ngIf="res.offer?.type === 'ACTIVITE' || res.offer?.type === 'ACTIVITY'">ACTIVITY</span>
+                                                    *ngIf="res.offer?.type === 'ACTIVITE' || res.offer?.type === 'ACTIVITY'">{{ 'COMMON.ACTIVITY' | translate }}</span>
                                                 <h6 class="fw-800 mb-0 text-dark">{{ res.offer?.name || ('ADMIN.OFFER_NAME' | translate) }}</h6>
                                             </div>
                                             <span class="badge rounded-pill fw-700"
@@ -216,7 +216,7 @@
                                 <div class="card reservation-card border-0 rounded-4 h-100">
                                     <div class="d-flex justify-content-between align-items-start mb-3">
                                         <div>
-                                            <span class="badge bg-warning text-dark fw-700 mb-2">EVENT</span>
+                                            <span class="badge bg-warning text-dark fw-700 mb-2">{{ 'COMMON.EVENT' | translate }}</span>
                                             <h6 class="fw-800 mb-0 text-dark">{{ res.evenement?.nom }}</h6>
                                         </div>
                                         <span class="badge bg-success rounded-pill fw-700">{{ res.status | translate }}</span>
@@ -301,9 +301,9 @@
                                     <mat-form-field appearance="outline" class="w-100">
                                         <mat-label>{{ 'PROFILE.LANGUAGE' | translate }}</mat-label>
                                         <mat-select [(ngModel)]="user.langue" name="langue">
-                                            <mat-option value="fr">Français</mat-option>
-                                            <mat-option value="en">English</mat-option>
-                                            <mat-option value="ar">العربية</mat-option>
+                                            <mat-option value="fr">{{ 'PROFILE.FRENCH' | translate }}</mat-option>
+                                            <mat-option value="en">{{ 'PROFILE.ENGLISH' | translate }}</mat-option>
+                                            <mat-option value="ar">{{ 'PROFILE.ARABIC' | translate }}</mat-option>
                                         </mat-select>
                                     </mat-form-field>
                                 </div>

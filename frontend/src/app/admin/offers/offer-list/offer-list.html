@@ -131,6 +131,6 @@
             </table>
         </div>
 
-        <mat-paginator [pageSizeOptions]="[10, 25, 50]" showFirstLastButtons aria-label="Select page"></mat-paginator>
+        <mat-paginator [pageSizeOptions]="[10, 25, 50]" showFirstLastButtons [attr.aria-label]="'FORMS.PAGE_SELECT' | translate"></mat-paginator>
     </mat-card>
 </div>

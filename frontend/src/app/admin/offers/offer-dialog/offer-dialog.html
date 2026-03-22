@@ -30,7 +30,7 @@
             <div class="col-md-6" *ngIf="selectedType === 'ACTIVITY'">
                 <mat-form-field appearance="outline" class="w-100 mb-2">
                     <mat-label>{{ 'ADMIN.OFFERS.PRICE_MAD' | translate }}</mat-label>
-                    <input matInput type="number" formControlName="price" placeholder="500">
+                    <input matInput type="number" formControlName="price" [placeholder]="'ADMIN.OFFERS.PLACEHOLDER_PRICE' | translate">
                 </mat-form-field>
             </div>
 
@@ -38,7 +38,7 @@
             <div class="col-md-6" *ngIf="selectedType === 'HOTEL'">
                 <mat-form-field appearance="outline" class="w-100 mb-2">
                     <mat-label>{{ 'ADMIN.OFFERS.PRICE_PER_NIGHT' | translate }}</mat-label>
-                    <input matInput type="number" formControlName="pricePerNight" placeholder="1000">
+                    <input matInput type="number" formControlName="pricePerNight" [placeholder]="'ADMIN.OFFERS.PLACEHOLDER_HOTEL' | translate">
                 </mat-form-field>
             </div>
 
@@ -46,7 +46,7 @@
             <div class="col-md-6" *ngIf="selectedType === 'RESTAURANT'">
                 <mat-form-field appearance="outline" class="w-100 mb-2">
                     <mat-label>{{ 'ADMIN.OFFERS.AVERAGE_PRICE' | translate }}</mat-label>
-                    <input matInput type="number" formControlName="averagePrice" placeholder="300">
+                    <input matInput type="number" formControlName="averagePrice" [placeholder]="'ADMIN.OFFERS.PLACEHOLDER_RESTO' | translate">
                 </mat-form-field>
             </div>
         </div>
@@ -88,7 +88,7 @@
             <div class="col-md-6">
                 <mat-form-field appearance="outline" class="w-100 mb-2">
                     <mat-label>{{ 'ADMIN.OFFERS.DURATION' | translate }}</mat-label>
-                    <input matInput formControlName="duration" placeholder="2 hours">
+                    <input matInput formControlName="duration" [placeholder]="'ADMIN.OFFERS.PLACEHOLDER_DURATION' | translate">
                 </mat-form-field>
             </div>
             <div class="col-md-6">

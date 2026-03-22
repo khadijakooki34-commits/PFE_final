@@ -240,7 +240,7 @@
                                 </h2>
                                 <div class="video-container shadow-lg rounded-4 overflow-hidden border">
                                     <iframe [src]="getSafeVideoUrl(destination.videoUrl)" width="100%" height="500"
-                                        title="Destination Video"
+                                         [attr.title]="'DESTINATIONS.DETAIL.TABS.VIDEO' | translate"
                                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                                         allowfullscreen></iframe>
                                 </div>
@@ -306,7 +306,7 @@
                                                     <h4 class="fw-800 mb-0 flex-grow-1">{{offer.name}}</h4>
                                                     <div class="price-tag ms-2">
                                                         <span class="price-val">{{ (offer.displayPrice || offer.price || 0) | number:'1.0-0'}}</span>
-                                                        <span class="price-unit">MAD</span>
+                                                         <span class="price-unit">{{ 'COMMON.MAD' | translate }}</span>
                                                         <small class="price-sub" *ngIf="offer.type === 'HOTEL'">{{ 'DESTINATIONS.DETAIL.OFFER_NIGHT' | translate }}</small>
                                                     </div>
                                                 </div>

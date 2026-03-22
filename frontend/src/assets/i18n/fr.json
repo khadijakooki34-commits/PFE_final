@@ -40,7 +40,16 @@
     "REJECTED": "Refusé",
     "CANCELLED": "Annulé",
     "ARCHIVED": "Archivé",
-    "FAILURE": "Failure"
+    "FAILURE": "Failure",
+    "EVENT": "Événement",
+    "HOTEL": "Hôtel",
+    "RESTAURANT": "Restaurant",
+    "ACTIVITY": "Activité",
+    "SENDING": "Envoi en cours...",
+    "PAGE_SELECT": "Sélectionner la page",
+    "LOG_IN": "Se connecter",
+    "CREATE_ACCOUNT": "Créer un compte",
+    "RETURN_HOME": "Retour à l'accueil"
   },
   "NAV": {
     "HOME": "Accueil",
@@ -56,7 +65,8 @@
     "LOGIN": "Connexion",
     "SIGNUP": "S'inscrire",
     "LANGUAGE": "Langue",
-    "DASHBOARD": "Tableau de bord"
+    "DASHBOARD": "Tableau de bord",
+    "ADMIN": "Admin"
   },
   "LANG": {
     "EN": "Anglais",
@@ -498,7 +508,12 @@
     "HISTORICAL": "Monuments Historiques",
     "RELIGIOUS": "Sites Religieux",
     "COPYRIGHT": "© 2026 Safar Morocco. Tous droits réservés.",
-    "MADE_WITH": "Fait avec"
+    "MADE_WITH": "Fait avec",
+    "TWITTER": "Twitter",
+    "FACEBOOK": "Facebook",
+    "FOLLOW_US": "Follow Us",
+    "YOUTUBE": "YouTube",
+    "INSTAGRAM": "Instagram"
   },
   "FORMS": {
     "SAVE": "Enregistrer",
@@ -506,7 +521,25 @@
     "DELETE": "Supprimer",
     "EDIT": "Modifier",
     "UPDATE": "Mettre à jour",
-    "CREATE": "Créer"
+    "CREATE": "Créer",
+    "CREATE_ACCOUNT": "Create Account",
+    "SAVE_CHANGES": "Save Changes",
+    "CLOSE": "Close",
+    "LOG_IN": "Log In",
+    "RETURN_HOME": "Return to Home",
+    "PAGE_SELECT": "Select page",
+    "PHONE_VAL": "+212 633 725 965",
+    "NADOR": "Nador",
+    "SENDING": "Sending...",
+    "RESTAURANT": "Restaurant",
+    "EVENT": "Event",
+    "ACTIVITY": "Activity",
+    "HOTEL": "Hotel",
+    "EMAIL_VAL": "mynameisossama@gmail.com",
+    "MAD": "MAD",
+    "LOADING": "Loading...",
+    "BREADCRUMB": "Breadcrumb",
+    "CLOSE_ARIA": "Close"
   },
   "ADMIN": {
     "MANAGE_LOCATIONS": "Ajouter, modifier ou supprimer des destinations de voyage",
@@ -597,7 +630,11 @@
       "DESTINATION_REQUIRED": "La destination est requise",
       "LOADING_DESTINATIONS": "Chargement des destinations...",
       "STARS_COUNT": "{{count}} étoiles",
-      "STAR_COUNT": "1 étoile"
+      "STAR_COUNT": "1 étoile",
+      "PLACEHOLDER_DURATION": "2 hours",
+      "PLACEHOLDER_RESTO": "300",
+      "PLACEHOLDER_PRICE": "500",
+      "PLACEHOLDER_HOTEL": "1000"
     },
     "EVENTS": {
       "NAME": "Nom",
@@ -629,7 +666,8 @@
       "STATUS": "Statut",
       "ACTIONS": "Actions",
       "NO_REVIEWS": "Aucun avis correspondant trouvé"
-    }
+    },
+    "USER_ROLE": "User"
   },
   "ERRORS": {
     "REQUIRED": "Ce champ est obligatoire.",
@@ -650,6 +688,112 @@
     "NO_UPCOMING_DESC": "Parcourez notre catalogue d'événements pour trouver des activités passionnantes !",
     "NO_ITINERARIES": "Aucun itinéraire créé.",
     "NO_ITINERARIES_DESC": "Créez votre premier itinéraire et commencez à explorer !",
-    "DESTINATIONS": "Destinations"
+    "DESTINATIONS": "Destinations",
+    "FRENCH": "Français",
+    "CHANGE_PHOTO": "Changer la photo",
+    "ARABIC": "Arabe",
+    "ENGLISH": "Anglais"
+  },
+  "LEGAL": {
+    "TANDC": {
+      "SECTION4_TITLE": "4. Acceptable Use",
+      "SECTION5_DESC": "At Safar Morocco, we value your privacy. We collect user information primarily to provide and improve our services, and personalize your experience. For more details, please refer to our Privacy Policy.",
+      "SECTION5_TITLE": "5. Privacy and Data Protection",
+      "SECTION7_DESC": "Safar Morocco reserves the right to update or modify these terms at any time. Your continued use of the platform after such changes constitutes acceptance of the new terms.",
+      "SECTION8_DESC": "If you have any questions or concerns regarding these Terms and Conditions, please contact us.",
+      "SECTION3_TITLE": "3. Reservations and Offers",
+      "SECTION7_TITLE": "7. Changes to Terms",
+      "SECTION3_DESC": "Safar Morocco facilitates bookings for various tourism activities and accommodations. All reservations made through our platform are subject to availability and confirmation by the service provider. Prices and availability are subject to change without notice until a booking is confirmed.",
+      "SECTION8_TITLE": "8. Contact",
+      "SECTION1_TITLE": "1. Introduction",
+      "SECTION4_DESC": "You agree not to misuse the platform. Prohibited activities include attempting to gain unauthorized access to our systems, publishing harmful content, or using the platform for fraudulent purposes.",
+      "SECTION1_DESC": "Welcome to Safar Morocco, your premier platform for discovering and booking unique travel experiences across the Kingdom. By accessing or using our website, services, or mobile applications, you agree to be bound by these Terms and Conditions. If you do not agree with any part of these terms, please refrain from using our platform.",
+      "SECTION2_TITLE": "2. User Accounts",
+      "SECTION2_DESC": "To access certain features of Safar Morocco, you must create an account. You agree to provide accurate, current, and complete information during the registration process, maintain and promptly update your account information, protect your login credentials and maintain the security of your password.",
+      "SECTION6_DESC": "Users are encouraged to share their experiences. By posting content, you grant us a non-exclusive license to use it for promotional purposes. Safar Morocco reserves the right to remove any inappropriate content.",
+      "SECTION6_TITLE": "6. Reviews and User Content"
+    },
+    "TERMS": {
+      "SECTION3_TITLE": "3. Platform Usage",
+      "SECTION4_TITLE": "4. Content",
+      "SECTION4_DESC": "Les utilisateurs peuvent publier des avis et des photos. Ce faisant, vous accordez à Safar Morocco une licence non exclusive et libre de redevance pour utiliser, reproduire et afficher ce contenu.",
+      "SECTION2_DESC": "La permission est accordée de télécharger temporairement une copie du matériel sur le site Web de Safar Morocco pour un visionnage transitoire personnel et non commercial uniquement.",
+      "SECTION3_DESC": "Les utilisateurs sont responsables du maintien de la confidentialité de leurs comptes et de toutes les activités qui se déroulent sous leur compte.",
+      "SECTION5_TITLE": "5. Modifications",
+      "SECTION5_DESC": "Safar Morocco peut réviser ces conditions d'utilisation de son site Web à tout moment sans préavis.",
+      "SECTION1_DESC": "En accédant et en utilisant Safar Morocco, vous acceptez d'être lié par ces conditions d'utilisation et par toutes les lois et réglementations applicables.",
+      "SECTION1_TITLE": "1. Acceptance of Terms",
+      "SECTION2_TITLE": "2. Use License"
+    },
+    "PRIVACY": {
+      "SECTION1_TITLE": "1. Information Collection",
+      "SECTION5_TITLE": "5. Security",
+      "SECTION4_TITLE": "4. Reviews and Ratings",
+      "SECTION4_DESC": "Les avis publics et les notes que vous fournissez seront visibles par les autres utilisateurs de la plateforme pour les aider à prendre des décisions de voyage éclairées.",
+      "SECTION2_DESC": "Nous utilisons les informations que nous collectons pour fournir, maintenir et améliorer nos services, y compris le traitement de vos réservations et l'envoi de mises à jour de voyage.",
+      "SECTION5_DESC": "Nous mettons en œuvre une variété de mesures de sécurité pour maintenir la sécurité de vos informations personnelles lorsque vous saisissez, soumettez ou accédez à vos informations personnelles.",
+      "SECTION1_DESC": "Nous collectons les informations que vous nous fournissez directement, par exemple lorsque vous créez un compte, effectuez une réservation ou nous contactez pour obtenir de l'aide.",
+      "SECTION2_TITLE": "2. Use of Information",
+      "SECTION3_TITLE": "3. Data Handling",
+      "SECTION3_DESC": "Vos détails de réservation et vos informations personnelles sont traités avec une confidentialité stricte et ne sont partagés qu'avec les partenaires concernés pour faciliter vos réservations."
+    },
+    "PRIVACY_TITLE": "Politique de confidentialité",
+    "TERMS_TITLE": "Conditions d'utilisation",
+    "TANDC_TITLE": "Termes et Conditions"
+  },
+  "RECOMMENDATIONS": {
+    "EXPLORE": "Explorer",
+    "EMPTY": "Aucune recommandation disponible pour le moment.",
+    "TITLE": "Recommandé pour vous",
+    "LOADING": "Recherche des meilleurs endroits pour vous...",
+    "EMPTY_DESC": "Explore more destinations and favorite them to get personalized suggestions.",
+    "SUBTITLE": "Destinations sélectionnées selon votre activité et vos préférences"
+  },
+  "HELP": {
+    "BOOKING": {
+      "TITLE": "Réservation d'événements",
+      "DESC": "Découvrez les festivals locaux, les ateliers et les visites dans la section \"Événements\". Sélectionnez simplement un événement et suivez le processus de réservation pour garantir votre place."
+    },
+    "TITLE": "Centre d'aide",
+    "RESERVATIONS": {
+      "DESC": "Accédez à votre profil pour consulter et gérer toutes vos réservations actives, vos voyages passés et vos destinations enregistrées.",
+      "TITLE": "Gestion des réservations"
+    },
+    "NAVIGATE": {
+      "DESC": "Notre plateforme est conçue pour être intuitive. Utilisez la barre de navigation pour explorer les destinations, trouver des événements à venir ou consulter vos itinéraires personnalisés sur la carte interactive.",
+      "TITLE": "Comment naviguer sur la plateforme"
+    },
+    "SUBTITLE": "Tout ce que vous devez savoir sur l'utilisation de notre plateforme.",
+    "ITINERARIES": {
+      "TITLE": "Création d'itinéraires",
+      "DESC": "Accédez à la section \"Itinéraires\" pour commencer à planifier votre voyage. Vous pouvez ajouter des destinations, définir des dates et organiser facilement vos activités quotidiennes."
+    },
+    "WELCOME": "Bienvenue au centre d'aide de Safar Morocco"
+  },
+  "AUTH_REQUIRED": {
+    "TITLE": "Authentification requise",
+    "DESC": "Vous devez vous connecter ou créer un compte pour accéder à ce contenu."
+  },
+  "CONTACT_PAGE": {
+    "INFO_SOCIAL_TITLE": "Follow Us",
+    "LABEL_SUBJECT": "Sujet",
+    "ERROR_SUBJECT": "Please enter a subject",
+    "LABEL_MESSAGE": "Message",
+    "PLACEHOLDER_EMAIL": "Email",
+    "BTN_SEND": "Envoyer le message",
+    "PLACEHOLDER_MESSAGE": "Message",
+    "ERROR_NAME": "Please enter your name",
+    "HERO_SUBTITLE": "Nous serions ravis de vous entendre.",
+    "ERROR_MESSAGE": "Please enter your message",
+    "HERO_TITLE": "Contactez-nous",
+    "INFO_PHONE_TITLE": "Phone Number",
+    "FORM_TITLE": "Envoyez-nous un message",
+    "PLACEHOLDER_SUBJECT": "Sujet",
+    "LABEL_NAME": "Nom complet",
+    "LABEL_EMAIL": "Email",
+    "INFO_EMAIL_TITLE": "Email Address",
+    "PLACEHOLDER_NAME": "Nom complet",
+    "ERROR_EMAIL": "Please enter a valid email",
+    "INFO_LOCATION_TITLE": "Our Location"
   }
 }

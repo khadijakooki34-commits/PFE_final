@@ -14,16 +14,16 @@
                     {{ 'FOOTER.DESC' | translate }}
                 </p>
                 <div class="social-links">
-                    <a href="#" class="social-link" aria-label="Facebook">
+                    <a href="#" class="social-link" [attr.aria-label]="'FOOTER.FACEBOOK' | translate">
                         <i class="bi bi-facebook"></i>
                     </a>
-                    <a href="#" class="social-link" aria-label="Instagram">
+                    <a href="#" class="social-link" [attr.aria-label]="'FOOTER.INSTAGRAM' | translate">
                         <i class="bi bi-instagram"></i>
                     </a>
-                    <a href="#" class="social-link" aria-label="Twitter">
+                    <a href="#" class="social-link" [attr.aria-label]="'FOOTER.TWITTER' | translate">
                         <i class="bi bi-twitter"></i>
                     </a>
-                    <a href="#" class="social-link" aria-label="YouTube">
+                    <a href="#" class="social-link" [attr.aria-label]="'FOOTER.YOUTUBE' | translate">
                         <i class="bi bi-youtube"></i>
                     </a>
                 </div>
@@ -73,15 +73,15 @@
                 <ul class="footer-contact">
                     <li>
                         <i class="bi bi-geo-alt-fill"></i>
-                        <span>Nador, {{ 'HOME.HERO.MOROCCO' | translate }}</span>
+                        <span>{{ 'COMMON.NADOR' | translate }}, {{ 'HOME.HERO.MOROCCO' | translate }}</span>
                     </li>
                     <li>
                         <i class="bi bi-telephone-fill"></i>
-                        <span>+212 633 725 965</span>
+                        <span>{{ 'COMMON.PHONE_VAL' | translate }}</span>
                     </li>
                     <li>
                         <i class="bi bi-envelope-fill"></i>
-                        <span>mynameisossama@gmail.com</span>
+                        <span>{{ 'COMMON.EMAIL_VAL' | translate }}</span>
                     </li>
                 </ul>
             </div>

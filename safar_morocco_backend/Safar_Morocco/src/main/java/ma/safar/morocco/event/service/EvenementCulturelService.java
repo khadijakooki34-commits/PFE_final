@@ -1,6 +1,7 @@
 package ma.safar.morocco.event.service;
 
 import lombok.RequiredArgsConstructor;
+import ma.safar.morocco.event.dto.EvenementRequestDTO;
 import ma.safar.morocco.event.dto.EvenementResponseDTO;
 import ma.safar.morocco.event.entity.EvenementCulturel;
 import ma.safar.morocco.event.repository.EvenementCulturelRepository;
@@ -50,11 +51,33 @@ public class EvenementCulturelService {
      * Crée un nouvel événement
      */
     @Transactional
-    public EvenementCulturel create(Long destinationId, EvenementCulturel evenement) {
+    public EvenementCulturel create(Long destinationId, EvenementRequestDTO request) {
         Destination destination = destinationRepository.findById(destinationId)
                 .orElseThrow(() -> new IllegalArgumentException("Destination non trouvée"));
 
-        evenement.setDestination(destination);
+        EvenementCulturel evenement = EvenementCulturel.builder()
+                .nom(request.getNom())
+                .nameEn(request.getNameEn())
+                .nameFr(request.getNameFr())
+                .nameAr(request.getNameAr())
+                .nameEs(request.getNameEs())
+                .dateDebut(request.getDateDebut())
+                .dateFin(request.getDateFin())
+                .lieu(request.getLieu())
+                .eventType(request.getEventType())
+                .description(request.getDescription())
+                .descriptionEn(request.getDescriptionEn())
+                .descriptionFr(request.getDescriptionFr())
+                .descriptionAr(request.getDescriptionAr())
+                .descriptionEs(request.getDescriptionEs())
+                .historique(request.getHistorique())
+                .historiqueEn(request.getHistoriqueEn())
+                .historiqueFr(request.getHistoriqueFr())
+                .historiqueAr(request.getHistoriqueAr())
+                .historiqueEs(request.getHistoriqueEs())
+                .imageUrl(request.getImageUrl())
+                .destination(destination)
+                .build();
         return evenementRepository.save(evenement);
     }
 
@@ -62,17 +85,30 @@ public class EvenementCulturelService {
      * Met à jour un événement
      */
     @Transactional
-    public EvenementCulturel update(Long id, EvenementCulturel updated) {
+    public EvenementCulturel update(Long id, EvenementRequestDTO request) {
         EvenementCulturel existing = evenementRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Événement non trouvé"));
 
-        existing.setNom(updated.getNom());
-        existing.setDescription(updated.getDescription());
-        existing.setDateDebut(updated.getDateDebut());
-        existing.setDateFin(updated.getDateFin());
-        existing.setLieu(updated.getLieu());
-        existing.setEventType(updated.getEventType());
-        existing.setImageUrl(updated.getImageUrl());
+        existing.setNom(request.getNom());
+        existing.setNameEn(request.getNameEn());
+        existing.setNameFr(request.getNameFr());
+        existing.setNameAr(request.getNameAr());
+        existing.setNameEs(request.getNameEs());
+        existing.setDescription(request.getDescription());
+        existing.setDescriptionEn(request.getDescriptionEn());
+        existing.setDescriptionFr(request.getDescriptionFr());
+        existing.setDescriptionAr(request.getDescriptionAr());
+        existing.setDescriptionEs(request.getDescriptionEs());
+        existing.setDateDebut(request.getDateDebut());
+        existing.setDateFin(request.getDateFin());
+        existing.setLieu(request.getLieu());
+        existing.setEventType(request.getEventType());
+        existing.setHistorique(request.getHistorique());
+        existing.setHistoriqueEn(request.getHistoriqueEn());
+        existing.setHistoriqueFr(request.getHistoriqueFr());
+        existing.setHistoriqueAr(request.getHistoriqueAr());
+        existing.setHistoriqueEs(request.getHistoriqueEs());
+        existing.setImageUrl(request.getImageUrl());
 
         return evenementRepository.save(existing);
     }
